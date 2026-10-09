@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roamly — Command Hub</title>
+  
+  <!-- خط Inter الموحّد مع حساب وموقع اليوزر -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- ربط ملف الـ CSS المنفصل -->
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside>
+    <div class="sidebar-top">
+      <div class="logo-row">
+        <div class="logo-mark">R</div>
+        <div>
+          <div class="logo-text">Roamly<span class="logo-dot">.</span></div>
+          <span class="logo-sub">Command Hub</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#overview" onclick="switchAdminTab('overview')" id="nav-overview" class="admin-nav-link active">
+          <i class="fa-solid fa-chart-pie"></i><span>Dashboard Overview</span>
+        </a>
+        <a href="#bookings" onclick="switchAdminTab('bookings')" id="nav-bookings" class="admin-nav-link">
+          <i class="fa-solid fa-suitcase-rolling"></i><span>Bookings &amp; Split Bills</span>
+        </a>
+        <a href="#ai-monitor" onclick="switchAdminTab('ai-monitor')" id="nav-ai-monitor" class="admin-nav-link">
+          <i class="fa-solid fa-wand-magic-sparkles"></i><span>AI Prompts &amp; Activity</span>
+        </a>
+        <a href="#promos" onclick="switchAdminTab('promos')" id="nav-promos" class="admin-nav-link">
+          <i class="fa-solid fa-ticket"></i><span>Promo Codes &amp; Offers</span>
+        </a>
+        <a href="#settings" onclick="switchAdminTab('settings')" id="nav-settings" class="admin-nav-link">
+          <i class="fa-solid fa-gear"></i><span>System Settings</span>
+        </a>
+      </nav>
+    </div>
+    <div class="sidebar-bottom">
+      <a href="../index.html" class="back-link">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Back to Main Site</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN AREA ================= -->
+  <div class="main-area">
+    <header class="topbar">
+      <div class="topbar-left">
+        <h2 id="admin-page-title">Dashboard Overview</h2>
+        <span class="live-pill"><span class="live-dot"></span> Live Sync Active</span>
+      </div>
+      <div class="topbar-right">
+        <div class="profile-meta">
+          <div class="profile-name">Nada Alawneh</div>
+          <div class="profile-role">Lead System Architect</div>
+        </div>
+        <div class="avatar">NA</div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- TAB 1: OVERVIEW -->
+      <div id="tab-overview" class="admin-tab active">
+        <div class="stats-grid">
+          <div class="card stat-card">
+            <div>
+              <div class="stat-label">Total Revenue</div>
+              <div class="stat-val">$28,430</div>
+              <span class="stat-sub text-emerald"><i class="fa-solid fa-arrow-trend-up"></i> +18% this month</span>
+            </div>
+            <div class="stat-icon icon-amber"><i class="fa-solid fa-wallet"></i></div>
+          </div>
+          <div class="card stat-card">
+            <div>
+              <div class="stat-label">Active Bookings</div>
+              <div class="stat-val">482</div>
+              <span class="stat-sub text-emerald"><i class="fa-solid fa-arrow-trend-up"></i> +34 today</span>
+            </div>
+            <div class="stat-icon icon-sky"><i class="fa-solid fa-suitcase-rolling"></i></div>
+          </div>
+          <div class="card stat-card">
+            <div>
+              <div class="stat-label">AI Itineraries</div>
+              <div class="stat-val">2,150</div>
+              <span class="stat-sub text-purple"><i class="fa-solid fa-wand-magic-sparkles"></i> 99.4% Success</span>
+            </div>
+            <div class="stat-icon icon-purple"><i class="fa-solid fa-brain"></i></div>
+          </div>
+          <div class="card stat-card">
+            <div>
+              <div class="stat-label">Active Travelers</div>
+              <div class="stat-val">1,420</div>
+              <span class="stat-sub text-emerald"><i class="fa-solid fa-user-plus"></i> +62 new</span>
+            </div>
+            <div class="stat-icon icon-emerald"><i class="fa-solid fa-users"></i></div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="panel-head">
+              <div class="panel-title"><i class="fa-solid fa-globe"></i> Global User Activity Feed</div>
+              <span class="live-pill">Real-time</span>
+            </div>
+            <div class="panel-body">
+              <div class="activity-row">
+                <div class="activity-left">
+                  <span class="dot dot-emerald"></span>
+                  <span class="activity-name">Nada Alawneh</span>
+                  <span class="activity-desc">booked 5-Day VIP Trip to Istanbul (Paid in Full)</span>
+                </div>
+                <span class="activity-time">2m ago</span>
+              </div>
+              <div class="activity-row">
+                <div class="activity-left">
+                  <span class="dot dot-sky"></span>
+                  <span class="activity-name">Ahmad Omar</span>
+                  <span class="activity-desc">initiated Split Bill for Paris Itinerary</span>
+                </div>
+                <span class="activity-time">14m ago</span>
+              </div>
+              <div class="activity-row">
+                <div class="activity-left">
+                  <span class="dot dot-purple"></span>
+                  <span class="activity-name">Sara Khalid</span>
+                  <span class="activity-desc">used Magic Wand to edit activity (Pizza Palace)</span>
+                </div>
+                <span class="activity-time">25m ago</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="panel-head">
+              <div class="panel-title"><i class="fa-solid fa-shield-halved"></i> Master Controls</div>
+            </div>
+            <div class="panel-body">
+              <button class="control-btn" onclick="showToast('System cache cleared successfully — all nodes refreshed.','broom')">
+                <span><i class="fa-solid fa-broom left-icon"></i> &nbsp;Clear AI Response Cache</span>
+                <i class="fa-solid fa-chevron-right right"></i>
+              </button>
+              <button class="control-btn" onclick="showToast('Broadcast sent to 1,420 active users!','bullhorn')">
+                <span><i class="fa-solid fa-bullhorn left-icon"></i> &nbsp;Broadcast Announcement</span>
+                <i class="fa-solid fa-chevron-right right"></i>
+              </button>
+              <button class="control-btn" onclick="showToast('Encrypted database backup downloaded.','database')">
+                <span><i class="fa-solid fa-database left-icon"></i> &nbsp;Download Database Dump</span>
+                <i class="fa-solid fa-chevron-right right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: BOOKINGS & SPLIT BILLS -->
+      <div id="tab-bookings" class="admin-tab">
+        <div class="card">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title fs-16">Bookings &amp; Split Bills Ledger</div>
+              <p class="panel-subtitle">Monitor payment modes, references, and split shares.</p>
+            </div>
+            <input type="text" class="filter-input" id="bookings-filter" placeholder="Filter bookings…">
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Traveler</th>
+                  <th>Destination</th>
+                  <th>Reference</th>
+                  <th>Payment Mode</th>
+                  <th>Status</th>
+                  <th class="text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="bookings-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: AI PROMPTS & ACTIVITY -->
+      <div id="tab-ai-monitor" class="admin-tab">
+        <div class="card">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title fs-16">Micro-Prompt &amp; AI Requests Inspector</div>
+              <p class="panel-subtitle">Track custom modifications made by users via the Magic Wand feature.</p>
+            </div>
+            <span class="engine-badge">Roamly AI Engine · Live</span>
+          </div>
+          <div class="panel-body" id="prompts-body"></div>
+        </div>
+      </div>
+
+      <!-- TAB 4: PROMO CODES -->
+      <div id="tab-promos" class="admin-tab">
+        <div class="card card-padded">
+          <div class="panel-head panel-head-clean">
+            <div>
+              <div class="panel-title fs-16">Promo Code Manager</div>
+              <p class="panel-subtitle">Create and monitor active discount codes for Roamly subscriptions.</p>
+            </div>
+            <button class="btn-gold" onclick="showToast('New promo code generated successfully!','ticket')">+ Add New Code</button>
+          </div>
+          <div class="promo-grid" id="promo-grid"></div>
+        </div>
+      </div>
+
+      <!-- TAB 5: SYSTEM SETTINGS -->
+      <div id="tab-settings" class="admin-tab">
+        <div class="card card-padded">
+          <div class="panel-title fs-16 mb-22">Platform Global Configuration</div>
+          <div class="settings-grid">
+            <div class="field-group">
+              <label>Platform Brand Name</label>
+              <input type="text" value="Roamly AI Travel">
+            </div>
+            <div class="field-group">
+              <label>AI Inference Engine</label>
+              <select>
+                <option>Roamly AI Engine (Optimized)</option>
+                <option>Claude Sonnet Integration</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Pro Monthly Subscription Price ($)</label>
+              <input type="number" value="4.99">
+            </div>
+            <div class="field-group">
+              <label>System Operational Status</label>
+              <select>
+                <option>Fully Operational (Live)</option>
+                <option>Maintenance Mode</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn-gold mt-24" onclick="showToast('Global system settings successfully updated!','gear')">Save System Settings</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ================= TOAST NOTIFICATION ================= -->
+  <div class="toast" id="toast">
+    <i class="fa-solid fa-circle-check" id="toast-icon"></i>
+    <span id="toast-msg"></span>
+  </div>
+
+  <!-- ربط ملف الـ JS المنفصل -->
+  <script src="admin.js"></script>
+</body>
+</html>

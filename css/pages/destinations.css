@@ -1,0 +1,56 @@
+/* ==========================================================================
+   Roamly — Destinations page (Figma frame "Destinations")
+   ========================================================================== */
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border-color: var(--slate-200);
+  border-radius: var(--radius-lg);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  background: var(--slate-100);
+  color: var(--slate-700);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.chip:hover { background: var(--slate-200); }
+
+.chip[aria-pressed="true"] {
+  background: var(--slate-900);
+  color: var(--white);
+}
+
+.filter-bar__search {
+  width: 256px;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
+.empty-state {
+  padding: 48px 16px;
+  text-align: center;
+  color: var(--slate-500);
+}
+
+@media (max-width: 720px) {
+  .filter-bar { flex-direction: column; align-items: stretch; }
+  .filter-bar__search { width: 100%; }
+}

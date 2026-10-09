@@ -1,0 +1,864 @@
+/* ==========================================================================
+   Roamly — Home page (Figma frame "Home Page")
+   ========================================================================== */
+/* ==========================================================================
+   Cinematic Video Hero Section (Motion Sites Luxury Style)
+   ========================================================================== */
+
+.hero-video-section {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  padding: 120px 20px 100px;
+  background-color: #0b111e;
+  color: #ffffff;
+}
+
+/* Background Video Styling */
+.hero-video-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-video-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.02); 
+}
+
+
+.hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(11, 17, 30, 0.65) 0%,
+    rgba(11, 17, 30, 0.4) 35%,
+    rgba(11, 17, 30, 0.75) 75%,
+    #0b111e 100%
+  );
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+}
+
+/* Container */
+.hero-video-content {
+  position: relative;
+  z-index: 2;
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Eyebrow Glass Pill */
+.hero-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 6px 16px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fde047;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.hero-badge-pill .badge-icon {
+  font-size: 0.9rem;
+}
+
+/* Motion Sites Typography Overlap Effect */
+.hero-overlap-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 0 16px 0;
+  text-align: center;
+}
+
+.title-line-1 {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(3rem, 7.5vw, 6.8rem);
+  font-weight: 300;
+  color: rgba(241, 245, 249, 0.75);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.title-line-2 {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(3rem, 7.5vw, 6.8rem);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  margin-top: -10px; /* تأثير التداخل المائل في الموشن سايتس */
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+@media (min-width: 768px) {
+  .title-line-2 {
+    margin-top: -18px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .title-line-2 {
+    margin-top: -24px;
+  }
+}
+
+/* Subtitle */
+.hero-subtitle {
+  max-width: 680px;
+  margin: 16px auto 36px;
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  line-height: 1.6;
+  color: #cbd5e1;
+  font-weight: 400;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Buttons */
+.hero-cta-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+/* زر أبيض لامع متناسق مع الفخامة */
+.btn-hero-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 14px 32px;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-hero-primary:hover {
+  background: #f8fafc;
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px -5px rgba(255, 255, 255, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  color: #0f172a;
+}
+
+/* زر زجاجي بلور */
+.btn-hero-glass {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 14px 30px;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-hero-glass:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+
+/* Proof Bar */
+.hero-proof-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+.hero-stars-row {
+  display: flex;
+  gap: 3px;
+  color: #f59e0b;
+  font-size: 0.85rem;
+}
+
+/* محاذاة ودمج مربع البحث (Search Widget) بانسيابية فوق نهاية الهيرو */
+.search-wrap {
+  position: relative;
+  z-index: 10;
+  margin-top: -45px;
+}
+
+.btn-video {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 61px;
+  padding: 0 28px 0 24px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid var(--slate-700);
+  border-radius: var(--radius-lg);
+  color: var(--white);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+.btn-video:hover { background: var(--slate-800); }
+
+.btn-video__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--amber-500);
+  font-size: 12px;
+}
+
+.hero__proof {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 8px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--slate-300);
+}
+
+.hero__stars { display: inline-flex; gap: 2px; color: var(--amber-500); font-size: 14px; }
+
+/* Featured "Premier Choice" card on the right of the hero */
+.featured-card {
+  position: relative;
+  align-self: start;
+  margin-top: 7px;
+  padding: 16px;
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-2xl);
+}
+
+.featured-card__media {
+  height: 288px;
+  border-radius: var(--radius-lg);
+}
+
+.featured-card__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0) 50%);
+}
+
+.featured-card__badge {
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  left: 12px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: var(--brand);
+  box-shadow: var(--shadow-md);
+  color: var(--slate-900);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.featured-card__caption {
+  position: absolute;
+  z-index: 1;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.featured-card__title {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 900;
+  color: var(--white);
+}
+
+.featured-card__meta {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: var(--slate-300);
+}
+
+.featured-card__rating {
+  flex: none;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: var(--white);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+}
+
+.featured-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 8px 0;
+}
+
+.featured-card__from {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: var(--slate-400);
+}
+
+.featured-card__footer .price__amount { font-size: 30px; line-height: 36px; color: var(--white); }
+
+.featured-card__footer .btn { min-height: 44px; padding: 12px 24px; }
+
+/* ---------- Search widget (floats over the bottom of the hero) ---------- */
+.search-wrap {
+  position: relative;
+  z-index: 2;
+  margin-top: -48px;
+}
+
+.search-widget {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  padding: 24px;
+  background: var(--white);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+}
+
+.search-field {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-height: 70px;
+  padding: 10px 12px;
+  background: var(--slate-50);
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  border-radius: var(--radius-lg);
+  cursor: text;
+}
+
+.search-field:focus-within { border-color: var(--brand); }
+
+.search-field__label {
+  font-size: 11px;
+  line-height: 16.5px;
+  font-weight: 900;
+  letter-spacing: 0.55px;
+  text-transform: uppercase;
+  color: var(--slate-900);
+}
+
+.search-field__control {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--slate-800);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+}
+
+.search-field__control:focus { outline: none; }
+
+select.search-field__control { appearance: none; cursor: pointer; }
+
+.search-widget__submit {
+  border-radius: var(--radius-lg);
+  font-size: 14px;
+  line-height: 20px;
+  box-shadow: var(--shadow-lg);
+}
+
+.search-widget__submit i { color: var(--amber-500); }
+
+/* ---------- Generic home section ---------- */
+.home-section { padding-block: 80px; }
+.home-section .grid-3,
+.home-section .grid-4 { margin-top: 40px; }
+
+/* ---------- Why Roamly + quiz ---------- */
+.why {
+  background: var(--slate-100);
+  border-block: 1px solid var(--slate-200);
+}
+
+.why__head {
+  max-width: 768px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.why__title {
+  margin-top: 16px;
+  font-size: 36px;
+  line-height: 40px;
+  font-weight: 900;
+  color: var(--slate-900);
+}
+
+.why__lead {
+  margin-top: 18px;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--slate-600);
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 64px;
+}
+
+.feature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 20px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.feature__title {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 800;
+  color: var(--slate-900);
+}
+
+.feature__text {
+  margin-top: -8px;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--slate-500);
+}
+
+.quiz {
+  position: relative;
+  overflow: hidden;
+  margin-top: 64px;
+  padding: 48px;
+  background: var(--slate-900);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-2xl);
+}
+
+.quiz::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 320px;
+  border-radius: var(--radius-full);
+  background: rgba(236, 168, 40, 0.1);
+  filter: blur(32px);
+  pointer-events: none;
+}
+
+.quiz > * { position: relative; }
+
+.quiz__title {
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: 900;
+  color: var(--white);
+}
+
+.quiz__lead {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--slate-300);
+}
+
+.quiz__fields {
+  display: grid;
+  grid-template-columns: repeat(2, 376px);
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.quiz .field__label { color: var(--slate-400); }
+
+.quiz .input {
+  min-height: 44px;
+  padding: 11px 32px 11px 16px;
+  background-color: var(--slate-800);
+  border-color: var(--slate-700);
+  color: var(--white);
+  font-weight: 600;
+}
+
+.quiz__submit { margin-top: 24px; min-height: 48px; padding: 14px 24px; }
+
+/* ---------- Testimonials ---------- */
+.reviews { background: var(--slate-900); }
+.reviews .grid-3 { margin-top: 48px; }
+
+.review {
+  padding: 24px;
+  background: var(--slate-800);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  border-radius: var(--radius-lg);
+}
+
+.review__stars { color: var(--amber-500); font-size: 14px; line-height: 20px; }
+
+.review__quote {
+  margin: 16px 0 24px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--slate-200);
+}
+
+.review__author { display: flex; align-items: center; gap: 12px; }
+
+.review__avatar {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--avatar-bg);
+  color: var(--avatar-fg);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+.review__avatar--amber { --avatar-bg: rgba(236, 168, 40, 0.2); --avatar-fg: var(--amber-500); }
+.review__avatar--sky { --avatar-bg: rgba(2, 132, 199, 0.2); --avatar-fg: var(--sky-400); }
+.review__avatar--purple { --avatar-bg: rgba(168, 85, 247, 0.2); --avatar-fg: #c084fc; }
+
+.review__name { font-size: 14px; line-height: 20px; font-weight: 800; color: var(--white); }
+.review__role { font-size: 12px; line-height: 16px; color: var(--slate-400); }
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--slate-800);
+  text-align: center;
+}
+
+.metric__value { font-size: 30px; line-height: 36px; font-weight: 900; color: var(--metric-color, var(--white)); }
+.metric__value--amber { --metric-color: var(--amber-500); }
+.metric__value--sky { --metric-color: var(--sky-400); }
+
+.metric__label {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--slate-400);
+}
+
+/* ---------- Closing call to action ---------- */
+.cta-banner {
+  margin-block: 80px;
+  padding: 64px 32px;
+  background: var(--slate-900);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.cta-banner__title {
+  font-size: 48px;
+  line-height: 48px;
+  font-weight: 900;
+  letter-spacing: -1.2px;
+  color: var(--white);
+}
+
+.cta-banner__text {
+  margin-top: 24px;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--slate-300);
+}
+
+.cta-banner .btn { margin-top: 24px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1200px) {
+  .hero__inner { grid-template-columns: minmax(0, 1fr) 420px; }
+  .features { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1000px) {
+  .hero__inner { grid-template-columns: minmax(0, 1fr); }
+  .featured-card { max-width: 560px; }
+  .search-widget { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .search-widget__submit { grid-column: 1 / -1; min-height: 52px; }
+  .quiz__fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+  .hero__title { font-size: 42px; line-height: 48px; letter-spacing: -1px; }
+  .hero__lead { font-size: 16px; line-height: 24px; }
+  .search-widget { grid-template-columns: minmax(0, 1fr); padding: 16px; }
+  .features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .why__title { font-size: 28px; line-height: 34px; }
+  .quiz { padding: 28px 20px; }
+  .quiz__title { font-size: 24px; line-height: 30px; }
+  .quiz__fields { grid-template-columns: minmax(0, 1fr); }
+  .metrics { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .home-section { padding-block: 56px; }
+  .cta-banner { padding: 48px 20px; }
+  .cta-banner__title { font-size: 32px; line-height: 38px; }
+}
+
+
+
+
+
+/* ==========================================================================
+   Roamly Flight Trajectory & Plane Animation System
+   ========================================================================== */
+
+/* الحاوية الأساسية لمسار الطيران */
+.flight-journey-tracker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 15;
+  overflow: visible;
+}
+
+/* طبقة الـ SVG لمسار الطيران */
+.flight-sky-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* مسار الطيران الأساسي المنقط (خفيف وعصري) */
+.flight-path-base {
+  fill: none;
+  stroke: rgba(226, 232, 240, 0.4);
+  stroke-width: 2.5;
+  stroke-dasharray: 8 10;
+  stroke-linecap: round;
+}
+
+/* المسار النفاث النشط الذي يُرسم خلف الطائرة */
+.flight-path-active {
+  fill: none;
+  stroke: url(#flightGradient);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.45));
+}
+
+/* الطائرة النفاثة المتحركة */
+.flight-plane {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 44px;
+  height: 44px;
+  margin-top: -22px;
+  margin-left: -22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  pointer-events: none;
+  transform: translate3d(-100px, -100px, 0);
+  will-change: transform;
+  filter: drop-shadow(0 8px 16px rgba(15, 23, 42, 0.35));
+  transition: opacity 0.3s ease;
+}
+
+.jet-icon {
+  width: 34px;
+  height: 34px;
+  color: #f59e0b; /* لون ذهبي دافئ من هوية الموقع */
+  filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.8));
+}
+
+/* وهج محرك الطائرة النفاث (Contrail) */
+.jet-contrail {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f59e0b 0%, rgba(245, 158, 11, 0) 70%);
+  bottom: 4px;
+  filter: blur(2px);
+  animation: jetBurn 0.6s infinite alternate;
+}
+
+@keyframes jetBurn {
+  0% { transform: scale(0.8); opacity: 0.7; }
+  100% { transform: scale(1.6); opacity: 1; }
+}
+
+/* الرادار الجوي الذكي (HUD Widget على يمين الشاشة) */
+.flight-hud {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 10px 18px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 100;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
+  transition: all 0.3s ease;
+}
+
+.hud-radar-pulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: radarPulse 1.8s infinite;
+}
+
+@keyframes radarPulse {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.hud-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.hud-flight-num {
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.hud-terminal {
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #f8fafc;
+}
+
+/* علامة البوابة الرادارية المضيئة على كل سكشن */
+.section-gate-marker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #d97706;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+}
+
+.section-gate-marker.active-gate {
+  background: #f59e0b;
+  color: #0f172a;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.5);
+  transform: scale(1.04);
+}
+
+@media (max-width: 900px) {
+  .flight-hud {
+    bottom: 16px;
+    right: 16px;
+    padding: 8px 14px;
+  }
+}

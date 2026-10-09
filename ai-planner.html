@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Itinerary Studio · Roamly</title>
+  <meta name="description" content="Generate dynamic, day-by-day travel itineraries optimized for budget, traffic, weather and your preferences.">
+  <link rel="icon" type="image/png" href="assets/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&amp;display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/planner.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="index.html" aria-label="Roamly home">
+        <span class="brand__mark"><img src="assets/img/logo.png" alt="" width="40" height="35"></span>
+        <span class="brand__name">Roamly<span class="brand__dot">.</span></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+        <i class="fa-solid fa-bars" aria-hidden="true"></i><span class="sr-only">Menu</span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul class="nav-pill">
+          <li><a class="nav-pill__link" href="index.html">Home</a></li>
+          <li><a class="nav-pill__link" href="ai-planner.html" aria-current="page">AI Planner</a></li>
+          <li><a class="nav-pill__link" href="destinations.html">Destinations</a></li>
+          <li><a class="nav-pill__link" href="deals.html">Packages &amp; Deals</a></li>
+          <li><a class="nav-pill__link" href="pricing.html">Pricing</a></li>
+          <li><a class="nav-pill__link" href="support.html"><i class="fa-solid fa-phone nav-pill__icon" aria-hidden="true"></i> Support</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="currency" type="button"><i class="fa-solid fa-globe" aria-hidden="true"></i> USD ($)</button>
+        <a class="btn btn--dark btn--md" href="sign-in.html"><i class="fa-regular fa-circle-user" aria-hidden="true"></i> Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="container page-hero__inner">
+        <p class="eyebrow">Roamly Studio</p>
+        <h1 class="page-hero__title">AI Itinerary Studio</h1>
+        <p class="page-hero__lead">Generate fully dynamic, day-by-day travel itineraries optimized for budget, local traffic, weather conditions, and personal preferences.</p>
+      </div>
+    </section>
+
+    <div class="container container--narrow page-main planner-main">
+      <!-- Generator control panel ("AI Planner 1") -->
+      <form class="card planner-panel" data-planner-form aria-labelledby="planner-title">
+        <h2 class="planner-panel__title" id="planner-title"><i class="fa-solid fa-sliders" aria-hidden="true"></i> Customize Your Travel Parameters</h2>
+        <div class="planner-fields">
+          <label class="field">
+            <span class="field__label">Destination</span>
+            <input class="input" name="destination" value="Istanbul, Turkey" autocomplete="off">
+          </label>
+          <label class="field">
+            <span class="field__label">Travelers</span>
+            <input class="input" name="travelers" type="number" min="1" max="20" value="2" inputmode="numeric">
+          </label>
+          <label class="field">
+            <span class="field__label">Duration &amp; Dates</span>
+            <select class="input" name="duration">
+              <option>3 Days Quick Escape</option>
+              <option selected>6 Days Full Experience</option>
+              <option>10 Days Grand Tour</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field__label">Budget Preference</span>
+            <select class="input" name="budget">
+              <option>Budget</option>
+              <option selected>Balanced</option>
+              <option>Luxury</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field__label">Primary Style</span>
+            <select class="input" name="style">
+              <option selected>Culture &amp; Food</option>
+              <option>Adventure &amp; Outdoors</option>
+              <option>Relax &amp; Beach</option>
+              <option>Nightlife</option>
+            </select>
+          </label>
+        </div>
+        <div class="planner-panel__actions">
+          <button class="btn btn--primary btn--lg" type="submit"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Re-Generate AI Plan</button>
+        </div>
+      </form>
+
+      <!-- Generated plan ("AI Planner 2") -->
+      <section class="plan" id="plan" data-plan hidden aria-label="Your generated itinerary">
+        <div class="plan__col">
+          <header class="card plan-header">
+            <div>
+              <span class="pill pill--emerald">100% AI Custom Plan</span>
+              <h2 class="plan-header__title">🕌 Istanbul, Turkey Dynamic AI Experience</h2>
+              <p class="plan-header__meta">Oct 12 - Oct 18 • <span data-quote="party">2 Adults</span> • Estimated Total: <span data-quote="total">$1,240</span></p>
+            </div>
+            <div class="plan-header__tools">
+              <button class="tool-btn tool-btn--sync" type="button"><span><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> Sync</span>Calendar</button>
+              <button class="tool-btn tool-btn--pdf" type="button"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i>PDF</button>
+              <button class="tool-btn tool-btn--share" type="button"><i class="fa-solid fa-users" aria-hidden="true"></i>Share to<br>Vote</button>
+            </div>
+          </header>
+
+          <div class="rain-banner">
+            <div class="rain-banner__body">
+              <span class="rain-banner__emoji" aria-hidden="true">🌧️</span>
+              <div>
+                <h3 class="rain-banner__title" id="rain-title">Rainy Day Auto-Replanner Enabled</h3>
+                <p class="rain-banner__text">If rain is predicted on any day, outdoor cruises automatically swap with museum passes.</p>
+              </div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" checked aria-labelledby="rain-title">
+              <span class="switch__track"></span>
+            </label>
+          </div>
+
+          <div class="day-list">
+            <article class="card day-card">
+              <header class="day-card__head">
+                <div class="day-card__heading">
+                  <span class="day-card__chip">DAY 1</span>
+                  <h3 class="day-card__title">Historic Sultanahmet &amp; Hagia Sophia</h3>
+                </div>
+                <time class="day-card__date" datetime="2026-10-12">Oct 12</time>
+              </header>
+              <ol class="timeline">
+                <li class="timeline__item">
+                  <span class="timeline__time">🌅 09:30 AM</span>
+                  <div>
+                    <h4 class="timeline__title">Private VIP Tour of Hagia Sophia &amp; Blue Mosque <button class="timeline__swap" type="button" aria-label="Swap this activity with AI"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></button></h4>
+                    <p class="timeline__text">Skip the line entrance ticket included with local historian guide.</p>
+                  </div>
+                </li>
+                <li class="timeline__item">
+                  <span class="timeline__time">🍽️ 01:00 PM</span>
+                  <div>
+                    <h4 class="timeline__title">Authentic Ottoman Lunch at Matbah Restaurant <button class="timeline__swap" type="button" aria-label="Swap this activity with AI"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></button></h4>
+                    <p class="timeline__text">Traditional palace recipes featuring slow-cooked lamb and lamb pilaf.</p>
+                  </div>
+                </li>
+                <li class="timeline__item">
+                  <span class="timeline__time">⛵ 05:00 PM</span>
+                  <div>
+                    <h4 class="timeline__title">Sunset Bosphorus Cruise with Live Traditional Music <button class="timeline__swap" type="button" aria-label="Swap this activity with AI"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></button></h4>
+                    <p class="timeline__text">2-hour yacht cruise along the Asian &amp; European shores.</p>
+                  </div>
+                </li>
+              </ol>
+            </article>
+
+            <article class="card day-card">
+              <header class="day-card__head">
+                <div class="day-card__heading">
+                  <span class="day-card__chip">DAY 2</span>
+                  <h3 class="day-card__title">Grand Bazaar &amp; Spice Market Delights</h3>
+                </div>
+                <time class="day-card__date" datetime="2026-10-13">Oct 13</time>
+              </header>
+              <ol class="timeline">
+                <li class="timeline__item">
+                  <span class="timeline__time">🛍️ 10:00 AM</span>
+                  <div>
+                    <h4 class="timeline__title">Guided Shopping Experience in Grand Bazaar <button class="timeline__swap" type="button" aria-label="Swap this activity with AI"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></button></h4>
+                    <p class="timeline__text">Explore authentic carpets, ceramics, and spices with a trusted local advisor.</p>
+                  </div>
+                </li>
+                <li class="timeline__item">
+                  <span class="timeline__time">☕ 02:30 PM</span>
+                  <div>
+                    <h4 class="timeline__title">Turkish Coffee Masterclass &amp; Baklava Tasting <button class="timeline__swap" type="button" aria-label="Swap this activity with AI"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></button></h4>
+                    <p class="timeline__text">Learn sand-brewed coffee techniques at Hafiz Mustafa 1864.</p>
+                  </div>
+                </li>
+                <li class="timeline__item">
+                  <span class="timeline__time">🏰 07:00 PM</span>
+                  <div>
+                    <h4 class="timeline__title">Rooftop Dinner Overlooking Galata Tower <button class="timeline__swap" type="button" aria-label="Swap this activity with AI"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></button></h4>
+                    <p class="timeline__text">3-course meal with panoramic city lighting views.</p>
+                  </div>
+                </li>
+              </ol>
+            </article>
+          </div>
+        </div>
+
+        <aside class="plan__col plan__col--side">
+          <section class="map-card" aria-labelledby="map-title">
+            <div class="widget-head">
+              <h3 class="widget-head__title" id="map-title"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> Interactive Route Map</h3>
+              <span class="map-card__tag">Live GPS Sync</span>
+            </div>
+            <div class="map-card__canvas media">
+              <img src="assets/img/istanbul-map.png" alt="" width="600" height="400" loading="lazy">
+              <div class="map-card__pin">
+                <span class="map-card__marker" aria-hidden="true">📍</span>
+                <p class="map-card__place">Sultanahmet Square</p>
+                <p class="map-card__route">3 Stops • 4.2 km total walking</p>
+              </div>
+            </div>
+            <a class="map-card__link" href="https://www.google.com/maps/search/?api=1&amp;query=Sultanahmet+Square+Istanbul" target="_blank" rel="noopener">Open in Google Maps 🧭</a>
+          </section>
+
+          <section class="card weather-card" aria-labelledby="weather-title">
+            <h3 class="widget-head__title" id="weather-title"><i class="fa-solid fa-cloud-sun" aria-hidden="true"></i> Weather &amp; AI Packing Tips</h3>
+            <div class="forecast">
+              <span class="forecast__label">Istanbul Forecast</span>
+              <span class="forecast__value">19°C • Partly Cloudy</span>
+            </div>
+            <ul class="tips">
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i> Pack a light jacket for Bosphorus evening breeze.</li>
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i> Comfortable walking shoes required for Old Town.</li>
+            </ul>
+          </section>
+
+          <section class="quote-card" aria-labelledby="quote-title">
+            <div class="quote-card__head">
+              <div>
+                <h3 class="quote-card__title" id="quote-title">Lock In This Itinerary</h3>
+                <p class="quote-card__sub">All pre-trip essentials secured.</p>
+              </div>
+              <span class="travelers-badge">👥 <strong data-quote="travelers">2</strong> Travelers</span>
+            </div>
+            <dl class="breakdown">
+              <div class="breakdown__row"><dt><span aria-hidden="true">✈️</span> Round-trip Flights</dt><dd data-quote="flights">$600</dd></div>
+              <div class="breakdown__row"><dt><span aria-hidden="true">🏨</span> Boutique Hotel</dt><dd data-quote="hotel">$450</dd></div>
+              <div class="breakdown__row"><dt><span aria-hidden="true">🚕</span> Airport Transfers</dt><dd data-quote="transfers">$90</dd></div>
+              <div class="breakdown__row"><dt><span aria-hidden="true">🎟️</span> Fast-track Tickets</dt><dd data-quote="tickets">$100</dd></div>
+            </dl>
+            <p class="quote-note">
+              <span class="quote-note__icon" aria-hidden="true">💡</span>
+              <span><strong>Pay Now, Relax Later:</strong> This price covers all your core bookings. You only pay out-of-pocket for local meals, shopping, and spontaneous activities on the ground.</span>
+            </p>
+            <div class="quote-total">
+              <div>
+                <p class="quote-total__label" data-quote="total-label">Total (For 2)</p>
+                <p class="quote-total__amount" data-quote="total">$1,240</p>
+              </div>
+              <button class="btn btn--gold" type="button" data-dialog-open="checkout">Book Trip ➔</button>
+            </div>
+          </section>
+        </aside>
+      </section>
+    </div>
+  </main>
+
+  <!-- Checkout modal ("Book Trip") -->
+  <dialog class="modal" id="checkout" aria-labelledby="checkout-title">
+    <form class="modal__card checkout" action="trip.html" method="get">
+      <button class="close-btn modal__close" type="button" data-dialog-close aria-label="Close">✕</button>
+      <div class="checkout__head">
+        <span class="pill pill--emerald pill--xs">🔒 256-Bit Encrypted Checkout</span>
+        <h2 class="modal__title" id="checkout-title">Complete Reservation</h2>
+        <p class="modal__text">Instant confirmation with Roamly Best Price Guarantee.</p>
+      </div>
+
+      <div class="checkout__summary">
+        <div class="checkout__summary-row">
+          <span>Istanbul Dynamic Experience</span>
+          <strong data-quote="total-cents">$1,240.00</strong>
+        </div>
+        <p class="checkout__inclusions">Inclusions: Flights + 5★ Hotel + AI Concierge Pass</p>
+      </div>
+
+      <div class="promo">
+        <label class="sr-only" for="promo-code">Promo code</label>
+        <input class="input" id="promo-code" placeholder="Promo code (e.g. ROAM20)" autocomplete="off">
+        <button class="btn btn--dark" type="button">Apply</button>
+      </div>
+
+      <div class="checkout__form">
+        <label class="field">
+          <span class="field__label field__label--caps">Cardholder Name</span>
+          <input class="input" value="Nada Alawneh" autocomplete="cc-name">
+        </label>
+        <label class="field">
+          <span class="field__label field__label--caps">Card Number</span>
+          <input class="input" value="4532 •••• •••• 8921" inputmode="numeric" autocomplete="cc-number">
+        </label>
+        <div class="form-row">
+          <label class="field">
+            <span class="field__label field__label--caps">Expiry Date</span>
+            <input class="input" value="08/28" autocomplete="cc-exp">
+          </label>
+          <label class="field">
+            <span class="field__label field__label--caps">CVC</span>
+            <input class="input" value="888" inputmode="numeric" autocomplete="cc-csc">
+          </label>
+        </div>
+
+        <fieldset class="pay-methods">
+          <legend class="field__label field__label--caps">Payment Method</legend>
+          <div class="pay-methods__options">
+            <label class="pay-option">
+              <input type="radio" name="payment" value="full" checked>
+              <span>
+                <span class="pay-option__title">Pay in Full</span><br>
+                <span class="pay-option__text">Pay the total amount now</span>
+              </span>
+            </label>
+            <label class="pay-option">
+              <input type="radio" name="payment" value="split">
+              <span>
+                <span class="pay-option__title">Split Bill</span><br>
+                <span class="pay-option__text" data-quote="per-person">$620.00 per person</span>
+              </span>
+            </label>
+          </div>
+        </fieldset>
+
+        <button class="btn btn--primary btn--block" type="submit"><i class="fa-solid fa-lock" aria-hidden="true"></i> Confirm Reservation</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Paywall modal ("Unlock Unlimited AI") -->
+  <dialog class="modal modal--dense" id="paywall" aria-labelledby="paywall-title">
+    <div class="modal__card paywall">
+      <button class="close-btn modal__close" type="button" data-dialog-close aria-label="Close">✕</button>
+      <span class="paywall__icon" aria-hidden="true">👑</span>
+      <h2 class="modal__title" id="paywall-title">Unlock Unlimited AI</h2>
+      <p class="paywall__text">You've used your free AI generation. Upgrade to a Pro or Family plan to unlock unlimited itinerary generations, calendar sync, and offline maps.</p>
+      <a class="btn btn--primary btn--block" href="pricing.html">View Pricing Plans ➔</a>
+    </div>
+  </dialog>
+
+  <footer class="site-footer">
+    <div class="container container--narrow site-footer__inner">
+      <section class="newsletter" aria-labelledby="newsletter-title">
+        <div>
+          <h2 class="newsletter__title" id="newsletter-title">📩 Subscribe to our newsletter</h2>
+          <p class="newsletter__text">Get exclusive deals, AI travel tips, and destination inspiration straight to your inbox.</p>
+        </div>
+        <form class="newsletter__form" action="#" method="post">
+          <label class="sr-only" for="newsletter-email">Email address</label>
+          <input class="newsletter__input" id="newsletter-email" type="email" name="email" placeholder="Enter your email..." autocomplete="email" required>
+          <button class="btn btn--primary" type="submit">Subscribe</button>
+        </form>
+      </section>
+
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="index.html" aria-label="Roamly home">
+            <span class="brand__mark"><img src="assets/img/logo.png" alt="" width="32" height="28"></span>
+            <span class="brand__name">Roamly<span class="brand__dot">.</span></span>
+          </a>
+          <p class="footer-brand__text">Your trusted AI travel partner for creating unforgettable experiences around the world.</p>
+          <div class="socials">
+            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter" aria-hidden="true"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a>
+          </div>
+        </div>
+        <nav class="footer-col" aria-labelledby="footer-quick">
+          <h3 class="footer-col__title" id="footer-quick">Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="ai-planner.html">AI Planner ✨</a></li>
+            <li><a href="destinations.html">Destinations</a></li>
+            <li><a href="deals.html">Packages &amp; Deals</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col" aria-labelledby="footer-top">
+          <h3 class="footer-col__title" id="footer-top">Top Destinations</h3>
+          <ul>
+            <li><a href="ai-planner.html?destination=Istanbul%2C%20Turkey">Istanbul, Turkey</a></li>
+            <li><a href="ai-planner.html?destination=Bali%2C%20Indonesia">Bali, Indonesia</a></li>
+            <li><a href="ai-planner.html?destination=Maldives">Maldives Resort</a></li>
+            <li><a href="ai-planner.html?destination=Santorini%2C%20Greece">Santorini, Greece</a></li>
+            <li><a href="ai-planner.html?destination=Dubai%2C%20UAE">Dubai, UAE</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col" aria-labelledby="footer-support">
+          <h3 class="footer-col__title" id="footer-support">Support</h3>
+          <ul>
+            <li><a href="support.html">Contact Us</a></li>
+            <li><a href="support.html#faq">FAQs</a></li>
+            <li><a href="support.html#faq">Booking Guide</a></li>
+            <li><a href="#">Terms &amp; Conditions</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <p class="copyright">© 2026 Roamly AI Travel Planner. All Rights Reserved. Designed for next-generation smart travel.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>

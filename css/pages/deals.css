@@ -1,0 +1,64 @@
+/* ==========================================================================
+   Roamly — Packages & Deals page (Figma frame "Packages&Deals")
+   ========================================================================== */
+
+.flash-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px;
+  background: linear-gradient(90deg, var(--rose-600) 0%, var(--rose-700) 100%);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+}
+
+.flash-banner__body { display: flex; align-items: center; gap: 16px; }
+
+.flash-banner__icon {
+  --tile-bg: rgba(255, 255, 255, 0.1);
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.flash-banner__title { font-size: 18px; line-height: 28px; font-weight: 800; color: var(--white); }
+.flash-banner__text { font-size: 12px; line-height: 16px; color: var(--rose-100); }
+
+.countdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+
+.countdown__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 50px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: var(--white);
+}
+
+.countdown__value {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  color: var(--slate-900);
+}
+
+.countdown__label {
+  font-size: 9px;
+  line-height: 13.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--slate-500);
+}
+
+.countdown__sep { font-size: 20px; line-height: 28px; font-weight: 700; color: var(--white); }
+
+@media (max-width: 720px) {
+  .flash-banner { flex-direction: column; align-items: flex-start; }
+}

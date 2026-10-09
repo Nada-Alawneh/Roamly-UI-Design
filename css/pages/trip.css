@@ -1,0 +1,77 @@
+/* ==========================================================================
+   Roamly — My Trip page
+   Figma frames: "Pay in Full" and "Split Pill" (split-bill state).
+   The state comes from ?payment=split (set by the checkout modal) and is
+   applied as data-payment on .trip-card; CSS shows the matching parts.
+   ========================================================================== */
+
+.trip-main {
+  --page-gap: 40px;
+  align-items: center;
+}
+
+.trip-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 768px;
+  padding: 40px;
+  text-align: center;
+}
+
+.trip-card__qr {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  background: var(--emerald-100);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  color: var(--emerald-500);
+  font-size: 36px;
+}
+
+.trip-card__title { font-size: 24px; line-height: 32px; font-weight: 900; }
+
+.trip-card__ref { color: var(--slate-500); }
+.trip-card__ref strong { color: var(--slate-900); }
+
+.status-note {
+  width: 100%;
+  max-width: 512px;
+  padding: 14px;
+  border: 1px solid;
+  border-radius: var(--radius-md);
+  font-size: 11px;
+  line-height: 17.88px;
+  text-align: left;
+}
+
+.status-note--full { background: var(--emerald-50); border-color: var(--emerald-200); color: var(--emerald-800); }
+.status-note--split { background: var(--amber-50); border-color: var(--amber-200); color: var(--amber-800); }
+
+.trip-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  padding-top: 16px;
+  border-top: 1px solid var(--slate-100);
+}
+
+.trip-card__actions .btn { padding: 12px 24px; font-size: 14px; line-height: 20px; font-weight: 700; }
+.trip-card__actions .btn--dark i { color: var(--amber-500); }
+.trip-card__actions .btn--soft { color: var(--slate-700); }
+
+/* State switching */
+.trip-card[data-payment="split"] [data-when="full"],
+.trip-card:not([data-payment="split"]) [data-when="split"] { display: none; }
+
+@media (max-width: 640px) {
+  .trip-card { padding: 28px 20px; }
+  .trip-card__actions .btn { width: 100%; }
+}
