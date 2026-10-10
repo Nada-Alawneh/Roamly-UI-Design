@@ -4,217 +4,352 @@
    element exists, so this one file is safe to load on every page.
    ========================================================================== */
 
-/* Per-person trip costs behind the "Lock In This Itinerary" card.
-   2 travellers → $1,240 and 5 travellers → $3,100, as in the Figma frames. */
-const PER_PERSON = { flights: 300, hotel: 225, transfers: 45, tickets: 50 };
+/* ==========================================================================
+   Roamly — Basic JavaScript Fundamentals Implementation
+   مكتوب بأبسط قواعد البرمجة: Variables, Functions, If/Else, Loops, DOM Events
+   ========================================================================== */
 
-const usd = (n, cents = false) =>
-  "$" + n.toLocaleString("en-US", { minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: cents ? 2 : 0 });
+// 1. المتغيرات الأساسية (Variables & Objects)
+var PER_PERSON = { 
+  flights: 300, 
+  hotel: 225, 
+  transfers: 45, 
+  tickets: 50 
+};
 
-/* ---------- Mobile menu ---------- */
-function initMenu() {
-  const toggle = document.querySelector("[data-menu-toggle]");
-  const header = toggle?.closest(".site-header");
-  if (!header) return;
-
-  toggle.addEventListener("click", () => {
-    const open = header.toggleAttribute("data-open");
-    toggle.setAttribute("aria-expanded", String(open));
+// 2. الدوال (Functions & Conditions)
+// دالة بسيطة لتحويل الرقم إلى صيغة أموال (دولار)
+function usd(number, hasCents) {
+  var digits = 0;
+  
+  // جملة شرطية بسيطة لمعرفة إذا كنا نحتاج قروش (Cents)
+  if (hasCents === true) {
+    digits = 2;
+  }
+  
+  return "$" + number.toLocaleString("en-US", { 
+    minimumFractionDigits: digits, 
+    maximumFractionDigits: digits 
   });
 }
 
-/* ---------- Dialogs ----------
-   [data-dialog-open="id"] opens <dialog id="id">; [data-dialog-close]
-   or a click on the dimmed area closes it; #id in the URL opens it on load. */
-function initDialogs() {
-  document.addEventListener("click", (event) => {
-    const opener = event.target.closest("[data-dialog-open]");
-    if (opener) {
-      event.preventDefault();
-      document.getElementById(opener.dataset.dialogOpen)?.showModal();
-      return;
-    }
-    const closer = event.target.closest("[data-dialog-close]");
-    if (closer) closer.closest("dialog")?.close();
-  });
-
-  for (const dialog of document.querySelectorAll("dialog.modal")) {
-    dialog.addEventListener("click", (event) => {
-      if (event.target === dialog) dialog.close();
-    });
+/* ---------- 1. DOM Manipulation & Events: Mobile Menu ---------- */
+function initMenu() {
+  var toggleButton = document.querySelector("[data-menu-toggle]");
+  
+  // إذا لم نجد الزر، نوقف الدالة
+  if (toggleButton === null) {
+    return;
   }
 
-  const target = location.hash ? document.getElementById(location.hash.slice(1)) : null;
-  if (target instanceof HTMLDialogElement) target.showModal();
+  var header = toggleButton.closest(".site-header");
+  
+  // إضافة حدث النقر (Click Event)
+  toggleButton.addEventListener("click", function () {
+    var isOpen = header.toggleAttribute("data-open");
+    
+    // جملة شرطية لتغيير حالة الزر
+    if (isOpen === true) {
+      toggleButton.setAttribute("aria-expanded", "true");
+    } else {
+      toggleButton.setAttribute("aria-expanded", "false");
+    }
+  });
 }
 
-/* ---------- AI planner ----------
-   First submit reveals the plan (the free generation). Any later submit
-   re-prices the plan and shows the paywall. #plan, #checkout or #paywall
-   in the URL reveal the plan straight away. */
-function renderQuote(travelers) {
-  const lines = Object.fromEntries(
-    Object.entries(PER_PERSON).map(([key, perPerson]) => [key, perPerson * travelers])
-  );
-  const perPersonTotal = Object.values(PER_PERSON).reduce((a, b) => a + b, 0);
-  const total = perPersonTotal * travelers;
-  const values = {
-    ...Object.fromEntries(Object.entries(lines).map(([k, v]) => [k, usd(v)])),
-    travelers: String(travelers),
-    total: usd(total),
-    "total-cents": usd(total, true),
-    "total-label": `Total (For ${travelers})`,
-    "per-person": `${usd(perPersonTotal, true)} per person`,
-    party: `${travelers} ${travelers === 1 ? "Adult" : "Adults"}`,
-  };
+/* ---------- 2. DOM Manipulation: Dialogs (Popups) ---------- */
+function initDialogs() {
+  // الاستماع للنقر في كل الصفحة
+  document.addEventListener("click", function (event) {
+    
+    // فحص إذا نقرنا على زر فتح المودال
+    var openButton = event.target.closest("[data-dialog-open]");
+    if (openButton !== null) {
+      event.preventDefault(); // منع تحديث الصفحة
+      var dialogId = openButton.getAttribute("data-dialog-open");
+      var targetDialog = document.getElementById(dialogId);
+      
+      if (targetDialog !== null) {
+        targetDialog.showModal();
+      }
+      return;
+    }
+    
+    // فحص إذا نقرنا على زر إغلاق المودال
+    var closeButton = event.target.closest("[data-dialog-close]");
+    if (closeButton !== null) {
+      var dialogToClose = closeButton.closest("dialog");
+      if (dialogToClose !== null) {
+        dialogToClose.close();
+      }
+    }
+  });
 
-  for (const el of document.querySelectorAll("[data-quote]")) {
-    const value = values[el.dataset.quote];
-    if (value !== undefined) el.textContent = value;
+  // إغلاق المودال عند النقر في الخلفية المظلمة
+  var allDialogs = document.querySelectorAll("dialog.modal");
+  for (var i = 0; i < allDialogs.length; i++) {
+    allDialogs[i].addEventListener("click", function (event) {
+      if (event.target === this) {
+        this.close();
+      }
+    });
+  }
+}
+
+/* ---------- 3. Functions & Math: AI Planner ---------- */
+function renderQuote(travelers) {
+  // حساب التكلفة للشخص الواحد
+  var perPersonTotal = PER_PERSON.flights + PER_PERSON.hotel + PER_PERSON.transfers + PER_PERSON.tickets;
+  var totalAmount = perPersonTotal * travelers;
+
+  // تجهيز الكلمات
+  var adultText = "Adults";
+  if (travelers === 1) {
+    adultText = "Adult";
+  }
+
+  // تخزين القيم في كائن (Object)
+  var values = {};
+  values["flights"] = usd(PER_PERSON.flights * travelers);
+  values["hotel"] = usd(PER_PERSON.hotel * travelers);
+  values["transfers"] = usd(PER_PERSON.transfers * travelers);
+  values["tickets"] = usd(PER_PERSON.tickets * travelers);
+  values["travelers"] = String(travelers);
+  values["total"] = usd(totalAmount);
+  values["total-cents"] = usd(totalAmount, true);
+  values["total-label"] = "Total (For " + travelers + ")";
+  values["per-person"] = usd(perPersonTotal, true) + " per person";
+  values["party"] = travelers + " " + adultText;
+
+  // حلقة (Loop) لتغيير النصوص في الـ HTML
+  var elements = document.querySelectorAll("[data-quote]");
+  for (var i = 0; i < elements.length; i++) {
+    var el = elements[i];
+    var key = el.getAttribute("data-quote");
+    
+    if (values[key] !== undefined) {
+      el.textContent = values[key];
+    }
   }
 }
 
 function initPlanner() {
-  const form = document.querySelector("[data-planner-form]");
-  const plan = document.querySelector("[data-plan]");
-  if (!form || !plan) return;
-
-  // Prefill from links such as destinations.html → "Explore Itinerary"
-  const params = new URLSearchParams(location.search);
-  for (const [name, value] of params) {
-    const field = form.elements.namedItem(name);
-    if (field && "value" in field) field.value = value;
+  var form = document.querySelector("[data-planner-form]");
+  var plan = document.querySelector("[data-plan]");
+  
+  if (form === null || plan === null) {
+    return;
   }
 
-  const travelers = () => Math.min(Math.max(parseInt(form.elements.travelers.value, 10) || 1, 1), 20);
-  const reveal = () => {
+  // دالة لجلب عدد المسافرين
+  function getTravelersCount() {
+    var inputField = form.elements.namedItem("travelers");
+    var num = parseInt(inputField.value, 10);
+    
+    if (isNaN(num) === true) { num = 1; }
+    if (num < 1) { num = 1; }
+    if (num > 20) { num = 20; }
+    
+    return num;
+  }
+
+  // دالة لإظهار الخطة
+  function showPlan() {
     plan.hidden = false;
-    renderQuote(travelers());
-  };
+    var count = getTravelersCount();
+    renderQuote(count);
+  }
 
-  if (["#plan", "#checkout", "#paywall"].includes(location.hash)) reveal();
-
-  form.addEventListener("submit", (event) => {
+  // حدث عند الضغط على زر Submit
+  form.addEventListener("submit", function (event) {
     event.preventDefault();
-    if (plan.hidden) {
-      reveal();
+    
+    if (plan.hidden === true) {
+      showPlan();
       plan.scrollIntoView({ behavior: "smooth", block: "start" });
-      return;
+    } else {
+      var count = getTravelersCount();
+      renderQuote(count);
+      var paywall = document.getElementById("paywall");
+      if (paywall !== null) {
+        paywall.showModal();
+      }
     }
-    renderQuote(travelers());
-    document.getElementById("paywall")?.showModal();
   });
 }
 
-/* ---------- My Trip: Pay in Full vs Split Bill ---------- */
-function initTripStatus() {
-  const card = document.querySelector("[data-payment]");
-  if (!card) return;
-  const payment = new URLSearchParams(location.search).get("payment");
-  if (payment === "split") card.dataset.payment = "split";
-}
-
-/* ---------- Destinations: region chips + search ---------- */
+/* ---------- 4. Arrays & Loops: Destinations Filter ---------- */
 function initDestinationFilter() {
-  const root = document.querySelector("[data-filter]");
-  if (!root) return;
+  var root = document.querySelector("[data-filter]");
+  if (root === null) return;
 
-  const chips = root.querySelectorAll("[data-region-chip]");
-  const search = root.querySelector("[data-filter-search]");
-  const cards = document.querySelectorAll("[data-region]");
-  const empty = document.querySelector("[data-filter-empty]");
-  let region = "all";
+  var chips = root.querySelectorAll("[data-region-chip]");
+  var searchInput = root.querySelector("[data-filter-search]");
+  var cards = document.querySelectorAll("[data-region]");
+  var emptyMessage = document.querySelector("[data-filter-empty]");
+  
+  var currentSelectedRegion = "all";
 
-  const apply = () => {
-    const query = search.value.trim().toLowerCase();
-    let shown = 0;
-    for (const card of cards) {
-      const inRegion = region === "all" || card.dataset.region.split(" ").includes(region);
-      const matches = card.textContent.toLowerCase().includes(query);
-      card.hidden = !(inRegion && matches);
-      if (!card.hidden) shown += 1;
+  // دالة لتطبيق الفلترة
+  function applyFilters() {
+    var query = searchInput.value.trim().toLowerCase();
+    var shownCount = 0;
+
+    // حلقة تمر على كل الكروت
+    for (var i = 0; i < cards.length; i++) {
+      var card = cards[i];
+      var cardRegion = card.getAttribute("data-region");
+      var cardText = card.textContent.toLowerCase();
+
+      var matchesRegion = false;
+      if (currentSelectedRegion === "all") {
+        matchesRegion = true;
+      } else if (cardRegion.indexOf(currentSelectedRegion) !== -1) {
+        matchesRegion = true;
+      }
+
+      var matchesText = false;
+      if (cardText.indexOf(query) !== -1) {
+        matchesText = true;
+      }
+
+      // إظهار الكرت إذا طابق الشروط
+      if (matchesRegion === true && matchesText === true) {
+        card.hidden = false;
+        shownCount = shownCount + 1;
+      } else {
+        card.hidden = true;
+      }
     }
-    if (empty) empty.hidden = shown > 0;
-  };
 
-  for (const chip of chips) {
-    chip.addEventListener("click", () => {
-      region = chip.dataset.regionChip;
-      for (const c of chips) c.setAttribute("aria-pressed", String(c === chip));
-      apply();
+    // إظهار رسالة "لا يوجد نتائج"
+    if (emptyMessage !== null) {
+      if (shownCount > 0) {
+        emptyMessage.hidden = true;
+      } else {
+        emptyMessage.hidden = false;
+      }
+    }
+  }
+
+  // حلقة لإضافة حدث النقر على الأزرار (Chips)
+  for (var j = 0; j < chips.length; j++) {
+    chips[j].addEventListener("click", function () {
+      currentSelectedRegion = this.getAttribute("data-region-chip");
+      
+      for (var k = 0; k < chips.length; k++) {
+        if (chips[k] === this) {
+          chips[k].setAttribute("aria-pressed", "true");
+        } else {
+          chips[k].setAttribute("aria-pressed", "false");
+        }
+      }
+      applyFilters();
     });
   }
-  search.addEventListener("input", apply);
+
+  searchInput.addEventListener("input", applyFilters);
 }
 
-/* ---------- Flash-sale countdown ---------- */
+/* ---------- 5. Timing Events: Flash-sale countdown ---------- */
 function initCountdown() {
-  const root = document.querySelector("[data-countdown]");
-  if (!root) return;
+  var root = document.querySelector("[data-countdown]");
+  if (root === null) return;
 
-  let remaining = parseInt(root.dataset.countdown, 10);
-  const parts = {
-    h: root.querySelector('[data-unit="h"]'),
-    m: root.querySelector('[data-unit="m"]'),
-    s: root.querySelector('[data-unit="s"]'),
-  };
-  const pad = (n) => String(n).padStart(2, "0");
-  const render = () => {
-    parts.h.textContent = pad(Math.floor(remaining / 3600));
-    parts.m.textContent = pad(Math.floor((remaining % 3600) / 60));
-    parts.s.textContent = pad(remaining % 60);
-  };
+  var remainingSeconds = parseInt(root.getAttribute("data-countdown"), 10);
+  var hoursEl = root.querySelector('[data-unit="h"]');
+  var minutesEl = root.querySelector('[data-unit="m"]');
+  var secondsEl = root.querySelector('[data-unit="s"]');
 
-  render();
-  const timer = setInterval(() => {
-    remaining = Math.max(remaining - 1, 0);
-    render();
-    if (remaining === 0) clearInterval(timer);
+  function padWithZero(number) {
+    var str = String(number);
+    if (str.length < 2) {
+      return "0" + str;
+    }
+    return str;
+  }
+
+  function updateDisplay() {
+    var hours = Math.floor(remainingSeconds / 3600);
+    var minutes = Math.floor((remainingSeconds % 3600) / 60);
+    var seconds = remainingSeconds % 60;
+
+    if (hoursEl !== null) { hoursEl.textContent = padWithZero(hours); }
+    if (minutesEl !== null) { minutesEl.textContent = padWithZero(minutes); }
+    if (secondsEl !== null) { secondsEl.textContent = padWithZero(seconds); }
+  }
+
+  updateDisplay();
+  
+  // تكرار كل ثانية
+  var timerId = setInterval(function () {
+    remainingSeconds = remainingSeconds - 1;
+    if (remainingSeconds < 0) {
+      remainingSeconds = 0;
+    }
+    
+    updateDisplay();
+    
+    if (remainingSeconds === 0) {
+      clearInterval(timerId); // إيقاف العداد
+    }
   }, 1000);
 }
 
-/* ---------- Support chat (front-end demo only) ---------- */
+/* ---------- 6. Forms & Timeout: Support chat ---------- */
 function initChat() {
-  const form = document.querySelector("[data-chat-form]");
-  const log = document.querySelector("[data-chat-log]");
-  if (!form || !log) return;
+  var form = document.querySelector("[data-chat-form]");
+  var log = document.querySelector("[data-chat-log]");
+  
+  if (form === null || log === null) return;
 
-  const add = (text, mine) => {
-    const bubble = document.createElement("p");
-    bubble.className = mine ? "bubble bubble--me" : "bubble";
+  function addMessage(text, isMine) {
+    var bubble = document.createElement("p");
+    if (isMine === true) {
+      bubble.className = "bubble bubble--me";
+    } else {
+      bubble.className = "bubble";
+    }
     bubble.textContent = text;
-    log.append(bubble);
+    log.appendChild(bubble);
     log.scrollTop = log.scrollHeight;
-  };
+  }
 
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", function (event) {
     event.preventDefault();
-    const input = form.elements.message;
-    const text = input.value.trim();
-    if (!text) return;
-    add(text, true);
+    var input = form.elements.namedItem("message");
+    var text = input.value.trim();
+    
+    if (text === "") {
+      return;
+    }
+
+    addMessage(text, true);
     input.value = "";
-    setTimeout(() => add("Thanks! A Roamly concierge is looking into this and will reply here shortly. ✨", false), 700);
+
+    // مهلة زمنية للرد (Timeout)
+    setTimeout(function () {
+      addMessage("Thanks! A Roamly concierge is looking into this and will reply here shortly.", false);
+    }, 700);
   });
 }
 
-
-
 /* ==========================================================================
-   Roamly Flight Engine: Smooth Airplane & Contrail Waypoint Navigation
+   7. Advanced Basic: Smooth Airplane Navigation (Scroll Events & Math)
    ========================================================================== */
-
 function initFlightJourney() {
-  const plane = document.getElementById("flightPlane");
-  const pathBase = document.getElementById("flightPathBase");
-  const pathActive = document.getElementById("flightPathActive");
-  const hudTerminal = document.getElementById("hudTerminal");
-  const svg = document.getElementById("flightSkySvg");
+  var plane = document.getElementById("flightPlane");
+  var pathBase = document.getElementById("flightPathBase");
+  var pathActive = document.getElementById("flightPathActive");
+  var hudTerminal = document.getElementById("hudTerminal");
+  var svg = document.getElementById("flightSkySvg");
 
-  if (!plane || !pathBase || !pathActive || !svg) return;
+  if (plane === null || pathBase === null || pathActive === null || svg === null) {
+    return;
+  }
 
-  // تعريف بوابات الطيران (السكاشن الرئيسية ومسمياتها الرادارية)
-  const waypointsConfig = [
+  // مصفوفة (Array) تحتوي على الكائنات (Objects) للبوابات
+  var waypointsConfig = [
     { selector: ".hero-video-section", label: "GATE 01: TAKEOFF • CLOUD RUNWAY" },
     { selector: ".search-wrap", label: "GATE 02: RADAR SEARCH ENGINE" },
     { selector: "section[aria-labelledby='popular-title']", label: "GATE 03: TOP DESTINATIONS" },
@@ -224,122 +359,136 @@ function initFlightJourney() {
     { selector: ".cta-banner", label: "FINAL DESTINATION: LANDING" }
   ];
 
-  let pathTotalLength = 0;
-  let waypoints = [];
+  var pathTotalLength = 0;
+  var waypoints = [];
 
-  // إنشاء تدرج لوني للمسار النفاث
-  if (!document.getElementById("flightGradient")) {
-    const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
-    defs.innerHTML = `
-      <linearGradient id="flightGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="#38bdf8" />
-        <stop offset="50%" stop-color="#f59e0b" />
-        <stop offset="100%" stop-color="#10b981" />
-      </linearGradient>
-    `;
-    svg.prepend(defs);
-  }
-
-  // حساب ورسم منحنيات بيزير (Bezier Curves) بين كل سكشن والآخر
+  // دالة حساب مسار الطيران (تحتاج بعض العمليات الحسابية للهندسة)
   function calculateFlightPath() {
-    const mainEl = document.querySelector("main") || document.body;
-    const mainRect = mainEl.getBoundingClientRect();
-    const scrollY = window.scrollY;
-
+    var scrollY = window.scrollY;
     waypoints = [];
 
-    waypointsConfig.forEach((cfg) => {
-      const el = document.querySelector(cfg.selector);
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        const absoluteTop = rect.top + scrollY;
-        // حساب نقطة الهبوط المناسبة للسكشن بتعرج جمالي (يمين - يسار)
-        const isLeft = waypoints.length % 2 === 0;
-        const xPos = isLeft 
-          ? Math.max(60, rect.left + rect.width * 0.15) 
-          : Math.min(window.innerWidth - 60, rect.left + rect.width * 0.85);
-        const yPos = absoluteTop + rect.height * 0.45;
+    // حلقة (Loop) لحساب أماكن السكاشن
+    for (var i = 0; i < waypointsConfig.length; i++) {
+      var config = waypointsConfig[i];
+      var element = document.querySelector(config.selector);
+      
+      if (element !== null) {
+        var rect = element.getBoundingClientRect();
+        var absoluteTop = rect.top + scrollY;
+        
+        var isLeft = false;
+        if (waypoints.length % 2 === 0) {
+          isLeft = true;
+        }
 
-        waypoints.push({ x: xPos, y: yPos, label: cfg.label, el: el });
+        var xPos = 0;
+        if (isLeft === true) {
+          xPos = rect.left + (rect.width * 0.15);
+          if (xPos < 60) { xPos = 60; }
+        } else {
+          xPos = rect.left + (rect.width * 0.85);
+          if (xPos > window.innerWidth - 60) { xPos = window.innerWidth - 60; }
+        }
+
+        var yPos = absoluteTop + (rect.height * 0.45);
+        waypoints.push({ x: xPos, y: yPos, label: config.label, el: element });
       }
-    });
-
-    if (waypoints.length < 2) return;
-
-    // بناء كود المسار المنحني d الخاص بـ SVG
-    let d = `M ${waypoints[0].x} ${waypoints[0].y}`;
-    for (let i = 0; i < waypoints.length - 1; i++) {
-      const curr = waypoints[i];
-      const next = waypoints[i + 1];
-      const midY = (curr.y + next.y) / 2;
-      // منحنى انسيابي سينمائي بين السكشنين
-      d += ` C ${curr.x} ${midY}, ${next.x} ${midY}, ${next.x} ${next.y}`;
     }
 
-    pathBase.setAttribute("d", d);
-    pathActive.setAttribute("d", d);
+    if (waypoints.length < 2) {
+      return;
+    }
+
+    // بناء النص الذي يرسم الخط المنحني للـ SVG
+    var dString = "M " + waypoints[0].x + " " + waypoints[0].y;
+    for (var j = 0; j < waypoints.length - 1; j++) {
+      var currentPoint = waypoints[j];
+      var nextPoint = waypoints[j + 1];
+      var midY = (currentPoint.y + nextPoint.y) / 2;
+      
+      dString = dString + " C " + currentPoint.x + " " + midY + ", " + nextPoint.x + " " + midY + ", " + nextPoint.x + " " + nextPoint.y;
+    }
+
+    pathBase.setAttribute("d", dString);
+    pathActive.setAttribute("d", dString);
 
     pathTotalLength = pathBase.getTotalLength();
-    pathActive.style.strokeDasharray = `${pathTotalLength} ${pathTotalLength}`;
+    pathActive.style.strokeDasharray = pathTotalLength + " " + pathTotalLength;
     pathActive.style.strokeDashoffset = pathTotalLength;
 
     updateFlight();
   }
 
-  // تحديث موقع الطائرة وزاوية دورانها أثناء السكرول
+  // دالة تحديث الطيارة أثناء السكرول
   function updateFlight() {
-    if (!pathTotalLength) return;
+    if (pathTotalLength === 0) {
+      return;
+    }
 
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = Math.min(1, Math.max(0, window.scrollY / (maxScroll || 1)));
+    var currentScroll = window.scrollY;
+    var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    if (maxScroll <= 0) { maxScroll = 1; }
 
-    const currentLen = progress * pathTotalLength;
-    const pt = pathBase.getPointAtLength(currentLen);
+    var progress = currentScroll / maxScroll;
+    if (progress < 0) { progress = 0; }
+    if (progress > 1) { progress = 1; }
+
+    var currentLen = progress * pathTotalLength;
+    var pt = pathBase.getPointAtLength(currentLen);
     
-    // حساب نقطة أمامية طفيفة لمعرفة زاوية انعطاف الطائرة (Aircraft Banking)
-    const nextPt = pathBase.getPointAtLength(Math.min(pathTotalLength, currentLen + 6));
-    const angleRad = Math.atan2(nextPt.y - pt.y, nextPt.x - pt.x);
-    const angleDeg = (angleRad * 180 / Math.PI) + 90; // زاوية الأيقونة للأمام
+    var nextLen = currentLen + 6;
+    if (nextLen > pathTotalLength) { nextLen = pathTotalLength; }
+    var nextPt = pathBase.getPointAtLength(nextLen);
 
-    // تحريك الطائرة بالإحداثيات الشاشية (Viewport View)
-    const screenX = pt.x;
-    const screenY = pt.y - window.scrollY;
+    // حساب زاوية دوران الطيارة (Math)
+    var angleRad = Math.atan2(nextPt.y - pt.y, nextPt.x - pt.x);
+    var angleDeg = (angleRad * 180 / Math.PI) + 90;
 
-    plane.style.transform = `translate3d(${screenX}px, ${screenY}px, 0) rotate(${angleDeg}deg)`;
-    pathActive.style.strokeDashoffset = Math.max(0, pathTotalLength - currentLen);
+    var screenX = pt.x;
+    var screenY = pt.y - currentScroll;
 
-    // تحديد البوابة الحالية وتحديث الـ HUD
-    let currentGate = waypoints[0]?.label || "";
-    waypoints.forEach((wp) => {
-      const rect = wp.el.getBoundingClientRect();
-      if (rect.top <= window.innerHeight * 0.6) {
+    plane.style.transform = "translate3d(" + screenX + "px, " + screenY + "px, 0) rotate(" + angleDeg + "deg)";
+    
+    var dashOffset = pathTotalLength - currentLen;
+    if (dashOffset < 0) { dashOffset = 0; }
+    pathActive.style.strokeDashoffset = dashOffset;
+
+    var currentGate = "";
+    if (waypoints.length > 0) {
+      currentGate = waypoints[0].label;
+    }
+
+    for (var k = 0; k < waypoints.length; k++) {
+      var wp = waypoints[k];
+      var wpRect = wp.el.getBoundingClientRect();
+      if (wpRect.top <= window.innerHeight * 0.6) {
         currentGate = wp.label;
       }
-    });
+    }
 
-    if (hudTerminal && hudTerminal.textContent !== currentGate) {
+    if (hudTerminal !== null && hudTerminal.textContent !== currentGate) {
       hudTerminal.textContent = currentGate;
     }
   }
 
-  window.addEventListener("scroll", updateFlight, { passive: true });
-  window.addEventListener("resize", () => {
-    calculateFlightPath();
-  });
+  // الاستماع لأحداث التمرير وتغيير حجم الشاشة
+  window.addEventListener("scroll", updateFlight);
+  window.addEventListener("resize", calculateFlightPath);
 
-  // تأخير طفيف عند بداية تحميل الصفحة لضمان اكتمال تحميل عناصر الصفحة
+  // تشغيل الحسابات بعد تحميل الصفحة
   setTimeout(calculateFlightPath, 350);
 }
 
-// تشغيل نظام الملاحة الجوية
-initFlightJourney();
+// ==========================================================================
+// تشغيل جميع الدوال (Function Calls)
+// ==========================================================================
 initMenu();
+initDialogs();
 initPlanner();
-initTripStatus();
 initDestinationFilter();
 initCountdown();
 initChat();
-initDialogs();
+initFlightJourney();
 
 
 
