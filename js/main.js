@@ -333,21 +333,6 @@ function initFlightJourney() {
 
 // تشغيل نظام الملاحة الجوية
 initFlightJourney();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 initMenu();
 initPlanner();
 initTripStatus();
