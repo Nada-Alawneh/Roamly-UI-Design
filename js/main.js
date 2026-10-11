@@ -335,7 +335,7 @@ function initChat() {
 }
 
 /* ==========================================================================
-   7. Advanced Basic: Smooth Airplane Navigation (Scroll Events & Math)
+   7. Advanced Basic: Smooth Left-Right Curve Avoiding Text Content to Footer
    ========================================================================== */
 function initFlightJourney() {
   var plane = document.getElementById("flightPlane");
@@ -343,69 +343,280 @@ function initFlightJourney() {
   var pathActive = document.getElementById("flightPathActive");
   var hudTerminal = document.getElementById("hudTerminal");
   var svg = document.getElementById("flightSkySvg");
+  var mainEl = document.getElementById("main");
 
   if (plane === null || pathBase === null || pathActive === null || svg === null) {
     return;
   }
 
-  // مصفوفة (Array) تحتوي على الكائنات (Objects) للبوابات
-  var waypointsConfig = [
-    { selector: ".hero-video-section", label: "GATE 01: TAKEOFF • CLOUD RUNWAY" },
-    { selector: ".search-wrap", label: "GATE 02: RADAR SEARCH ENGINE" },
-    { selector: "section[aria-labelledby='popular-title']", label: "GATE 03: TOP DESTINATIONS" },
-    { selector: ".why", label: "GATE 04: AIR CONCIERGE HUB" },
-    { selector: "section[aria-labelledby='deals-title']", label: "GATE 05: PROMO ESCAPES" },
-    { selector: ".reviews", label: "GATE 06: PASSENGER TERMINAL" },
-    { selector: ".cta-banner", label: "FINAL DESTINATION: LANDING" }
+  // إنشاء تدرجات الألوان الذكية داخل الـ SVG لتتغير بين السكاشن الغامقة والفاتحة
+  var svgNs = "http://www.w3.org/2000/svg";
+  var defs = svg.querySelector("defs");
+  if (defs === null) {
+    defs = document.createElementNS(svgNs, "defs");
+    svg.insertBefore(defs, svg.firstChild);
+  }
+
+  var baseGrad = document.getElementById("flightBaseGrad");
+  if (baseGrad === null) {
+    baseGrad = document.createElementNS(svgNs, "linearGradient");
+    baseGrad.setAttribute("id", "flightBaseGrad");
+    baseGrad.setAttribute("gradientUnits", "userSpaceOnUse");
+    baseGrad.setAttribute("x1", "0");
+    baseGrad.setAttribute("x2", "0");
+    defs.appendChild(baseGrad);
+  }
+
+  var activeGrad = document.getElementById("flightActiveGrad");
+  if (activeGrad === null) {
+    activeGrad = document.createElementNS(svgNs, "linearGradient");
+    activeGrad.setAttribute("id", "flightActiveGrad");
+    activeGrad.setAttribute("gradientUnits", "userSpaceOnUse");
+    activeGrad.setAttribute("x1", "0");
+    activeGrad.setAttribute("x2", "0");
+    defs.appendChild(activeGrad);
+  }
+
+  // عناوين البوابات للسكاشن وصولاً للفوتر
+  var gateLabels = [
+    "GATE 01: TAKEOFF • CLOUD RUNWAY",
+    "GATE 02: TOP DESTINATIONS",
+    "GATE 03: AIR CONCIERGE HUB",
+    "GATE 04: PROMO ESCAPES",
+    "GATE 05: PASSENGER TERMINAL",
+    "GATE 06: ADVENTURE BOARDING",
+    "FINAL DESTINATION: ROAMLY TERMINAL"
   ];
 
   var pathTotalLength = 0;
   var waypoints = [];
+  var sectionZones = [];
 
-  // دالة حساب مسار الطيران (تحتاج بعض العمليات الحسابية للهندسة)
-  function calculateFlightPath() {
-    var scrollY = window.scrollY;
-    waypoints = [];
+  // دالة تفحص إذا كان السكشن غامق أو فاتح تلقائياً
+  function isSectionDark(el) {
+    var tag = el.tagName ? el.tagName.toLowerCase() : "";
+    if (
+      tag === "footer" ||
+      el.classList.contains("site-footer") ||
+      el.classList.contains("footer") ||
+      el.classList.contains("why") ||
+      el.classList.contains("reviews") ||
+      el.classList.contains("hero-video-section")
+    ) {
+      return true;
+    }
 
-    // حلقة (Loop) لحساب أماكن السكاشن
-    for (var i = 0; i < waypointsConfig.length; i++) {
-      var config = waypointsConfig[i];
-      var element = document.querySelector(config.selector);
-      
-      if (element !== null) {
-        var rect = element.getBoundingClientRect();
-        var absoluteTop = rect.top + scrollY;
-        
-        var isLeft = false;
-        if (waypoints.length % 2 === 0) {
-          isLeft = true;
+    var styleBg = window.getComputedStyle(el).backgroundColor;
+    if (styleBg && styleBg.indexOf("rgb") !== -1) {
+      var rgb = styleBg.match(/\d+/g);
+      if (rgb && rgb.length >= 3) {
+        var red = parseInt(rgb[0], 10);
+        var green = parseInt(rgb[1], 10);
+        var blue = parseInt(rgb[2], 10);
+        var alpha = rgb.length >= 4 ? parseFloat(rgb[3]) : 1;
+        if (alpha === 0) {
+          return false;
         }
+        var lum = (red * 299 + green * 587 + blue * 114) / 1000;
+        return lum < 140;
+      }
+    }
+    return false;
+  }
 
-        var xPos = 0;
-        if (isLeft === true) {
-          xPos = rect.left + (rect.width * 0.15);
-          if (xPos < 60) { xPos = 60; }
-        } else {
-          xPos = rect.left + (rect.width * 0.85);
-          if (xPos > window.innerWidth - 60) { xPos = window.innerWidth - 60; }
+  // دالة مساعدة لإضافة نقطة لون للتدرج
+  function addGradStop(grad, offsetPercent, color) {
+    var stop = document.createElementNS(svgNs, "stop");
+    stop.setAttribute("offset", offsetPercent + "%");
+    stop.setAttribute("stop-color", color);
+    grad.appendChild(stop);
+  }
+
+  // دالة جمع كل السكاشن بالصفحة بما فيها السكشن الأخير والفوتر
+  function getAllPageSections() {
+    var list = [];
+
+    if (mainEl !== null) {
+      var mainChildren = mainEl.children;
+      for (var m = 0; m < mainChildren.length; m++) {
+        var child = mainChildren[m];
+        if (
+          !child.classList.contains("flight-journey-tracker") &&
+          !child.classList.contains("search-wrap") &&
+          child.offsetHeight > 120
+        ) {
+          list.push(child);
         }
-
-        var yPos = absoluteTop + (rect.height * 0.45);
-        waypoints.push({ x: xPos, y: yPos, label: config.label, el: element });
       }
     }
 
-    if (waypoints.length < 2) {
+    var bodyChildren = document.body.children;
+    var afterMain = (mainEl === null);
+    for (var b = 0; b < bodyChildren.length; b++) {
+      var bChild = bodyChildren[b];
+      if (bChild === mainEl) {
+        afterMain = true;
+        continue;
+      }
+      if (afterMain === true) {
+        var bTag = bChild.tagName ? bChild.tagName.toLowerCase() : "";
+        if (
+          bTag !== "script" &&
+          bTag !== "dialog" &&
+          !bChild.classList.contains("flight-hud") &&
+          bChild.offsetHeight > 120
+        ) {
+          list.push(bChild);
+        }
+      }
+    }
+
+    var footerEl = document.querySelector("footer, .site-footer, .footer");
+    if (footerEl !== null && list.indexOf(footerEl) === -1 && footerEl.offsetHeight > 100) {
+      list.push(footerEl);
+    }
+
+    return list;
+  }
+
+  // دالة حساب مسار الطيران (كيرف مرة يمين ومرة يسار يلتف حول المحتوى بدون تغطية النص)
+  function calculateFlightPath() {
+    var scrollY = window.scrollY;
+    var mainTop = 0;
+
+    if (mainEl !== null) {
+      var mainRect = mainEl.getBoundingClientRect();
+      mainTop = mainRect.top + scrollY;
+    }
+
+    var sections = getAllPageSections();
+    if (sections.length < 2) {
       return;
     }
 
-    // بناء النص الذي يرسم الخط المنحني للـ SVG
+    var lastSec = sections[sections.length - 1];
+    var lastRect = lastSec.getBoundingClientRect();
+    var totalHeight = (lastRect.top + scrollY - mainTop) + lastRect.height;
+
+    svg.style.height = totalHeight + "px";
+    if (svg.parentElement !== null) {
+      svg.parentElement.style.height = totalHeight + "px";
+    }
+
+    waypoints = [];
+    sectionZones = [];
+
+    var screenW = window.innerWidth;
+    // نقاط أقصى اليسار وأقصى اليمين على الأطراف الفارغة لتفادي النص بالمنتصف
+    var leftInnerX = Math.max(36, screenW * 0.08);
+    var leftOuterX = Math.max(24, screenW * 0.035);
+    var rightInnerX = Math.min(screenW - 36, screenW * 0.92);
+    var rightOuterX = Math.min(screenW - 24, screenW * 0.965);
+
+    for (var i = 0; i < sections.length; i++) {
+      var sec = sections[i];
+      var rect = sec.getBoundingClientRect();
+      var secTop = rect.top + scrollY - mainTop;
+      var secBottom = secTop + rect.height;
+      var dark = isSectionDark(sec);
+
+      var label = gateLabels[i] || ("GATE 0" + (i + 1) + ": TERMINAL");
+      if (i === sections.length - 1) {
+        label = "FINAL DESTINATION: LANDING";
+      }
+
+      sectionZones.push({
+        top: secTop,
+        bottom: secBottom,
+        dark: dark,
+        label: label,
+        el: sec
+      });
+
+      // التناوب: سكشن على اليسار وسكشن على اليمين
+      var isLeft = (i % 2 === 0);
+
+      // داخل السكشن يلتف الكيرف على الطرف الفارغ، وينتقل للجهة المقابلة في منطقة الفراغ بين السكاشن
+      var padOffset = Math.min(85, rect.height * 0.16);
+      var entryY = secTop + padOffset;
+      var exitY = secBottom - padOffset;
+
+      if (i === 0) {
+        // نقطة الانطلاق في الهيرو
+        waypoints.push({
+          x: leftInnerX,
+          y: secTop + (rect.height * 0.35),
+          label: label,
+          el: sec
+        });
+        waypoints.push({
+          x: leftOuterX,
+          y: exitY,
+          label: label,
+          el: sec
+        });
+      } else if (i === sections.length - 1) {
+        // نقاط الهبوط في الفوتر
+        waypoints.push({
+          x: isLeft ? leftInnerX : rightInnerX,
+          y: entryY,
+          label: label,
+          el: sec
+        });
+        waypoints.push({
+          x: isLeft ? leftOuterX : rightOuterX,
+          y: secTop + (rect.height * 0.82),
+          label: label,
+          el: sec
+        });
+      } else {
+        // نقطتان على نفس الطرف الفارغ لكل سكشن حتى يمر بجانب النص والكروت دون أن يقطع فوقها
+        waypoints.push({
+          x: isLeft ? leftInnerX : rightInnerX,
+          y: entryY,
+          label: label,
+          el: sec
+        });
+        waypoints.push({
+          x: isLeft ? leftOuterX : rightOuterX,
+          y: exitY,
+          label: label,
+          el: sec
+        });
+      }
+    }
+
+    // تحديث تدرج الألوان (فاتح وذهبي على الغامق، وكحلي على الفاتح)
+    baseGrad.setAttribute("y1", "0");
+    baseGrad.setAttribute("y2", String(totalHeight));
+    activeGrad.setAttribute("y1", "0");
+    activeGrad.setAttribute("y2", String(totalHeight));
+
+    while (baseGrad.firstChild) { baseGrad.removeChild(baseGrad.firstChild); }
+    while (activeGrad.firstChild) { activeGrad.removeChild(activeGrad.firstChild); }
+
+    for (var z = 0; z < sectionZones.length; z++) {
+      var zone = sectionZones[z];
+      var startPct = Math.max(0, Math.min(100, (zone.top / totalHeight) * 100));
+      var endPct = Math.max(0, Math.min(100, (zone.bottom / totalHeight) * 100));
+
+      var baseColor = zone.dark ? "rgba(241, 245, 249, 0.55)" : "rgba(15, 23, 42, 0.42)";
+      var activeColor = zone.dark ? "#fbbf24" : "#0f172a";
+
+      addGradStop(baseGrad, startPct.toFixed(2), baseColor);
+      addGradStop(baseGrad, endPct.toFixed(2), baseColor);
+
+      addGradStop(activeGrad, startPct.toFixed(2), activeColor);
+      addGradStop(activeGrad, endPct.toFixed(2), activeColor);
+    }
+
+    // بناء منحنيات المسار الانسيابية (Bezier Curves)
     var dString = "M " + waypoints[0].x + " " + waypoints[0].y;
     for (var j = 0; j < waypoints.length - 1; j++) {
       var currentPoint = waypoints[j];
       var nextPoint = waypoints[j + 1];
       var midY = (currentPoint.y + nextPoint.y) / 2;
-      
+
       dString = dString + " C " + currentPoint.x + " " + midY + ", " + nextPoint.x + " " + midY + ", " + nextPoint.x + " " + nextPoint.y;
     }
 
@@ -419,13 +630,37 @@ function initFlightJourney() {
     updateFlight();
   }
 
+  // دالة إيجاد النقطة على المسار المقابلة لمكان الشاشة الحالي
+  function getLengthAtY(targetY) {
+    var low = 0;
+    var high = pathTotalLength;
+    for (var iter = 0; iter < 15; iter++) {
+      var mid = (low + high) / 2;
+      var pt = pathBase.getPointAtLength(mid);
+      if (pt.y < targetY) {
+        low = mid;
+      } else {
+        high = mid;
+      }
+    }
+    return (low + high) / 2;
+  }
+
   // دالة تحديث الطيارة أثناء السكرول
   function updateFlight() {
-    if (pathTotalLength === 0) {
+    if (pathTotalLength === 0 || waypoints.length < 2) {
       return;
     }
 
     var currentScroll = window.scrollY;
+    var mainTop = 0;
+    if (mainEl !== null) {
+      mainTop = mainEl.getBoundingClientRect().top + currentScroll;
+    }
+
+    var startY = waypoints[0].y;
+    var endY = waypoints[waypoints.length - 1].y;
+
     var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     if (maxScroll <= 0) { maxScroll = 1; }
 
@@ -433,37 +668,49 @@ function initFlightJourney() {
     if (progress < 0) { progress = 0; }
     if (progress > 1) { progress = 1; }
 
-    var currentLen = progress * pathTotalLength;
+    var viewportTargetY = (currentScroll - mainTop) + (window.innerHeight * (0.38 + progress * 0.35));
+    if (viewportTargetY < startY) { viewportTargetY = startY; }
+    if (viewportTargetY > endY) { viewportTargetY = endY; }
+
+    var currentLen = getLengthAtY(viewportTargetY);
     var pt = pathBase.getPointAtLength(currentLen);
-    
-    var nextLen = currentLen + 6;
+
+    var nextLen = currentLen + 8;
     if (nextLen > pathTotalLength) { nextLen = pathTotalLength; }
     var nextPt = pathBase.getPointAtLength(nextLen);
 
-    // حساب زاوية دوران الطيارة (Math)
+    // حساب زاوية دوران الطيارة
     var angleRad = Math.atan2(nextPt.y - pt.y, nextPt.x - pt.x);
     var angleDeg = (angleRad * 180 / Math.PI) + 90;
 
     var screenX = pt.x;
-    var screenY = pt.y - currentScroll;
+    var screenY = (pt.y + mainTop) - currentScroll;
 
     plane.style.transform = "translate3d(" + screenX + "px, " + screenY + "px, 0) rotate(" + angleDeg + "deg)";
-    
+
     var dashOffset = pathTotalLength - currentLen;
     if (dashOffset < 0) { dashOffset = 0; }
     pathActive.style.strokeDashoffset = dashOffset;
 
-    var currentGate = "";
-    if (waypoints.length > 0) {
-      currentGate = waypoints[0].label;
+    var currentGate = sectionZones.length > 0 ? sectionZones[0].label : "";
+    var onDark = true;
+
+    for (var k = 0; k < sectionZones.length; k++) {
+      var zone = sectionZones[k];
+      if (pt.y >= zone.top && pt.y <= zone.bottom) {
+        currentGate = zone.label;
+        onDark = zone.dark;
+        break;
+      } else if (pt.y > zone.bottom) {
+        currentGate = zone.label;
+        onDark = zone.dark;
+      }
     }
 
-    for (var k = 0; k < waypoints.length; k++) {
-      var wp = waypoints[k];
-      var wpRect = wp.el.getBoundingClientRect();
-      if (wpRect.top <= window.innerHeight * 0.6) {
-        currentGate = wp.label;
-      }
+    if (onDark === true) {
+      plane.classList.remove("on-light-sec");
+    } else {
+      plane.classList.add("on-light-sec");
     }
 
     if (hudTerminal !== null && hudTerminal.textContent !== currentGate) {
@@ -471,11 +718,10 @@ function initFlightJourney() {
     }
   }
 
-  // الاستماع لأحداث التمرير وتغيير حجم الشاشة
   window.addEventListener("scroll", updateFlight);
   window.addEventListener("resize", calculateFlightPath);
+  window.addEventListener("load", calculateFlightPath);
 
-  // تشغيل الحسابات بعد تحميل الصفحة
   setTimeout(calculateFlightPath, 350);
 }
 
