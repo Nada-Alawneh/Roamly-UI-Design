@@ -5,6 +5,8 @@
    Values are taken from the Figma file "Roamly" (desktop frames, 1528px).
    ========================================================================== */
 
+
+   
 :root {
   /* Slate (text, surfaces, borders) */
   --slate-950: #080d1a;
@@ -406,3 +408,145 @@ select.input {
 }
 
 .skip-link:focus { left: 12px; }
+
+
+
+/* ==========================================================================
+   Clean Dark Mode Overrides (لا يؤثر أبدًا على النسخة الفاتحة الأصلية)
+   ========================================================================== */
+html.dark-theme,
+html.dark-theme body {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+/* الهيدر والنافبار */
+html.dark-theme .site-header {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border-bottom: 1px solid #1e293b !important;
+}
+
+html.dark-theme .nav-pill {
+  background: rgba(30, 41, 59, 0.85) !important;
+  border-color: #334155 !important;
+}
+
+html.dark-theme .nav-pill__link {
+  color: #94a3b8 !important;
+}
+
+html.dark-theme .nav-pill__link:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark-theme .nav-pill__link[aria-current="page"] {
+  background: #1e293b !important;
+  color: #ffffff !important;
+}
+
+/* الكاردات والصناديق بجميع الصفحات (هوم، أباوت، ديسانتينيشنز) */
+html.dark-theme .card,
+html.dark-theme .dest-card,
+html.dark-theme .deal-card,
+html.dark-theme .bento-card,
+html.dark-theme .chronicle-body,
+html.dark-theme .act-content,
+html.dark-theme .gate-card,
+html.dark-theme .story-card {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+html.dark-theme .section-title,
+html.dark-theme .bento-title,
+html.dark-theme .chronicle-title,
+html.dark-theme .act-title,
+html.dark-theme .gate-title,
+html.dark-theme .about-card__title {
+  color: #ffffff !important;
+}
+
+html.dark-theme p,
+html.dark-theme span:not(.s-num):not(.tel-val),
+html.dark-theme .bento-desc,
+html.dark-theme .chronicle-text,
+html.dark-theme .act-text,
+html.dark-theme .about-card__text {
+  color: #cbd5e1 !important;
+}
+
+/* حقول البحث والمدخلات */
+html.dark-theme .search-widget,
+html.dark-theme .quiz,
+html.dark-theme .search-field__control,
+html.dark-theme .input,
+html.dark-theme .newsletter__input {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #ffffff !important;
+}
+
+/* القائمة المنسدلة للبروفايل */
+html.dark-theme .user-dropdown {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+html.dark-theme .user-dropdown__email {
+  color: #ffffff !important;
+}
+
+html.dark-theme .user-dropdown__list a,
+html.dark-theme .user-dropdown__list button {
+  color: #cbd5e1 !important;
+}
+
+html.dark-theme .user-dropdown__list a:hover,
+html.dark-theme .user-dropdown__list button:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #fbbf24 !important;
+}
+
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+html.dark-theme .theme-toggle-btn {
+  background: #1e293b;
+  border-color: #334155;
+  color: #fbbf24;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.05);
+  border-color: #f59e0b;
+}
+
+html.dark-theme .site-header .brand__mark {
+  padding: 8px 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+html.dark-theme .site-header .brand__mark img {
+  filter:
+    brightness(1.32)
+    drop-shadow(0 0 2px rgba(226, 232, 240, 0.5))
+    drop-shadow(0 0 6px rgba(203, 213, 225, 0.32))
+    drop-shadow(0 0 14px rgba(148, 163, 184, 0.2));
+  transition: filter 0.3s ease, transform 0.3s ease;
+}

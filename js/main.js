@@ -738,3 +738,422 @@ initFlightJourney();
 
 
 
+/* ==========================================================================
+   8. Global Draggable AI Captain Chatbot Widget (All Pages)
+   ========================================================================== */
+function initFloatingAIChat() {
+  if (document.getElementById("roamlyAiWidget") !== null) {
+    return;
+  }
+
+  var widget = document.createElement("div");
+  widget.className = "roamly-ai-widget";
+  widget.id = "roamlyAiWidget";
+
+  widget.innerHTML =
+    '<div class="roamly-ai-popup" id="roamlyAiPopup" role="dialog" aria-label="Roamly AI Concierge Chat">' +
+      '<div class="roamly-ai-header" id="roamlyAiDragHeader">' +
+        '<div class="roamly-ai-header__info">' +
+          '<div class="roamly-ai-header__avatar" aria-hidden="true">🧑‍✈️</div>' +
+          '<div>' +
+            '<p class="roamly-ai-header__eyebrow">Live AI Captain • 24/7</p>' +
+            '<h3 class="roamly-ai-header__title">Roamly AI Concierge</h3>' +
+          '</div>' +
+        '</div>' +
+        '<button type="button" class="roamly-ai-close" id="roamlyAiClose" aria-label="Close chat">' +
+          '<i class="fa-solid fa-xmark" aria-hidden="true"></i>' +
+        '</button>' +
+      '</div>' +
+      '<div class="roamly-ai-messages" id="roamlyAiMessages" aria-live="polite">' +
+        '<p class="roamly-ai-bubble">👋 Welcome aboard! I am Captain Roamly AI. Drag me anywhere on the screen, or ask me about bookings, weather, or custom itineraries!</p>' +
+      '</div>' +
+      '<div class="roamly-ai-chips">' +
+        '<button type="button" class="roamly-ai-chip" data-prompt="Best package deals right now?">🔥 Best Deals</button>' +
+        '<button type="button" class="roamly-ai-chip" data-prompt="How can I modify my itinerary?">🗺️ Modify Trip</button>' +
+        '<button type="button" class="roamly-ai-chip" data-prompt="What is the refund policy?">💰 Refund Policy</button>' +
+      '</div>' +
+      '<form class="roamly-ai-form" id="roamlyAiForm">' +
+        '<input type="text" class="roamly-ai-input" id="roamlyAiInput" placeholder="Ask Captain Roamly..." autocomplete="off" required>' +
+        '<button type="submit" class="roamly-ai-send">Send ➔</button>' +
+      '</form>' +
+    '</div>' +
+    '<button type="button" class="roamly-ai-Launcher" id="roamlyAiLauncher" aria-label="Open Roamly AI Concierge">' +
+      '<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+        '<!-- قبعة الكابتن وأنتين الطيران الذكي -->' +
+        '<line x1="32" y1="5" x2="32" y2="13" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>' +
+        '<circle cx="32" cy="4.5" r="3" fill="#38bdf8"/>' +
+        '<path d="M16 21C16 14.5 23 11 32 11C41 11 48 14.5 48 21H16Z" fill="#f8fafc" stroke="#fbbf24" stroke-width="2"/>' +
+        '<path d="M13 21H51" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>' +
+        '<circle cx="32" cy="16.5" r="2.3" fill="#f59e0b"/>' +
+        '<!-- رأس مجسم البوت -->' +
+        '<rect x="14" y="21" width="36" height="27" rx="12" fill="#0f172a" stroke="#e2e8f0" stroke-width="2"/>' +
+        '<!-- شاشة الوجه ونظارة الطيار -->' +
+        '<rect x="19" y="26" width="26" height="14" rx="7" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>' +
+        '<circle class="roamly-bot-eye" cx="26.5" cy="33" r="3" fill="#38bdf8"/>' +
+        '<circle class="roamly-bot-eye" cx="37.5" cy="33" r="3" fill="#38bdf8"/>' +
+        '<path d="M28 43.5C29.5 45 34.5 45 36 43.5" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>' +
+        '<!-- طيارة ذهبية صغيرة على جنب المجسم -->' +
+        '<path d="M49 46L58 41L54 52L51.5 48.5L49 46Z" fill="#fbbf24"/>' +
+      '</svg>' +
+    '</button>' +
+'<div class="roamly-ai-tooltip"><span>Roamly AI</span></div>';
+  document.body.appendChild(widget);
+
+  var launcher = document.getElementById("roamlyAiLauncher");
+  var dragHeader = document.getElementById("roamlyAiDragHeader");
+  var closeBtn = document.getElementById("roamlyAiClose");
+  var form = document.getElementById("roamlyAiForm");
+  var input = document.getElementById("roamlyAiInput");
+  var messages = document.getElementById("roamlyAiMessages");
+  var chips = widget.querySelectorAll(".roamly-ai-chip");
+
+  var isDragging = false;
+  var movedDuringDrag = false;
+  var startX = 0;
+  var startY = 0;
+  var initialLeft = 28;
+  var initialTop = window.innerHeight - 90;
+
+  // استرجاع آخر مكان سحبه فيه اليوزر إذا تنقل بين الصفحات
+  var savedPos = sessionStorage.getItem("roamlyBotPos");
+  if (savedPos !== null) {
+    try {
+      var parsed = JSON.parse(savedPos);
+      applyPosition(parsed.left, parsed.top);
+    } catch (err) {
+      applyPosition(28, window.innerHeight - 90);
+    }
+  } else {
+    applyPosition(28, window.innerHeight - 90);
+  }
+
+  function applyPosition(leftPos, topPos) {
+    var maxLeft = window.innerWidth - 76;
+    var maxTop = window.innerHeight - 76;
+    var clampedLeft = Math.max(14, Math.min(maxLeft, leftPos));
+    var clampedTop = Math.max(14, Math.min(maxTop, topPos));
+
+    widget.style.left = clampedLeft + "px";
+    widget.style.top = clampedTop + "px";
+    widget.style.bottom = "auto";
+    widget.style.right = "auto";
+
+    // ضبط اتجاه فتح الـ Pop-up تلقائياً حسب موقع المجسم على الشاشة
+    if (clampedLeft > window.innerWidth * 0.52) {
+      widget.classList.add("align-right");
+    } else {
+      widget.classList.remove("align-right");
+    }
+
+    if (clampedTop < window.innerHeight * 0.55) {
+      widget.classList.add("open-down");
+    } else {
+      widget.classList.remove("open-down");
+    }
+  }
+
+  function startDrag(e) {
+    if (e.target.closest("#roamlyAiClose") !== null) {
+      return;
+    }
+    isDragging = true;
+    movedDuringDrag = false;
+
+    var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    var rect = widget.getBoundingClientRect();
+
+    startX = clientX;
+    startY = clientY;
+    initialLeft = rect.left;
+    initialTop = rect.top;
+  }
+
+  function onDrag(e) {
+    if (!isDragging) {
+      return;
+    }
+    var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    var dx = clientX - startX;
+    var dy = clientY - startY;
+
+    if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+      movedDuringDrag = true;
+      widget.classList.add("is-dragging");
+      applyPosition(initialLeft + dx, initialTop + dy);
+    }
+  }
+
+  function stopDrag() {
+    if (!isDragging) {
+      return;
+    }
+    isDragging = false;
+    widget.classList.remove("is-dragging");
+
+    if (movedDuringDrag) {
+      var rect = widget.getBoundingClientRect();
+      sessionStorage.setItem("roamlyBotPos", JSON.stringify({ left: rect.left, top: rect.top }));
+    }
+  }
+
+  launcher.addEventListener("mousedown", startDrag);
+  launcher.addEventListener("touchstart", startDrag, { passive: true });
+  dragHeader.addEventListener("mousedown", startDrag);
+  dragHeader.addEventListener("touchstart", startDrag, { passive: true });
+
+  window.addEventListener("mousemove", onDrag);
+  window.addEventListener("touchmove", onDrag, { passive: true });
+  window.addEventListener("mouseup", stopDrag);
+  window.addEventListener("touchend", stopDrag);
+
+  window.addEventListener("resize", function () {
+    var rect = widget.getBoundingClientRect();
+    applyPosition(rect.left, rect.top);
+  });
+
+  // فتح وإغلاق الشات عند الضغط بدون سحب
+  launcher.addEventListener("click", function () {
+    if (movedDuringDrag) {
+      movedDuringDrag = false;
+      return;
+    }
+    widget.classList.toggle("is-open");
+    if (widget.classList.contains("is-open")) {
+      setTimeout(function () { input.focus(); }, 180);
+    }
+  });
+
+  closeBtn.addEventListener("click", function () {
+    widget.classList.remove("is-open");
+  });
+
+  // ردود ذكية للمساعد حسب سؤال اليوزر
+  function getSmartReply(question) {
+    var q = question.toLowerCase();
+    if (q.indexOf("deal") !== -1 || q.indexOf("discount") !== -1 || q.indexOf("offer") !== -1) {
+      return "🔥 Our top flash deals right now include Maldives Paradise (50% Off at $899) and Dubai Experience (40% Off at $889) — plus an extra 15% off at checkout!";
+    }
+    if (q.indexOf("refund") !== -1 || q.indexOf("cancel") !== -1 || q.indexOf("price") !== -1) {
+      return "💰 With Roamly's Best Price Guarantee, if you find a lower rate within 24 hours of booking, we refund the difference immediately!";
+    }
+    if (q.indexOf("modify") !== -1 || q.indexOf("itinerary") !== -1 || q.indexOf("plan") !== -1) {
+      return "🗺️ You can customize any day of your trip in the AI Planner! Click 'Re-Generate AI Plan' next to any activity to swap it based on live weather and traffic.";
+    }
+    return "✈️ Copy that! I've checked our live global concierge data for \"" + question + "\". Would you like me to tailor a custom itinerary or apply a promo bundle for you?";
+  }
+
+  function sendUserMessage(text) {
+    if (!text) { return; }
+
+    var userBubble = document.createElement("p");
+    userBubble.className = "roamly-ai-bubble roamly-ai-bubble--me";
+    userBubble.textContent = text;
+    messages.appendChild(userBubble);
+    messages.scrollTop = messages.scrollHeight;
+
+    setTimeout(function () {
+      var botBubble = document.createElement("p");
+      botBubble.className = "roamly-ai-bubble";
+      botBubble.textContent = getSmartReply(text);
+      messages.appendChild(botBubble);
+      messages.scrollTop = messages.scrollHeight;
+    }, 450);
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var text = input.value.trim();
+    if (text === "") { return; }
+    input.value = "";
+    sendUserMessage(text);
+  });
+
+  for (var c = 0; c < chips.length; c++) {
+    chips[c].addEventListener("click", function () {
+      var promptText = this.getAttribute("data-prompt");
+      sendUserMessage(promptText);
+    });
+  }
+}
+
+initFloatingAIChat();
+
+
+
+
+/* ==========================================================================
+   9. Contact Us & Feedback Boarding Studio Interactive Logic
+   ========================================================================== */
+function initContactStudio() {
+  var form = document.getElementById("roamlyContactForm");
+  if (form === null) {
+    return;
+  }
+
+  var topicButtons = document.querySelectorAll("#contactTopicChips .topic-chip");
+  var topicInput = document.getElementById("selectedTopicInput");
+  var starButtons = document.querySelectorAll("#contactStarPicker .star-btn");
+  var ratingInput = document.getElementById("selectedRatingInput");
+  var ratingStatus = document.getElementById("ratingStatusText");
+  var modal = document.getElementById("contactSuccessModal");
+  var closeModalBtn = document.getElementById("closeContactModalBtn");
+  var modalTopicBadge = document.getElementById("modalTopicBadge");
+  var modalPersonalText = document.getElementById("modalPersonalText");
+
+  var ratingLabels = {
+    1: "1/5 • Needs Work 🛠️",
+    2: "2/5 • Fair Experience 🌤️",
+    3: "3/5 • Good Flight 👍",
+    4: "4/5 • Great Service! ✨",
+    5: "5/5 • Amazing! 🤩"
+  };
+
+  // تفعيل أزرار اختيار موضوع الرسالة
+  for (var i = 0; i < topicButtons.length; i++) {
+    topicButtons[i].addEventListener("click", function () {
+      for (var j = 0; j < topicButtons.length; j++) {
+        topicButtons[j].classList.remove("is-active");
+      }
+      this.classList.add("is-active");
+      if (topicInput !== null) {
+        topicInput.value = this.getAttribute("data-topic");
+      }
+    });
+  }
+
+  // تفعيل النجوم التفاعلية للفيدباك
+  for (var s = 0; s < starButtons.length; s++) {
+    starButtons[s].addEventListener("click", function () {
+      var val = parseInt(this.getAttribute("data-val"), 10);
+      if (ratingInput !== null) {
+        ratingInput.value = String(val);
+      }
+      if (ratingStatus !== null && ratingLabels[val]) {
+        ratingStatus.textContent = ratingLabels[val];
+      }
+      for (var k = 0; k < starButtons.length; k++) {
+        var btnVal = parseInt(starButtons[k].getAttribute("data-val"), 10);
+        if (btnVal <= val) {
+          starButtons[k].classList.add("is-Lit");
+        } else {
+          starButtons[k].classList.remove("is-Lit");
+        }
+      }
+    });
+  }
+
+  // إظهار الـ Pop-up الفخم عند إرسال الفورم
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var userName = document.getElementById("contact-name").value.trim() || "Traveler";
+    var chosenTopic = topicInput ? topicInput.value : "General Inquiry";
+    var chosenRating = ratingInput ? ratingInput.value : "5";
+
+    if (modalTopicBadge !== null) {
+      modalTopicBadge.textContent = chosenTopic.toUpperCase() + " • " + chosenRating + "★ RATING";
+    }
+    if (modalPersonalText !== null) {
+      modalPersonalText.textContent = "Thank you, " + userName + "! Your message and feedback have been received by our priority concierge desk. We'll get back to you within 15 minutes.";
+    }
+    if (modal !== null) {
+      modal.classList.add("is-visible");
+      modal.setAttribute("aria-hidden", "false");
+    }
+    form.reset();
+  });
+
+  if (closeModalBtn !== null && modal !== null) {
+    closeModalBtn.addEventListener("click", function () {
+      modal.classList.remove("is-visible");
+      modal.setAttribute("aria-hidden", "true");
+    });
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) {
+        modal.classList.remove("is-visible");
+        modal.setAttribute("aria-hidden", "true");
+      }
+    });
+  }
+}
+
+initContactStudio();
+
+
+
+/* ==========================================================================
+   10. Simple Navbar Login State Toggle
+   ========================================================================== */
+function initSimpleNavbarAuth() {
+  var guestActions = document.getElementById("guestActions");
+  var loggedActions = document.getElementById("loggedActions");
+  var simulateLoginBtn = document.getElementById("simulateLoginBtn");
+  var userMenuToggle = document.getElementById("userMenuToggle");
+  var userMenuWrap = document.querySelector(".user-menu-wrap");
+  var logoutBtn = document.getElementById("logoutBtn");
+
+  // محاكاة تسجيل الدخول عند الضغط على زر Sign In
+  if (simulateLoginBtn && guestActions && loggedActions) {
+    simulateLoginBtn.addEventListener("click", function () {
+      guestActions.style.display = "none";
+      loggedActions.style.display = "block";
+    });
+  }
+
+  // فتح وإغلاق القائمة المنسدلة للبروفايل
+  if (userMenuToggle && userMenuWrap) {
+    userMenuToggle.addEventListener("click", function (e) {
+      e.stopPropagation();
+      userMenuWrap.classList.toggle("is-open");
+    });
+
+    document.addEventListener("click", function (e) {
+      if (!userMenuWrap.contains(e.target)) {
+        userMenuWrap.classList.remove("is-open");
+      }
+    });
+  }
+
+  // تسجيل الخروج والرجوع لحالة الضيف
+  if (logoutBtn && guestActions && loggedActions) {
+    logoutBtn.addEventListener("click", function () {
+      loggedActions.style.display = "none";
+      guestActions.style.display = "flex";
+      userMenuWrap.classList.remove("is-open");
+    });
+  }
+}
+
+initSimpleNavbarAuth();
+
+/* ==========================================================================
+   Simple Safe Dark Theme Controller
+   ========================================================================== */
+function initSafeDarkMode() {
+  var toggleBtn = document.getElementById("themeToggleBtn");
+  var themeIcon = document.getElementById("themeIcon");
+  var htmlRoot = document.documentElement;
+
+  // استرجاع اختيار اليوزر السابق
+  if (localStorage.getItem("roamlyThemeMode") === "dark") {
+    htmlRoot.classList.add("dark-theme");
+    if (themeIcon) { themeIcon.className = "fa-solid fa-sun"; }
+  }
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", function () {
+      htmlRoot.classList.toggle("dark-theme");
+
+      if (htmlRoot.classList.contains("dark-theme")) {
+        localStorage.setItem("roamlyThemeMode", "dark");
+        if (themeIcon) { themeIcon.className = "fa-solid fa-sun"; }
+      } else {
+        localStorage.setItem("roamlyThemeMode", "light");
+        if (themeIcon) { themeIcon.className = "fa-solid fa-moon"; }
+      }
+    });
+  }
+}
+
+initSafeDarkMode();

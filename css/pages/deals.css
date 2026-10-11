@@ -1,29 +1,57 @@
 /* ==========================================================================
-   Roamly — Packages & Deals page (Figma frame "Packages&Deals")
+   Roamly — Packages & Deals page (Amber / Orange Warning & Urgency Theme)
    ========================================================================== */
 
+
+
+   
+/* 1. تحويل عنوان EXCLUSIVE SAVINGS للبرتقالي الذهبي المشرق */
+.page-hero .eyebrow--rose,
+.eyebrow--rose {
+  color: #f59e0b;
+}
+
+/* 2. بانر العد التنازلي (Flash Sale) بتدرج برتقالي ذهبي دافئ بدل الأحمر */
 .flash-banner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 24px;
-  background: linear-gradient(90deg, var(--rose-600) 0%, var(--rose-700) 100%);
+  padding: 24px 28px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 60%, #b45309 100%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl);
+  box-shadow: 0 18px 35px -10px rgba(217, 119, 6, 0.38);
 }
 
-.flash-banner__body { display: flex; align-items: center; gap: 16px; }
+.flash-banner__body {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
 
 .flash-banner__icon {
-  --tile-bg: rgba(255, 255, 255, 0.1);
+  --tile-bg: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   font-size: 24px;
   line-height: 32px;
 }
 
-.flash-banner__title { font-size: 18px; line-height: 28px; font-weight: 800; color: var(--white); }
-.flash-banner__text { font-size: 12px; line-height: 16px; color: var(--rose-100); }
+.flash-banner__title {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 800;
+  color: var(--white);
+}
 
+.flash-banner__text {
+  font-size: 12.5px;
+  line-height: 18px;
+  color: #fef3c7;
+  font-weight: 500;
+}
+
+/* 3. مربعات العد التنازلي */
 .countdown {
   display: flex;
   align-items: center;
@@ -35,10 +63,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 50px;
+  min-width: 52px;
   padding: 8px 12px;
   border-radius: var(--radius-md);
   background: var(--white);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .countdown__value {
@@ -54,11 +83,31 @@
   line-height: 13.5px;
   font-weight: 900;
   text-transform: uppercase;
-  color: var(--slate-500);
+  color: #d97706;
 }
 
-.countdown__sep { font-size: 20px; line-height: 28px; font-weight: 700; color: var(--white); }
+.countdown__sep {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+/* 4. تحويل شارات الخصم على الكروت (50% OFF) للبرتقالي الذهبي */
+.deal-card__badge {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.35);
+}
+
+/* 5. تحويل لون السعر بعد الخصم ($899) للبرتقالي الغني الواضح */
+.deal-card__price strong {
+  color: #d97706 !important;
+}
 
 @media (max-width: 720px) {
-  .flash-banner { flex-direction: column; align-items: flex-start; }
+  .flash-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

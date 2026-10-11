@@ -20,23 +20,54 @@
   <header class="site-header">
     <div class="container site-header__inner">
       <a class="brand" href="index.html" aria-label="Roamly home">
-        <span class="brand__mark"><img src="assets/img/logo.png" alt="" width="180" height="70"></span>
+       <span class="brand__mark"><img src="assets/img/logo.png" alt="" width="180" height="70"></span>
       </a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
         <i class="fa-solid fa-bars" aria-hidden="true"></i><span class="sr-only">Menu</span>
       </button>
       <nav class="site-nav" id="site-nav" aria-label="Main">
         <ul class="nav-pill">
-          <li><a class="nav-pill__link" href="index.html">Home</a></li>
+          <li><a class="nav-pill__link" href="index.html" aria-current="page">Home</a></li>
           <li><a class="nav-pill__link" href="ai-planner.html">AI Planner</a></li>
-          <li><a class="nav-pill__link" href="destinations.html" aria-current="page">Destinations</a></li>
+          <li><a class="nav-pill__link" href="destinations.html">Destinations</a></li>
           <li><a class="nav-pill__link" href="pricing.html">Pricing</a></li>
-          <li><a class="nav-pill__link" href="support.html">Support</a></li>
+          <li><a class="nav-pill__link" href="about.html" aria-current="page">About Us</a></li>
+          <li><a class="nav-pill__link" href="Contact-Us.html">Contact Us</a></li>
         </ul>
       </nav>
       <div class="header-actions">
-        <button class="currency" type="button"><i class="fa-solid fa-globe" aria-hidden="true"></i> USD ($)</button>
-        <a class="btn btn--dark btn--md" href="sign-in.html"><i class="fa-regular fa-circle-user" aria-hidden="true"></i> Sign In</a>
+        <!-- الحالة الأولى: قبل تسجيل الدخول (Guest) -->
+        <div id="guestActions" class="nav-auth-group">
+          <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme" title="Switch Dark/Light Mode">
+             <i class="fa-solid fa-moon" id="themeIcon"></i>
+            </button>
+          <button type="button" class="btn btn--dark btn--md" id="simulateLoginBtn">
+            <i class="fa-regular fa-circle-user" aria-hidden="true"></i> Sign In
+          </button>
+        </div>
+
+        <!-- الحالة الثانية: بعد تسجيل الدخول (Logged-In مع Dropdown) -->
+        <div class="user-menu-wrap" id="loggedActions" style="display: none;">
+          <button type="button" class="user-menu-trigger" id="userMenuToggle" aria-expanded="false">
+            <span class="user-avatar">N</span>
+            <span class="user-name">Nada Alawneh</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="user-dropdown" id="userDropdownMenu">
+            <div class="user-dropdown__header">
+              <p class="user-dropdown__title">Signed in as</p>
+              <p class="user-dropdown__email">nada@roamly.com</p>
+            </div>
+            <ul class="user-dropdown__list">
+              <li><a href="#"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li>
+              <li><a href="ai-planner.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li>
+              <li><button type="button" class="currency-switch-btn"><i class="fa-solid fa-globe" aria-hidden="true"></i> Currency: <strong>USD ($)</strong></button></li>
+              <li><a href="#"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li>
+              <li class="user-dropdown__divider"></li>
+              <li><button type="button" id="logoutBtn" class="logout-link"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log Out</button></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -221,9 +252,9 @@
         <nav class="footer-col" aria-labelledby="footer-support">
           <h3 class="footer-col__title" id="footer-support">Support</h3>
           <ul>
-            <li><a href="support.html">Contact Us</a></li>
-            <li><a href="support.html#faq">FAQs</a></li>
-            <li><a href="support.html#faq">Booking Guide</a></li>
+            <li><a href="Contact-Us.html">Contact Us</a></li>
+            <li><a href="Contact-Us.html#faq">FAQs</a></li>
+            <li><a href="Contact-Us.html#booking">Booking Guide</a></li>
             <li><a href="#">Terms &amp; Conditions</a></li>
             <li><a href="#">Privacy Policy</a></li>
           </ul>

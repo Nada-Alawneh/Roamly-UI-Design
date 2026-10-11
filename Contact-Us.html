@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Support · Roamly</title>
-  <meta name="description" content="24/7 AI support for bookings, calendar sync and refunds.">
+  <title>Contact Us · Roamly</title>
+  <meta name="description" content="Get in touch with Roamly team, ask about bookings or custom itineraries.">
   <link rel="icon" type="image/png" href="assets/img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,31 +13,61 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/pages/support.css">
+  <link rel="stylesheet" href="css/pages/Contact-Us.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="container site-header__inner">
       <a class="brand" href="index.html" aria-label="Roamly home">
-        <span class="brand__mark"><img src="assets/img/logo.png" alt="" width="180" height="70"></span>
-        <!-- <span class="brand__name">Roamly<span class="brand__dot">.</span></span> -->
+       <span class="brand__mark"><img src="assets/img/logo.png" alt="" width="180" height="70"></span>
       </a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
         <i class="fa-solid fa-bars" aria-hidden="true"></i><span class="sr-only">Menu</span>
       </button>
       <nav class="site-nav" id="site-nav" aria-label="Main">
         <ul class="nav-pill">
-          <li><a class="nav-pill__link" href="index.html">Home</a></li>
+          <li><a class="nav-pill__link" href="index.html" aria-current="page">Home</a></li>
           <li><a class="nav-pill__link" href="ai-planner.html">AI Planner</a></li>
           <li><a class="nav-pill__link" href="destinations.html">Destinations</a></li>
           <li><a class="nav-pill__link" href="pricing.html">Pricing</a></li>
-          <li><a class="nav-pill__link" href="support.html" aria-current="page">Support</a></li>
+          <li><a class="nav-pill__link" href="about.html" aria-current="page">About Us</a></li>
+          <li><a class="nav-pill__link" href="Contact-Us.html">Contact Us</a></li>
         </ul>
       </nav>
       <div class="header-actions">
-        <button class="currency" type="button"><i class="fa-solid fa-globe" aria-hidden="true"></i> USD ($)</button>
-        <a class="btn btn--dark btn--md" href="sign-in.html"><i class="fa-regular fa-circle-user" aria-hidden="true"></i> Sign In</a>
+        <!-- الحالة الأولى: قبل تسجيل الدخول (Guest) -->
+        <div id="guestActions" class="nav-auth-group">
+          <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme" title="Switch Dark/Light Mode">
+             <i class="fa-solid fa-moon" id="themeIcon"></i>
+            </button>
+          <button type="button" class="btn btn--dark btn--md" id="simulateLoginBtn">
+            <i class="fa-regular fa-circle-user" aria-hidden="true"></i> Sign In
+          </button>
+        </div>
+
+        <!-- الحالة الثانية: بعد تسجيل الدخول (Logged-In مع Dropdown) -->
+        <div class="user-menu-wrap" id="loggedActions" style="display: none;">
+          <button type="button" class="user-menu-trigger" id="userMenuToggle" aria-expanded="false">
+            <span class="user-avatar">N</span>
+            <span class="user-name">Nada Alawneh</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="user-dropdown" id="userDropdownMenu">
+            <div class="user-dropdown__header">
+              <p class="user-dropdown__title">Signed in as</p>
+              <p class="user-dropdown__email">nada@roamly.com</p>
+            </div>
+            <ul class="user-dropdown__list">
+              <li><a href="#"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li>
+              <li><a href="ai-planner.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li>
+              <li><button type="button" class="currency-switch-btn"><i class="fa-solid fa-globe" aria-hidden="true"></i> Currency: <strong>USD ($)</strong></button></li>
+              <li><a href="#"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li>
+              <li class="user-dropdown__divider"></li>
+              <li><button type="button" id="logoutBtn" class="logout-link"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log Out</button></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -45,9 +75,9 @@
   <main id="main">
     <section class="page-hero">
       <div class="container page-hero__inner">
-        <p class="eyebrow eyebrow--sky">Help Center</p>
-        <h1 class="page-hero__title">24/7 AI Support &amp; Assistance </h1>
-        <p class="page-hero__lead">Have questions about your booking, calendar sync, or refund policies? Our AI team is online around the clock.</p>
+        <p class="eyebrow" style="color: #f59e0b;">Get In Touch</p>
+        <h1 class="page-hero__title">Contact Our Team</h1>
+        <p class="page-hero__lead">Have a question about your trip, or want to customize a luxury package? Send us a message directly.</p>
       </div>
     </section>
 
@@ -79,30 +109,61 @@
         </article>
       </div>
 
-      <section class="card chat" aria-labelledby="chat-title">
-        <div class="chat__intro">
-          <div class="chat__intro-text">
-            <p class="chat__eyebrow">Live AI Assistant</p>
-            <h2 class="chat__title" id="chat-title">Chat with Roamly Concierge </h2>
-            <p class="chat__lead">Ask any questions regarding travel requirements, weather predictions, or modifying your existing booked package.</p>
+      <!-- Clean Contact Form Section -->
+      <section class="card contact-studio" aria-labelledby="contact-title">
+        <div class="contact-studio__aside">
+          <div>
+            <span class="contact-studio__badge"> DIRECT CONTACT DESK</span>
+            <h2 class="contact-studio__title" id="contact-title">We’re Here to Help Your Journey</h2>
+            <p class="contact-studio__desc">Fill out the form and our travel concierge team will get back to your inbox in less than 15 minutes.</p>
           </div>
-          <div class="agent-status">
-            <p class="agent-status__online">Live Agent Online</p>
-            <p class="agent-status__quote">"Hello! I am Roamly AI. How can I assist your trip planning today?"</p>
+          <div class="contact-info-list">
+            
+            <div class="contact-info-item"><i class="fa-solid fa-shield-halved"></i> <span>Secure encrypted messaging</span></div>
+            
           </div>
         </div>
-        <div class="chat__window">
-          <div class="chat__messages" data-chat-log aria-live="polite">
-            <p class="bubble">👋 Welcome to Roamly Support! Ask me about bookings, refunds, or itinerary customization.</p>
+
+        <div class="contact-studio__form-wrap">
+          <div class="boarding-header">
+            <span class="boarding-header__sub">SEND A MESSAGE</span>
+            <h3 class="boarding-header__main">Drop Us a Line</h3>
           </div>
-          <form class="chat__form" data-chat-form>
-            <label class="sr-only" for="chat-message">Your question</label>
-            <input class="input" id="chat-message" name="message" placeholder="Type your question here..." autocomplete="off">
-            <button class="btn btn--dark" type="submit">Send ➔</button>
+
+          <form class="contact-form" id="roamlyContactForm">
+            <div class="contact-form__row">
+              <div class="contact-field">
+                <label for="contact-name">Full Name</label>
+                <input type="text" id="contact-name" name="name" placeholder="e.g. Nada Alawneh" required>
+              </div>
+              <div class="contact-field">
+                <label for="contact-email">Email Address</label>
+                <input type="email" id="contact-email" name="email" placeholder="you@example.com" required>
+              </div>
+            </div>
+
+            <div class="contact-field">
+              <label for="contact-subject">Subject <span>(Optional)</span></label>
+              <input type="text" id="contact-subject" name="subject" placeholder="e.g. Booking inquiry or feedback">
+            </div>
+
+            <div class="contact-field">
+              <label for="contact-message">Your Message</label>
+              <textarea id="contact-message" name="message" rows="4" placeholder="How can we assist your trip today..." required></textarea>
+            </div>
+
+            <div class="contact-form__footer">
+              <p class="contact-form__note"><i class="fa-solid fa-circle-check"></i> Fast response guaranteed</p>
+              <button type="submit" class="contact-submit-btn">
+                <span>Send Message</span>
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </div>
           </form>
         </div>
       </section>
 
+      <!-- FAQ Section -->
       <section class="card faq" id="faq" aria-labelledby="faq-title">
         <h2 class="faq__title" id="faq-title">Frequently Asked Questions</h2>
         <div class="faq__list">
@@ -123,6 +184,16 @@
     </div>
   </main>
 
+  <!-- Success Pop-up Modal -->
+  <div class="contact-modal-backdrop" id="contactSuccessModal" aria-hidden="true">
+    <div class="contact-modal" role="dialog" aria-labelledby="modal-title">
+      <div class="contact-modal__icon">✈️</div>
+      <h3 class="contact-modal__title" id="modal-title">Message Sent Successfully!</h3>
+      <p class="contact-modal__text" id="modalPersonalText">Thank you! Your message has been received by our concierge desk. We will reply to your email shortly.</p>
+      <button type="button" class="contact-modal__btn" id="closeContactModalBtn">Awesome, Got It!</button>
+    </div>
+  </div>
+
   <footer class="site-footer">
     <div class="container container--narrow site-footer__inner">
       <section class="newsletter" aria-labelledby="newsletter-title">
@@ -140,7 +211,7 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <a class="brand" href="index.html" aria-label="Roamly home">
-            <span class="brand__mark"><img src="assets/img/logo.png" alt="" width="32" height="28"></span>
+            <span class="brand__mark"><img src="assets/img/logo.png" alt="" width="180" height="70"></span>
           </a><br>
           <p class="footer-brand__text" style="color: var(--slate-400);">Roamly is your travel companion</p><br>
           <div class="socials">
@@ -173,9 +244,9 @@
         <nav class="footer-col" aria-labelledby="footer-support">
           <h3 class="footer-col__title" id="footer-support">Support</h3>
           <ul>
-            <li><a href="support.html">Contact Us</a></li>
-            <li><a href="support.html#faq">FAQs</a></li>
-            <li><a href="support.html#faq">Booking Guide</a></li>
+            <li><a href="Contact-Us.html">Contact Us</a></li>
+            <li><a href="Contact-Us.html#faq">FAQs</a></li>
+            <li><a href="Contact-Us.html#booking">Booking Guide</a></li>
             <li><a href="#">Terms &amp; Conditions</a></li>
             <li><a href="#">Privacy Policy</a></li>
           </ul>
