@@ -36,7 +36,6 @@
         </ul>
       </nav>
       <div class="header-actions">
-        <!-- الحالة الأولى: قبل تسجيل الدخول (Guest) -->
         <div id="guestActions" class="nav-auth-group">
           <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme" title="Switch Dark/Light Mode">
              <i class="fa-solid fa-moon" id="themeIcon"></i>
@@ -46,7 +45,6 @@
           </button>
         </div>
 
-        <!-- الحالة الثانية: بعد تسجيل الدخول (Logged-In مع Dropdown) -->
         <div class="user-menu-wrap" id="loggedActions" style="display: none;">
           <button type="button" class="user-menu-trigger" id="userMenuToggle" aria-expanded="false">
             <span class="user-avatar">N</span>
@@ -82,7 +80,6 @@
     </section>
 
     <div class="container container--narrow page-main planner-main">
-      <!-- Generator control panel ("AI Planner 1") -->
       <form class="card planner-panel" data-planner-form aria-labelledby="planner-title">
         <h2 class="planner-panel__title" id="planner-title"><i class="fa-solid fa-sliders" aria-hidden="true"></i> Customize Your Travel Parameters</h2>
         <div class="planner-fields">
@@ -125,7 +122,6 @@
         </div>
       </form>
 
-      <!-- Generated plan ("AI Planner 2") -->
       <section class="plan" id="plan" data-plan hidden aria-label="Your generated itinerary">
         <div class="plan__col">
           <header class="card plan-header">
@@ -283,8 +279,7 @@
       </section>
     </div>
   </main>
-
-  <!-- Checkout modal ("Book Trip") -->
+<!-- Checkout modal -->
   <dialog class="modal" id="checkout" aria-labelledby="checkout-title">
     <form class="modal__card checkout" action="trip.html" method="get">
       <button class="close-btn modal__close" type="button" data-dialog-close aria-label="Close">✕</button>
@@ -342,7 +337,9 @@
               <input type="radio" name="payment" value="split">
               <span>
                 <span class="pay-option__title">Split Bill</span><br>
-                <span class="pay-option__text" data-quote="per-person">$620.00 per person</span>
+                <!-- Filled by renderQuote() in js/main.js (total ÷ travelers); text below is the no-JS fallback for the default 2 travelers -->
+                <span class="pay-option__text" data-quote="per-person">$620.00 per person</span><br>
+                <span class="pay-option__text" data-quote="split-formula">$1,240.00 ÷ 2 travelers</span>
               </span>
             </label>
           </div>
@@ -353,7 +350,7 @@
     </form>
   </dialog>
 
-  <!-- Paywall modal ("Unlock Unlimited AI") -->
+  <!-- Paywall modal -->
   <dialog class="modal modal--dense" id="paywall" aria-labelledby="paywall-title">
     <div class="modal__card paywall">
       <button class="close-btn modal__close" type="button" data-dialog-close aria-label="Close">✕</button>

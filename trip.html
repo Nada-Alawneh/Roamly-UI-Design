@@ -36,7 +36,6 @@
         </ul>
       </nav>
       <div class="header-actions">
-        <!-- الحالة الأولى: قبل تسجيل الدخول (Guest) -->
         <div id="guestActions" class="nav-auth-group">
           <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme" title="Switch Dark/Light Mode">
              <i class="fa-solid fa-moon" id="themeIcon"></i>
@@ -46,7 +45,6 @@
           </button>
         </div>
 
-        <!-- الحالة الثانية: بعد تسجيل الدخول (Logged-In مع Dropdown) -->
         <div class="user-menu-wrap" id="loggedActions" style="display: none;">
           <button type="button" class="user-menu-trigger" id="userMenuToggle" aria-expanded="false">
             <span class="user-avatar">N</span>
@@ -91,7 +89,7 @@
           <strong>Payment Status:</strong> Paid in Full! Your entire trip is fully confirmed and secured.
         </p>
         <p class="status-note status-note--split" data-when="split">
-          <strong>Group Split-Bill Status:</strong> Your share has been successfully paid! We are waiting for the rest of your travel party to complete their shares. <strong>If the group booking is not completed, your payment will be fully refunded.</strong>
+          <strong>Group Split-Bill Status:</strong> Your share has been successfully paid! Please note that all travelers in your group must complete their payments within 48 hours . We will send you continuous reminders. <strong>If everyone does not complete payment within this period, a 10% administrative tax/fee will be deducted from the total, and the remainder will be refunded.</strong>
         </p>
 
         <div class="trip-card__actions">
@@ -165,6 +163,17 @@
     </div>
   </footer>
 
+  <script>
+    // قراءة حالة الدفع من الـ URL لتحديث الشاشة في صفحة الرحلة
+    window.addEventListener("DOMContentLoaded", function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const paymentType = urlParams.get("payment");
+      const tripCard = document.querySelector(".trip-card");
+      if (tripCard && paymentType) {
+        tripCard.setAttribute("data-payment", paymentType);
+      }
+    });
+  </script>
   <script src="js/main.js" defer></script>
 </body>
 </html>

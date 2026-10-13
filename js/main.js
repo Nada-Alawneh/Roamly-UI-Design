@@ -1,15 +1,7 @@
 /* ==========================================================================
    Roamly — page behaviour
-   Each behaviour is keyed to a data-attribute and only runs when that
-   element exists, so this one file is safe to load on every page.
    ========================================================================== */
 
-/* ==========================================================================
-   Roamly — Basic JavaScript Fundamentals Implementation
-   مكتوب بأبسط قواعد البرمجة: Variables, Functions, If/Else, Loops, DOM Events
-   ========================================================================== */
-
-// 1. المتغيرات الأساسية (Variables & Objects)
 var PER_PERSON = { 
   flights: 300, 
   hotel: 225, 
@@ -17,98 +9,59 @@ var PER_PERSON = {
   tickets: 50 
 };
 
-// 2. الدوال (Functions & Conditions)
-// دالة بسيطة لتحويل الرقم إلى صيغة أموال (دولار)
 function usd(number, hasCents) {
   var digits = 0;
-  
-  // جملة شرطية بسيطة لمعرفة إذا كنا نحتاج قروش (Cents)
-  if (hasCents === true) {
-    digits = 2;
-  }
-  
-  return "$" + number.toLocaleString("en-US", { 
-    minimumFractionDigits: digits, 
-    maximumFractionDigits: digits 
-  });
+  if (hasCents === true) { digits = 2; }
+  return "$" + number.toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits });
 }
 
-/* ---------- 1. DOM Manipulation & Events: Mobile Menu ---------- */
 function initMenu() {
   var toggleButton = document.querySelector("[data-menu-toggle]");
-  
-  // إذا لم نجد الزر، نوقف الدالة
-  if (toggleButton === null) {
-    return;
-  }
-
+  if (toggleButton === null) { return; }
   var header = toggleButton.closest(".site-header");
-  
-  // إضافة حدث النقر (Click Event)
   toggleButton.addEventListener("click", function () {
     var isOpen = header.toggleAttribute("data-open");
-    
-    // جملة شرطية لتغيير حالة الزر
-    if (isOpen === true) {
-      toggleButton.setAttribute("aria-expanded", "true");
-    } else {
-      toggleButton.setAttribute("aria-expanded", "false");
-    }
+    if (isOpen === true) { toggleButton.setAttribute("aria-expanded", "true"); }
+    else { toggleButton.setAttribute("aria-expanded", "false"); }
   });
 }
 
-/* ---------- 2. DOM Manipulation: Dialogs (Popups) ---------- */
 function initDialogs() {
-  // الاستماع للنقر في كل الصفحة
   document.addEventListener("click", function (event) {
-    
-    // فحص إذا نقرنا على زر فتح المودال
     var openButton = event.target.closest("[data-dialog-open]");
     if (openButton !== null) {
-      event.preventDefault(); // منع تحديث الصفحة
+      event.preventDefault();
       var dialogId = openButton.getAttribute("data-dialog-open");
       var targetDialog = document.getElementById(dialogId);
-      
-      if (targetDialog !== null) {
-        targetDialog.showModal();
-      }
+      if (targetDialog !== null) { targetDialog.showModal(); }
       return;
     }
-    
-    // فحص إذا نقرنا على زر إغلاق المودال
     var closeButton = event.target.closest("[data-dialog-close]");
     if (closeButton !== null) {
       var dialogToClose = closeButton.closest("dialog");
-      if (dialogToClose !== null) {
-        dialogToClose.close();
-      }
+      if (dialogToClose !== null) { dialogToClose.close(); }
     }
   });
 
-  // إغلاق المودال عند النقر في الخلفية المظلمة
   var allDialogs = document.querySelectorAll("dialog.modal");
   for (var i = 0; i < allDialogs.length; i++) {
     allDialogs[i].addEventListener("click", function (event) {
-      if (event.target === this) {
-        this.close();
-      }
+      if (event.target === this) { this.close(); }
     });
   }
 }
 
-/* ---------- 3. Functions & Math: AI Planner ---------- */
 function renderQuote(travelers) {
-  // حساب التكلفة للشخص الواحد
+  // Never divide by zero / NaN, whatever the caller passes in
+  travelers = parseInt(travelers, 10);
+  if (isNaN(travelers) || travelers < 1) { travelers = 1; }
+
   var perPersonTotal = PER_PERSON.flights + PER_PERSON.hotel + PER_PERSON.transfers + PER_PERSON.tickets;
   var totalAmount = perPersonTotal * travelers;
+  // Split Bill = total amount ÷ number of travelers
+  var splitPerPerson = totalAmount / travelers;
+  var adultText = (travelers === 1) ? "Adult" : "Adults";
 
-  // تجهيز الكلمات
-  var adultText = "Adults";
-  if (travelers === 1) {
-    adultText = "Adult";
-  }
-
-  // تخزين القيم في كائن (Object)
   var values = {};
   values["flights"] = usd(PER_PERSON.flights * travelers);
   values["hotel"] = usd(PER_PERSON.hotel * travelers);
@@ -118,15 +71,16 @@ function renderQuote(travelers) {
   values["total"] = usd(totalAmount);
   values["total-cents"] = usd(totalAmount, true);
   values["total-label"] = "Total (For " + travelers + ")";
-  values["per-person"] = usd(perPersonTotal, true) + " per person";
+  values["per-person"] = usd(splitPerPerson, true) + " per person";
+  values["split-formula"] = usd(totalAmount, true) + " ÷ " + travelers + (travelers === 1 ? " traveler" : " travelers");
   values["party"] = travelers + " " + adultText;
 
-  // حلقة (Loop) لتغيير النصوص في الـ HTML
+  // One update path: every [data-quote] element (including Split Bill's
+  // data-quote="per-person") is filled from the values map, synchronously.
   var elements = document.querySelectorAll("[data-quote]");
   for (var i = 0; i < elements.length; i++) {
     var el = elements[i];
     var key = el.getAttribute("data-quote");
-    
     if (values[key] !== undefined) {
       el.textContent = values[key];
     }
@@ -136,49 +90,43 @@ function renderQuote(travelers) {
 function initPlanner() {
   var form = document.querySelector("[data-planner-form]");
   var plan = document.querySelector("[data-plan]");
-  
-  if (form === null || plan === null) {
-    return;
-  }
+  if (form === null || plan === null) { return; }
 
-  // دالة لجلب عدد المسافرين
   function getTravelersCount() {
     var inputField = form.elements.namedItem("travelers");
+    if (!inputField) return 1;
     var num = parseInt(inputField.value, 10);
-    
     if (isNaN(num) === true) { num = 1; }
     if (num < 1) { num = 1; }
     if (num > 20) { num = 20; }
-    
     return num;
   }
 
-  // دالة لإظهار الخطة
   function showPlan() {
     plan.hidden = false;
     var count = getTravelersCount();
     renderQuote(count);
   }
 
-  // حدث عند الضغط على زر Submit
+  // Re-render the whole quote (Split Bill included) on every change of the travelers field
+  var travelersInput = form.elements.namedItem("travelers");
+  if (travelersInput !== null) {
+    var syncQuote = function () { renderQuote(getTravelersCount()); };
+    travelersInput.addEventListener("input", syncQuote);
+    travelersInput.addEventListener("change", syncQuote);
+  }
+
+  // Sync once on load: browsers restore form values on reload/back, which
+  // would otherwise leave the static HTML prices out of step with the input.
+  renderQuote(getTravelersCount());
+
   form.addEventListener("submit", function (event) {
     event.preventDefault();
-    
-    if (plan.hidden === true) {
-      showPlan();
-      plan.scrollIntoView({ behavior: "smooth", block: "start" });
-    } else {
-      var count = getTravelersCount();
-      renderQuote(count);
-      var paywall = document.getElementById("paywall");
-      if (paywall !== null) {
-        paywall.showModal();
-      }
-    }
+    showPlan();
+    plan.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 }
 
-/* ---------- 4. Arrays & Loops: Destinations Filter ---------- */
 function initDestinationFilter() {
   var root = document.querySelector("[data-filter]");
   if (root === null) return;
@@ -187,62 +135,38 @@ function initDestinationFilter() {
   var searchInput = root.querySelector("[data-filter-search]");
   var cards = document.querySelectorAll("[data-region]");
   var emptyMessage = document.querySelector("[data-filter-empty]");
-  
   var currentSelectedRegion = "all";
 
-  // دالة لتطبيق الفلترة
   function applyFilters() {
     var query = searchInput.value.trim().toLowerCase();
     var shownCount = 0;
 
-    // حلقة تمر على كل الكروت
     for (var i = 0; i < cards.length; i++) {
       var card = cards[i];
       var cardRegion = card.getAttribute("data-region");
       var cardText = card.textContent.toLowerCase();
 
-      var matchesRegion = false;
-      if (currentSelectedRegion === "all") {
-        matchesRegion = true;
-      } else if (cardRegion.indexOf(currentSelectedRegion) !== -1) {
-        matchesRegion = true;
-      }
+      var matchesRegion = (currentSelectedRegion === "all") || (cardRegion.indexOf(currentSelectedRegion) !== -1);
+      var matchesText = (cardText.indexOf(query) !== -1);
 
-      var matchesText = false;
-      if (cardText.indexOf(query) !== -1) {
-        matchesText = true;
-      }
-
-      // إظهار الكرت إذا طابق الشروط
       if (matchesRegion === true && matchesText === true) {
         card.hidden = false;
-        shownCount = shownCount + 1;
+        shownCount++;
       } else {
         card.hidden = true;
       }
     }
 
-    // إظهار رسالة "لا يوجد نتائج"
     if (emptyMessage !== null) {
-      if (shownCount > 0) {
-        emptyMessage.hidden = true;
-      } else {
-        emptyMessage.hidden = false;
-      }
+      emptyMessage.hidden = (shownCount > 0);
     }
   }
 
-  // حلقة لإضافة حدث النقر على الأزرار (Chips)
   for (var j = 0; j < chips.length; j++) {
     chips[j].addEventListener("click", function () {
       currentSelectedRegion = this.getAttribute("data-region-chip");
-      
       for (var k = 0; k < chips.length; k++) {
-        if (chips[k] === this) {
-          chips[k].setAttribute("aria-pressed", "true");
-        } else {
-          chips[k].setAttribute("aria-pressed", "false");
-        }
+        chips[k].setAttribute("aria-pressed", (chips[k] === this) ? "true" : "false");
       }
       applyFilters();
     });
@@ -251,11 +175,9 @@ function initDestinationFilter() {
   searchInput.addEventListener("input", applyFilters);
 }
 
-/* ---------- 5. Timing Events: Flash-sale countdown ---------- */
 function initCountdown() {
   var root = document.querySelector("[data-countdown]");
   if (root === null) return;
-
   var remainingSeconds = parseInt(root.getAttribute("data-countdown"), 10);
   var hoursEl = root.querySelector('[data-unit="h"]');
   var minutesEl = root.querySelector('[data-unit="m"]');
@@ -263,53 +185,35 @@ function initCountdown() {
 
   function padWithZero(number) {
     var str = String(number);
-    if (str.length < 2) {
-      return "0" + str;
-    }
-    return str;
+    return (str.length < 2) ? "0" + str : str;
   }
 
   function updateDisplay() {
     var hours = Math.floor(remainingSeconds / 3600);
     var minutes = Math.floor((remainingSeconds % 3600) / 60);
     var seconds = remainingSeconds % 60;
-
     if (hoursEl !== null) { hoursEl.textContent = padWithZero(hours); }
     if (minutesEl !== null) { minutesEl.textContent = padWithZero(minutes); }
     if (secondsEl !== null) { secondsEl.textContent = padWithZero(seconds); }
   }
 
   updateDisplay();
-  
-  // تكرار كل ثانية
   var timerId = setInterval(function () {
-    remainingSeconds = remainingSeconds - 1;
-    if (remainingSeconds < 0) {
-      remainingSeconds = 0;
-    }
-    
+    remainingSeconds--;
+    if (remainingSeconds < 0) { remainingSeconds = 0; }
     updateDisplay();
-    
-    if (remainingSeconds === 0) {
-      clearInterval(timerId); // إيقاف العداد
-    }
+    if (remainingSeconds === 0) { clearInterval(timerId); }
   }, 1000);
 }
 
-/* ---------- 6. Forms & Timeout: Support chat ---------- */
 function initChat() {
   var form = document.querySelector("[data-chat-form]");
   var log = document.querySelector("[data-chat-log]");
-  
   if (form === null || log === null) return;
 
   function addMessage(text, isMine) {
     var bubble = document.createElement("p");
-    if (isMine === true) {
-      bubble.className = "bubble bubble--me";
-    } else {
-      bubble.className = "bubble";
-    }
+    bubble.className = isMine ? "bubble bubble--me" : "bubble";
     bubble.textContent = text;
     log.appendChild(bubble);
     log.scrollTop = log.scrollHeight;
@@ -319,15 +223,9 @@ function initChat() {
     event.preventDefault();
     var input = form.elements.namedItem("message");
     var text = input.value.trim();
-    
-    if (text === "") {
-      return;
-    }
-
+    if (text === "") return;
     addMessage(text, true);
     input.value = "";
-
-    // مهلة زمنية للرد (Timeout)
     setTimeout(function () {
       addMessage("Thanks! A Roamly concierge is looking into this and will reply here shortly.", false);
     }, 700);
@@ -335,7 +233,7 @@ function initChat() {
 }
 
 /* ==========================================================================
-   7. Advanced Basic: Smooth Left-Right Curve Avoiding Text Content to Footer
+   Flight Journey System (Sine Wave + Hero & Footer Bounds)
    ========================================================================== */
 function initFlightJourney() {
   var plane = document.getElementById("flightPlane");
@@ -349,7 +247,6 @@ function initFlightJourney() {
     return;
   }
 
-  // إنشاء تدرجات الألوان الذكية داخل الـ SVG لتتغير بين السكاشن الغامقة والفاتحة
   var svgNs = "http://www.w3.org/2000/svg";
   var defs = svg.querySelector("defs");
   if (defs === null) {
@@ -377,7 +274,6 @@ function initFlightJourney() {
     defs.appendChild(activeGrad);
   }
 
-  // عناوين البوابات للسكاشن وصولاً للفوتر
   var gateLabels = [
     "GATE 01: TAKEOFF • CLOUD RUNWAY",
     "GATE 02: TOP DESTINATIONS",
@@ -392,39 +288,14 @@ function initFlightJourney() {
   var waypoints = [];
   var sectionZones = [];
 
-  // دالة تفحص إذا كان السكشن غامق أو فاتح تلقائياً
   function isSectionDark(el) {
     var tag = el.tagName ? el.tagName.toLowerCase() : "";
-    if (
-      tag === "footer" ||
-      el.classList.contains("site-footer") ||
-      el.classList.contains("footer") ||
-      el.classList.contains("why") ||
-      el.classList.contains("reviews") ||
-      el.classList.contains("hero-video-section")
-    ) {
+    if (tag === "footer" || el.classList.contains("site-footer") || el.classList.contains("footer") || el.classList.contains("why") || el.classList.contains("reviews") || el.classList.contains("hero-video-section")) {
       return true;
-    }
-
-    var styleBg = window.getComputedStyle(el).backgroundColor;
-    if (styleBg && styleBg.indexOf("rgb") !== -1) {
-      var rgb = styleBg.match(/\d+/g);
-      if (rgb && rgb.length >= 3) {
-        var red = parseInt(rgb[0], 10);
-        var green = parseInt(rgb[1], 10);
-        var blue = parseInt(rgb[2], 10);
-        var alpha = rgb.length >= 4 ? parseFloat(rgb[3]) : 1;
-        if (alpha === 0) {
-          return false;
-        }
-        var lum = (red * 299 + green * 587 + blue * 114) / 1000;
-        return lum < 140;
-      }
     }
     return false;
   }
 
-  // دالة مساعدة لإضافة نقطة لون للتدرج
   function addGradStop(grad, offsetPercent, color) {
     var stop = document.createElementNS(svgNs, "stop");
     stop.setAttribute("offset", offsetPercent + "%");
@@ -432,86 +303,50 @@ function initFlightJourney() {
     grad.appendChild(stop);
   }
 
-  // دالة جمع كل السكاشن بالصفحة بما فيها السكشن الأخير والفوتر
   function getAllPageSections() {
     var list = [];
-
     if (mainEl !== null) {
       var mainChildren = mainEl.children;
       for (var m = 0; m < mainChildren.length; m++) {
         var child = mainChildren[m];
-        if (
-          !child.classList.contains("flight-journey-tracker") &&
-          !child.classList.contains("search-wrap") &&
-          child.offsetHeight > 120
-        ) {
+        if (!child.classList.contains("flight-journey-tracker") && !child.classList.contains("search-wrap") && child.offsetHeight > 120) {
           list.push(child);
         }
       }
     }
-
-    var bodyChildren = document.body.children;
-    var afterMain = (mainEl === null);
-    for (var b = 0; b < bodyChildren.length; b++) {
-      var bChild = bodyChildren[b];
-      if (bChild === mainEl) {
-        afterMain = true;
-        continue;
-      }
-      if (afterMain === true) {
-        var bTag = bChild.tagName ? bChild.tagName.toLowerCase() : "";
-        if (
-          bTag !== "script" &&
-          bTag !== "dialog" &&
-          !bChild.classList.contains("flight-hud") &&
-          bChild.offsetHeight > 120
-        ) {
-          list.push(bChild);
-        }
-      }
-    }
-
     var footerEl = document.querySelector("footer, .site-footer, .footer");
     if (footerEl !== null && list.indexOf(footerEl) === -1 && footerEl.offsetHeight > 100) {
       list.push(footerEl);
     }
-
     return list;
   }
 
-  // دالة حساب مسار الطيران (كيرف مرة يمين ومرة يسار يلتف حول المحتوى بدون تغطية النص)
   function calculateFlightPath() {
     var scrollY = window.scrollY;
     var mainTop = 0;
-
     if (mainEl !== null) {
-      var mainRect = mainEl.getBoundingClientRect();
-      mainTop = mainRect.top + scrollY;
+      mainTop = mainEl.getBoundingClientRect().top + scrollY;
     }
 
     var sections = getAllPageSections();
-    if (sections.length < 2) {
-      return;
-    }
+    if (sections.length < 2) { return; }
 
     var lastSec = sections[sections.length - 1];
-    var lastRect = lastSec.getBoundingClientRect();
-    var totalHeight = (lastRect.top + scrollY - mainTop) + lastRect.height;
+    var footerEl = document.querySelector("footer, .site-footer, .footer");
+    var totalHeight = 0;
+    if (footerEl !== null) {
+      var footerRect = footerEl.getBoundingClientRect();
+      totalHeight = footerRect.top + scrollY - mainTop;
+    } else {
+      var lastRect = lastSec.getBoundingClientRect();
+      totalHeight = (lastRect.top + scrollY - mainTop) + lastRect.height;
+    }
 
     svg.style.height = totalHeight + "px";
-    if (svg.parentElement !== null) {
-      svg.parentElement.style.height = totalHeight + "px";
-    }
+    if (svg.parentElement !== null) { svg.parentElement.style.height = totalHeight + "px"; }
 
     waypoints = [];
     sectionZones = [];
-
-    var screenW = window.innerWidth;
-    // نقاط أقصى اليسار وأقصى اليمين على الأطراف الفارغة لتفادي النص بالمنتصف
-    var leftInnerX = Math.max(36, screenW * 0.08);
-    var leftOuterX = Math.max(24, screenW * 0.035);
-    var rightInnerX = Math.min(screenW - 36, screenW * 0.92);
-    var rightOuterX = Math.min(screenW - 24, screenW * 0.965);
 
     for (var i = 0; i < sections.length; i++) {
       var sec = sections[i];
@@ -519,74 +354,11 @@ function initFlightJourney() {
       var secTop = rect.top + scrollY - mainTop;
       var secBottom = secTop + rect.height;
       var dark = isSectionDark(sec);
-
       var label = gateLabels[i] || ("GATE 0" + (i + 1) + ": TERMINAL");
-      if (i === sections.length - 1) {
-        label = "FINAL DESTINATION: LANDING";
-      }
-
-      sectionZones.push({
-        top: secTop,
-        bottom: secBottom,
-        dark: dark,
-        label: label,
-        el: sec
-      });
-
-      // التناوب: سكشن على اليسار وسكشن على اليمين
-      var isLeft = (i % 2 === 0);
-
-      // داخل السكشن يلتف الكيرف على الطرف الفارغ، وينتقل للجهة المقابلة في منطقة الفراغ بين السكاشن
-      var padOffset = Math.min(85, rect.height * 0.16);
-      var entryY = secTop + padOffset;
-      var exitY = secBottom - padOffset;
-
-      if (i === 0) {
-        // نقطة الانطلاق في الهيرو
-        waypoints.push({
-          x: leftInnerX,
-          y: secTop + (rect.height * 0.35),
-          label: label,
-          el: sec
-        });
-        waypoints.push({
-          x: leftOuterX,
-          y: exitY,
-          label: label,
-          el: sec
-        });
-      } else if (i === sections.length - 1) {
-        // نقاط الهبوط في الفوتر
-        waypoints.push({
-          x: isLeft ? leftInnerX : rightInnerX,
-          y: entryY,
-          label: label,
-          el: sec
-        });
-        waypoints.push({
-          x: isLeft ? leftOuterX : rightOuterX,
-          y: secTop + (rect.height * 0.82),
-          label: label,
-          el: sec
-        });
-      } else {
-        // نقطتان على نفس الطرف الفارغ لكل سكشن حتى يمر بجانب النص والكروت دون أن يقطع فوقها
-        waypoints.push({
-          x: isLeft ? leftInnerX : rightInnerX,
-          y: entryY,
-          label: label,
-          el: sec
-        });
-        waypoints.push({
-          x: isLeft ? leftOuterX : rightOuterX,
-          y: exitY,
-          label: label,
-          el: sec
-        });
-      }
+      if (i === sections.length - 1) { label = "FINAL DESTINATION: LANDING"; }
+      sectionZones.push({ top: secTop, bottom: secBottom, dark: dark, label: label, el: sec });
     }
 
-    // تحديث تدرج الألوان (فاتح وذهبي على الغامق، وكحلي على الفاتح)
     baseGrad.setAttribute("y1", "0");
     baseGrad.setAttribute("y2", String(totalHeight));
     activeGrad.setAttribute("y1", "0");
@@ -599,68 +371,73 @@ function initFlightJourney() {
       var zone = sectionZones[z];
       var startPct = Math.max(0, Math.min(100, (zone.top / totalHeight) * 100));
       var endPct = Math.max(0, Math.min(100, (zone.bottom / totalHeight) * 100));
+      var softGrayColor = "rgba(100, 116, 139, 0.75)";
 
-      var baseColor = zone.dark ? "rgba(241, 245, 249, 0.55)" : "rgba(15, 23, 42, 0.42)";
-      var activeColor = zone.dark ? "#fbbf24" : "#0f172a";
-
-      addGradStop(baseGrad, startPct.toFixed(2), baseColor);
-      addGradStop(baseGrad, endPct.toFixed(2), baseColor);
-
-      addGradStop(activeGrad, startPct.toFixed(2), activeColor);
-      addGradStop(activeGrad, endPct.toFixed(2), activeColor);
+      addGradStop(baseGrad, startPct.toFixed(2), softGrayColor);
+      addGradStop(baseGrad, endPct.toFixed(2), softGrayColor);
+      addGradStop(activeGrad, startPct.toFixed(2), softGrayColor);
+      addGradStop(activeGrad, endPct.toFixed(2), softGrayColor);
     }
 
-    // بناء منحنيات المسار الانسيابية (Bezier Curves)
-    var dString = "M " + waypoints[0].x + " " + waypoints[0].y;
-    for (var j = 0; j < waypoints.length - 1; j++) {
-      var currentPoint = waypoints[j];
-      var nextPoint = waypoints[j + 1];
-      var midY = (currentPoint.y + nextPoint.y) / 2;
+    var dString = "";
+    var totalPoints = 100;
+    var screenW = window.innerWidth;
+    
+    var leftMargin = Math.max(24, screenW * 0.04);
+    var rightMargin = screenW - leftMargin;
+    var waveWidth = (rightMargin - leftMargin) / 2;
+    var midEdge = (leftMargin + rightMargin) / 2;
 
-      dString = dString + " C " + currentPoint.x + " " + midY + ", " + nextPoint.x + " " + midY + ", " + nextPoint.x + " " + nextPoint.y;
+    var heroSec = document.querySelector(".hero-video-section");
+    var heroRect = heroSec ? heroSec.getBoundingClientRect() : null;
+    var startY = heroRect ? (heroRect.top + window.scrollY - mainTop) + (heroRect.height * 0.55) : 300;
+
+    for (var p = 0; p <= totalPoints; p++) {
+      var t = p / totalPoints;
+      var currentY = startY + (t * (totalHeight - startY));
+      if (currentY > totalHeight) { currentY = totalHeight; }
+
+      var currentX = midEdge + Math.cos(t * Math.PI * 4) * waveWidth;
+
+      if (p === 0) {
+        dString = "M " + rightMargin + " " + startY;
+      } else {
+        dString = dString + " L " + currentX + " " + currentY;
+      }
     }
+
+    waypoints.push({ x: rightMargin, y: startY });
+    waypoints.push({ x: leftMargin, y: totalHeight });
 
     pathBase.setAttribute("d", dString);
     pathActive.setAttribute("d", dString);
 
     pathTotalLength = pathBase.getTotalLength();
-    pathActive.style.strokeDasharray = pathTotalLength + " " + pathTotalLength;
-    pathActive.style.strokeDashoffset = pathTotalLength;
+    pathActive.style.strokeDasharray = "8 10";
 
     updateFlight();
   }
 
-  // دالة إيجاد النقطة على المسار المقابلة لمكان الشاشة الحالي
   function getLengthAtY(targetY) {
     var low = 0;
     var high = pathTotalLength;
     for (var iter = 0; iter < 15; iter++) {
       var mid = (low + high) / 2;
       var pt = pathBase.getPointAtLength(mid);
-      if (pt.y < targetY) {
-        low = mid;
-      } else {
-        high = mid;
-      }
+      if (pt.y < targetY) { low = mid; } else { high = mid; }
     }
     return (low + high) / 2;
   }
 
-  // دالة تحديث الطيارة أثناء السكرول
   function updateFlight() {
-    if (pathTotalLength === 0 || waypoints.length < 2) {
-      return;
-    }
+    if (pathTotalLength === 0 || waypoints.length < 2) { return; }
 
     var currentScroll = window.scrollY;
     var mainTop = 0;
-    if (mainEl !== null) {
-      mainTop = mainEl.getBoundingClientRect().top + currentScroll;
-    }
+    if (mainEl !== null) { mainTop = mainEl.getBoundingClientRect().top + currentScroll; }
 
     var startY = waypoints[0].y;
     var endY = waypoints[waypoints.length - 1].y;
-
     var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     if (maxScroll <= 0) { maxScroll = 1; }
 
@@ -674,12 +451,9 @@ function initFlightJourney() {
 
     var currentLen = getLengthAtY(viewportTargetY);
     var pt = pathBase.getPointAtLength(currentLen);
-
-    var nextLen = currentLen + 8;
-    if (nextLen > pathTotalLength) { nextLen = pathTotalLength; }
+    var nextLen = Math.min(currentLen + 8, pathTotalLength);
     var nextPt = pathBase.getPointAtLength(nextLen);
 
-    // حساب زاوية دوران الطيارة
     var angleRad = Math.atan2(nextPt.y - pt.y, nextPt.x - pt.x);
     var angleDeg = (angleRad * 180 / Math.PI) + 90;
 
@@ -688,29 +462,19 @@ function initFlightJourney() {
 
     plane.style.transform = "translate3d(" + screenX + "px, " + screenY + "px, 0) rotate(" + angleDeg + "deg)";
 
-    var dashOffset = pathTotalLength - currentLen;
-    if (dashOffset < 0) { dashOffset = 0; }
+    pathActive.style.strokeDasharray = "8 10";
+    var dashOffset = Math.max(0, pathTotalLength - currentLen);
     pathActive.style.strokeDashoffset = dashOffset;
 
     var currentGate = sectionZones.length > 0 ? sectionZones[0].label : "";
-    var onDark = true;
-
     for (var k = 0; k < sectionZones.length; k++) {
       var zone = sectionZones[k];
       if (pt.y >= zone.top && pt.y <= zone.bottom) {
         currentGate = zone.label;
-        onDark = zone.dark;
         break;
       } else if (pt.y > zone.bottom) {
         currentGate = zone.label;
-        onDark = zone.dark;
       }
-    }
-
-    if (onDark === true) {
-      plane.classList.remove("on-light-sec");
-    } else {
-      plane.classList.add("on-light-sec");
     }
 
     if (hudTerminal !== null && hudTerminal.textContent !== currentGate) {
@@ -721,13 +485,10 @@ function initFlightJourney() {
   window.addEventListener("scroll", updateFlight);
   window.addEventListener("resize", calculateFlightPath);
   window.addEventListener("load", calculateFlightPath);
-
   setTimeout(calculateFlightPath, 350);
 }
 
-// ==========================================================================
-// تشغيل جميع الدوال (Function Calls)
-// ==========================================================================
+// تشغيل جميع الدوال الأساسية
 initMenu();
 initDialogs();
 initPlanner();
@@ -736,7 +497,18 @@ initCountdown();
 initChat();
 initFlightJourney();
 
-
+// تمرير نوع الدفع (Full أو Split) عند إرسال نموذج الحجز في الـ Checkout لصفحة الـ trip
+document.addEventListener("DOMContentLoaded", function() {
+  var checkoutForm = document.querySelector("#checkout form");
+  if (checkoutForm !== null) {
+    checkoutForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      var selectedPayment = checkoutForm.querySelector('input[name="payment"]:checked');
+      var paymentVal = selectedPayment ? selectedPayment.value : "full";
+      window.location.href = "trip.html?payment=" + paymentVal;
+    });
+  }
+});
 
 /* ==========================================================================
    8. Global Draggable AI Captain Chatbot Widget (All Pages)
@@ -779,24 +551,20 @@ function initFloatingAIChat() {
     '</div>' +
     '<button type="button" class="roamly-ai-Launcher" id="roamlyAiLauncher" aria-label="Open Roamly AI Concierge">' +
       '<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-        '<!-- قبعة الكابتن وأنتين الطيران الذكي -->' +
         '<line x1="32" y1="5" x2="32" y2="13" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>' +
         '<circle cx="32" cy="4.5" r="3" fill="#38bdf8"/>' +
         '<path d="M16 21C16 14.5 23 11 32 11C41 11 48 14.5 48 21H16Z" fill="#f8fafc" stroke="#fbbf24" stroke-width="2"/>' +
         '<path d="M13 21H51" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>' +
         '<circle cx="32" cy="16.5" r="2.3" fill="#f59e0b"/>' +
-        '<!-- رأس مجسم البوت -->' +
         '<rect x="14" y="21" width="36" height="27" rx="12" fill="#0f172a" stroke="#e2e8f0" stroke-width="2"/>' +
-        '<!-- شاشة الوجه ونظارة الطيار -->' +
         '<rect x="19" y="26" width="26" height="14" rx="7" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>' +
         '<circle class="roamly-bot-eye" cx="26.5" cy="33" r="3" fill="#38bdf8"/>' +
         '<circle class="roamly-bot-eye" cx="37.5" cy="33" r="3" fill="#38bdf8"/>' +
         '<path d="M28 43.5C29.5 45 34.5 45 36 43.5" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>' +
-        '<!-- طيارة ذهبية صغيرة على جنب المجسم -->' +
         '<path d="M49 46L58 41L54 52L51.5 48.5L49 46Z" fill="#fbbf24"/>' +
       '</svg>' +
     '</button>' +
-'<div class="roamly-ai-tooltip"><span>Roamly AI</span></div>';
+    '<div class="roamly-ai-tooltip"><span>Roamly AI</span></div>';
   document.body.appendChild(widget);
 
   var launcher = document.getElementById("roamlyAiLauncher");
@@ -811,10 +579,7 @@ function initFloatingAIChat() {
   var movedDuringDrag = false;
   var startX = 0;
   var startY = 0;
-  var initialLeft = 28;
-  var initialTop = window.innerHeight - 90;
 
-  // استرجاع آخر مكان سحبه فيه اليوزر إذا تنقل بين الصفحات
   var savedPos = sessionStorage.getItem("roamlyBotPos");
   if (savedPos !== null) {
     try {
@@ -838,7 +603,6 @@ function initFloatingAIChat() {
     widget.style.bottom = "auto";
     widget.style.right = "auto";
 
-    // ضبط اتجاه فتح الـ Pop-up تلقائياً حسب موقع المجسم على الشاشة
     if (clampedLeft > window.innerWidth * 0.52) {
       widget.classList.add("align-right");
     } else {
@@ -853,9 +617,7 @@ function initFloatingAIChat() {
   }
 
   function startDrag(e) {
-    if (e.target.closest("#roamlyAiClose") !== null) {
-      return;
-    }
+    if (e.target.closest("#roamlyAiClose") !== null) { return; }
     isDragging = true;
     movedDuringDrag = false;
 
@@ -865,14 +627,10 @@ function initFloatingAIChat() {
 
     startX = clientX;
     startY = clientY;
-    initialLeft = rect.left;
-    initialTop = rect.top;
   }
 
   function onDrag(e) {
-    if (!isDragging) {
-      return;
-    }
+    if (!isDragging) { return; }
     var clientX = e.touches ? e.touches[0].clientX : e.clientX;
     var clientY = e.touches ? e.touches[0].clientY : e.clientY;
     var dx = clientX - startX;
@@ -881,14 +639,15 @@ function initFloatingAIChat() {
     if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
       movedDuringDrag = true;
       widget.classList.add("is-dragging");
-      applyPosition(initialLeft + dx, initialTop + dy);
+      var rect = widget.getBoundingClientRect();
+      applyPosition(rect.left + dx, rect.top + dy);
+      startX = clientX;
+      startY = clientY;
     }
   }
 
   function stopDrag() {
-    if (!isDragging) {
-      return;
-    }
+    if (!isDragging) { return; }
     isDragging = false;
     widget.classList.remove("is-dragging");
 
@@ -908,12 +667,6 @@ function initFloatingAIChat() {
   window.addEventListener("mouseup", stopDrag);
   window.addEventListener("touchend", stopDrag);
 
-  window.addEventListener("resize", function () {
-    var rect = widget.getBoundingClientRect();
-    applyPosition(rect.left, rect.top);
-  });
-
-  // فتح وإغلاق الشات عند الضغط بدون سحب
   launcher.addEventListener("click", function () {
     if (movedDuringDrag) {
       movedDuringDrag = false;
@@ -929,7 +682,6 @@ function initFloatingAIChat() {
     widget.classList.remove("is-open");
   });
 
-  // ردود ذكية للمساعد حسب سؤال اليوزر
   function getSmartReply(question) {
     var q = question.toLowerCase();
     if (q.indexOf("deal") !== -1 || q.indexOf("discount") !== -1 || q.indexOf("offer") !== -1) {
@@ -979,181 +731,3 @@ function initFloatingAIChat() {
 }
 
 initFloatingAIChat();
-
-
-
-
-/* ==========================================================================
-   9. Contact Us & Feedback Boarding Studio Interactive Logic
-   ========================================================================== */
-function initContactStudio() {
-  var form = document.getElementById("roamlyContactForm");
-  if (form === null) {
-    return;
-  }
-
-  var topicButtons = document.querySelectorAll("#contactTopicChips .topic-chip");
-  var topicInput = document.getElementById("selectedTopicInput");
-  var starButtons = document.querySelectorAll("#contactStarPicker .star-btn");
-  var ratingInput = document.getElementById("selectedRatingInput");
-  var ratingStatus = document.getElementById("ratingStatusText");
-  var modal = document.getElementById("contactSuccessModal");
-  var closeModalBtn = document.getElementById("closeContactModalBtn");
-  var modalTopicBadge = document.getElementById("modalTopicBadge");
-  var modalPersonalText = document.getElementById("modalPersonalText");
-
-  var ratingLabels = {
-    1: "1/5 • Needs Work 🛠️",
-    2: "2/5 • Fair Experience 🌤️",
-    3: "3/5 • Good Flight 👍",
-    4: "4/5 • Great Service! ✨",
-    5: "5/5 • Amazing! 🤩"
-  };
-
-  // تفعيل أزرار اختيار موضوع الرسالة
-  for (var i = 0; i < topicButtons.length; i++) {
-    topicButtons[i].addEventListener("click", function () {
-      for (var j = 0; j < topicButtons.length; j++) {
-        topicButtons[j].classList.remove("is-active");
-      }
-      this.classList.add("is-active");
-      if (topicInput !== null) {
-        topicInput.value = this.getAttribute("data-topic");
-      }
-    });
-  }
-
-  // تفعيل النجوم التفاعلية للفيدباك
-  for (var s = 0; s < starButtons.length; s++) {
-    starButtons[s].addEventListener("click", function () {
-      var val = parseInt(this.getAttribute("data-val"), 10);
-      if (ratingInput !== null) {
-        ratingInput.value = String(val);
-      }
-      if (ratingStatus !== null && ratingLabels[val]) {
-        ratingStatus.textContent = ratingLabels[val];
-      }
-      for (var k = 0; k < starButtons.length; k++) {
-        var btnVal = parseInt(starButtons[k].getAttribute("data-val"), 10);
-        if (btnVal <= val) {
-          starButtons[k].classList.add("is-Lit");
-        } else {
-          starButtons[k].classList.remove("is-Lit");
-        }
-      }
-    });
-  }
-
-  // إظهار الـ Pop-up الفخم عند إرسال الفورم
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var userName = document.getElementById("contact-name").value.trim() || "Traveler";
-    var chosenTopic = topicInput ? topicInput.value : "General Inquiry";
-    var chosenRating = ratingInput ? ratingInput.value : "5";
-
-    if (modalTopicBadge !== null) {
-      modalTopicBadge.textContent = chosenTopic.toUpperCase() + " • " + chosenRating + "★ RATING";
-    }
-    if (modalPersonalText !== null) {
-      modalPersonalText.textContent = "Thank you, " + userName + "! Your message and feedback have been received by our priority concierge desk. We'll get back to you within 15 minutes.";
-    }
-    if (modal !== null) {
-      modal.classList.add("is-visible");
-      modal.setAttribute("aria-hidden", "false");
-    }
-    form.reset();
-  });
-
-  if (closeModalBtn !== null && modal !== null) {
-    closeModalBtn.addEventListener("click", function () {
-      modal.classList.remove("is-visible");
-      modal.setAttribute("aria-hidden", "true");
-    });
-    modal.addEventListener("click", function (e) {
-      if (e.target === modal) {
-        modal.classList.remove("is-visible");
-        modal.setAttribute("aria-hidden", "true");
-      }
-    });
-  }
-}
-
-initContactStudio();
-
-
-
-/* ==========================================================================
-   10. Simple Navbar Login State Toggle
-   ========================================================================== */
-function initSimpleNavbarAuth() {
-  var guestActions = document.getElementById("guestActions");
-  var loggedActions = document.getElementById("loggedActions");
-  var simulateLoginBtn = document.getElementById("simulateLoginBtn");
-  var userMenuToggle = document.getElementById("userMenuToggle");
-  var userMenuWrap = document.querySelector(".user-menu-wrap");
-  var logoutBtn = document.getElementById("logoutBtn");
-
-  // محاكاة تسجيل الدخول عند الضغط على زر Sign In
-  if (simulateLoginBtn && guestActions && loggedActions) {
-    simulateLoginBtn.addEventListener("click", function () {
-      guestActions.style.display = "none";
-      loggedActions.style.display = "block";
-    });
-  }
-
-  // فتح وإغلاق القائمة المنسدلة للبروفايل
-  if (userMenuToggle && userMenuWrap) {
-    userMenuToggle.addEventListener("click", function (e) {
-      e.stopPropagation();
-      userMenuWrap.classList.toggle("is-open");
-    });
-
-    document.addEventListener("click", function (e) {
-      if (!userMenuWrap.contains(e.target)) {
-        userMenuWrap.classList.remove("is-open");
-      }
-    });
-  }
-
-  // تسجيل الخروج والرجوع لحالة الضيف
-  if (logoutBtn && guestActions && loggedActions) {
-    logoutBtn.addEventListener("click", function () {
-      loggedActions.style.display = "none";
-      guestActions.style.display = "flex";
-      userMenuWrap.classList.remove("is-open");
-    });
-  }
-}
-
-initSimpleNavbarAuth();
-
-/* ==========================================================================
-   Simple Safe Dark Theme Controller
-   ========================================================================== */
-function initSafeDarkMode() {
-  var toggleBtn = document.getElementById("themeToggleBtn");
-  var themeIcon = document.getElementById("themeIcon");
-  var htmlRoot = document.documentElement;
-
-  // استرجاع اختيار اليوزر السابق
-  if (localStorage.getItem("roamlyThemeMode") === "dark") {
-    htmlRoot.classList.add("dark-theme");
-    if (themeIcon) { themeIcon.className = "fa-solid fa-sun"; }
-  }
-
-  if (toggleBtn) {
-    toggleBtn.addEventListener("click", function () {
-      htmlRoot.classList.toggle("dark-theme");
-
-      if (htmlRoot.classList.contains("dark-theme")) {
-        localStorage.setItem("roamlyThemeMode", "dark");
-        if (themeIcon) { themeIcon.className = "fa-solid fa-sun"; }
-      } else {
-        localStorage.setItem("roamlyThemeMode", "light");
-        if (themeIcon) { themeIcon.className = "fa-solid fa-moon"; }
-      }
-    });
-  }
-}
-
-initSafeDarkMode();
