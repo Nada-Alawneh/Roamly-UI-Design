@@ -27,23 +27,20 @@
       </button>
       <nav class="site-nav" id="site-nav" aria-label="Main">
         <ul class="nav-pill">
-          <li><a class="nav-pill__link" href="index.html" aria-current="page">Home</a></li>
+          <li><a class="nav-pill__link" href="index.html">Home</a></li>
           <li><a class="nav-pill__link" href="ai-planner.html">AI Planner</a></li>
-          <li><a class="nav-pill__link" href="destinations.html">Destinations</a></li>
+          <li><a class="nav-pill__link" href="destinations.html" aria-current="page">Destinations</a></li>
           <li><a class="nav-pill__link" href="pricing.html">Pricing</a></li>
-          <li><a class="nav-pill__link" href="about.html" aria-current="page">About Us</a></li>
+          <li><a class="nav-pill__link" href="about.html">About Us</a></li>
           <li><a class="nav-pill__link" href="Contact-Us.html">Contact Us</a></li>
         </ul>
       </nav>
       <div class="header-actions">
         <!-- الحالة الأولى: قبل تسجيل الدخول (Guest) -->
         <div id="guestActions" class="nav-auth-group">
-          <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme" title="Switch Dark/Light Mode">
-             <i class="fa-solid fa-moon" id="themeIcon"></i>
-            </button>
-          <button type="button" class="btn btn--dark btn--md" id="simulateLoginBtn">
+          <a href="sign-in.html" class="btn btn--dark btn--md">
             <i class="fa-regular fa-circle-user" aria-hidden="true"></i> Sign In
-          </button>
+          </a>
         </div>
 
         <!-- الحالة الثانية: بعد تسجيل الدخول (Logged-In مع Dropdown) -->
@@ -59,10 +56,10 @@
               <p class="user-dropdown__email">nada@roamly.com</p>
             </div>
             <ul class="user-dropdown__list">
-              <li><a href="#"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li>
-              <li><a href="ai-planner.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li>
+              <li><a href="profile.html"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li>
+              <li><a href="itineraries.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li>
               <li><button type="button" class="currency-switch-btn"><i class="fa-solid fa-globe" aria-hidden="true"></i> Currency: <strong>USD ($)</strong></button></li>
-              <li><a href="#"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li>
+              <li><a href="settings.html"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li>
               <li class="user-dropdown__divider"></li>
               <li><button type="button" id="logoutBtn" class="logout-link"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log Out</button></li>
             </ul>
@@ -94,8 +91,16 @@
         <input class="input filter-bar__search" id="destination-search" type="search" placeholder="Search destination..." data-filter-search>
       </div>
 
+      <aside class="destination-match" data-recommendation hidden aria-live="polite">
+        <span class="destination-match__icon" aria-hidden="true"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+        <div>
+          <p class="destination-match__eyebrow">YOUR ROAMLY MATCH</p>
+          <p class="destination-match__text" data-recommendation-text></p>
+        </div>
+      </aside>
+
       <div class="grid-3">
-        <article class="dest-card" data-region="tropical asia">
+        <article class="dest-card" data-region="tropical asia" data-vibes="relax" data-price="899">
           <div class="dest-card__media media">
             <img src="assets/img/maldives.png" alt="Overwater villas in a turquoise Maldives lagoon" width="600" height="400" loading="lazy">
             <span class="dest-card__rating">★ 4.9</span>
@@ -112,7 +117,7 @@
             </div>
           </div>
         </article>
-        <article class="dest-card" data-region="tropical">
+        <article class="dest-card" data-region="tropical" data-vibes="relax" data-price="1099">
           <div class="dest-card__media media">
             <img src="assets/img/bora-bora.png" alt="Beach at sunset in Bora Bora" width="600" height="400" loading="lazy">
             <span class="dest-card__rating">★ 4.8</span>
@@ -129,7 +134,7 @@
             </div>
           </div>
         </article>
-        <article class="dest-card" data-region="europe">
+        <article class="dest-card" data-region="europe" data-vibes="culture" data-price="799">
           <div class="dest-card__media media">
             <img src="assets/img/santorini.png" alt="White houses on the cliffs of Santorini at dusk" width="600" height="400" loading="lazy">
             <span class="dest-card__rating">★ 4.7</span>
@@ -146,7 +151,7 @@
             </div>
           </div>
         </article>
-        <article class="dest-card" data-region="tropical asia">
+        <article class="dest-card" data-region="tropical asia" data-vibes="relax family adventure" data-price="549">
           <div class="dest-card__media media">
             <img src="assets/img/bali.png" alt="Lake temple in Bali" width="600" height="400" loading="lazy">
             <span class="dest-card__rating">★ 4.9</span>
@@ -163,7 +168,7 @@
             </div>
           </div>
         </article>
-        <article class="dest-card" data-region="middle-east asia">
+        <article class="dest-card" data-region="middle-east asia" data-vibes="family culture" data-price="899">
           <div class="dest-card__media media">
             <img src="assets/img/dubai.png" alt="Dubai skyline at sunset" width="600" height="400" loading="lazy">
             <span class="dest-card__rating">★ 4.8</span>
@@ -180,7 +185,7 @@
             </div>
           </div>
         </article>
-        <article class="dest-card" data-region="tropical">
+        <article class="dest-card" data-region="tropical" data-vibes="relax family" data-price="699">
           <div class="dest-card__media media">
             <img src="assets/img/cancun.png" alt="Turquoise cove near Cancun" width="600" height="400" loading="lazy">
             <span class="dest-card__rating">★ 4.6</span>
@@ -254,9 +259,9 @@
           <ul>
             <li><a href="Contact-Us.html">Contact Us</a></li>
             <li><a href="Contact-Us.html#faq">FAQs</a></li>
-            <li><a href="Contact-Us.html#booking">Booking Guide</a></li>
-            <li><a href="#">Terms &amp; Conditions</a></li>
-            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="booking-guide.html">Booking Guide</a></li>
+            <li><a href="terms.html">Terms &amp; Conditions</a></li>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
           </ul>
         </nav>
       </div>

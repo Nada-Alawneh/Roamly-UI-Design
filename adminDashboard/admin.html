@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Roamly — Command Hub</title>
   
-  <!-- خط Inter الموحّد مع حساب وموقع اليوزر -->
+  <!-- Inter typography shared with the Roamly site -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- ربط ملف الـ CSS المنفصل -->
+  <!-- Admin dashboard styles -->
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
@@ -22,14 +22,11 @@
   <aside>
     <div class="sidebar-top">
       <div class="logo-row">
-        <div class="logo-mark">R</div>
-        <div>
-          <div class="logo-text">Roamly<span class="logo-dot">.</span></div>
-          <span class="logo-sub">Command Hub</span>
-        </div>
+        <img class="sidebar-logo" src="../assets/img/logo.png" alt="Roamly Command Hub">
+        <span class="sidebar-brand-caption">Command Hub</span>
       </div>
-      <nav class="sidebar-nav">
-        <a href="#overview" onclick="switchAdminTab('overview')" id="nav-overview" class="admin-nav-link active">
+      <nav class="sidebar-nav" aria-label="Admin sections">
+        <a href="#overview" onclick="switchAdminTab('overview')" id="nav-overview" class="admin-nav-link active" aria-current="page">
           <i class="fa-solid fa-chart-pie"></i><span>Dashboard Overview</span>
         </a>
         <a href="#bookings" onclick="switchAdminTab('bookings')" id="nav-bookings" class="admin-nav-link">
@@ -47,6 +44,9 @@
       </nav>
     </div>
     <div class="sidebar-bottom">
+      <a href="../sign-in.html" class="logout-link">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Log Out</span>
+      </a>
       <a href="../index.html" class="back-link">
         <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Back to Main Site</span>
       </a>
@@ -61,11 +61,27 @@
         <span class="live-pill"><span class="live-dot"></span> Live Sync Active</span>
       </div>
       <div class="topbar-right">
-        <div class="profile-meta">
-          <div class="profile-name">Nada Alawneh</div>
-          <div class="profile-role">Lead System Architect</div>
+        <div class="profile-menu-wrap">
+          <button class="profile-menu-trigger" id="profileMenuToggle" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="profileMenu">
+            <span class="profile-meta">
+              <span class="profile-name" id="adminProfileName">Nada Alawneh</span>
+              <span class="profile-role" id="adminProfileRole">Lead System Architect</span>
+            </span>
+            <span class="avatar" id="adminProfileAvatar">NA</span>
+            <i class="fa-solid fa-chevron-down profile-chevron" aria-hidden="true"></i>
+          </button>
+          <div class="profile-dropdown" id="profileMenu" hidden>
+            <div class="profile-dropdown__heading">YOUR ACCOUNT</div>
+            <a href="profile.html#profile" class="profile-dropdown__link">
+              <i class="fa-regular fa-user"></i><span><strong>My Profile</strong><small>Personal information</small></span>
+            </a>
+            <a href="profile.html#preferences" class="profile-dropdown__link">
+              <i class="fa-solid fa-sliders"></i><span><strong>Preferences</strong><small>Language &amp; notifications</small></span>
+            </a>
+            <div class="profile-dropdown__divider"></div>
+            <a href="../sign-in.html" class="profile-dropdown__logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+          </div>
         </div>
-        <div class="avatar">NA</div>
       </div>
     </header>
 
@@ -73,6 +89,25 @@
 
       <!-- TAB 1: OVERVIEW -->
       <div id="tab-overview" class="admin-tab active">
+        <section class="dashboard-hero" aria-labelledby="dashboard-welcome">
+          <div class="dashboard-hero__content">
+            <span class="hero-eyebrow"><span class="hero-eyebrow__spark"></span> ROAMLY COMMAND CENTER</span>
+            <h1 id="dashboard-welcome">Behind every great escape, <span>there’s a plan.</span></h1>
+            <p>One clear view of every journey, traveler, and idea moving through Roamly.</p>
+            <div class="hero-actions">
+              <button class="btn-hero-primary" type="button" onclick="switchAdminTab('bookings')"><i class="fa-solid fa-arrow-right"></i> Explore bookings</button>
+              <span class="hero-status"><span class="live-dot"></span> All systems operational</span>
+            </div>
+          </div>
+          <div class="hero-orbit" aria-hidden="true">
+            <span class="orbit orbit--one"></span><span class="orbit orbit--two"></span>
+            <span class="orbit-core"><i class="fa-solid fa-compass"></i></span>
+            <span class="orbit-star orbit-star--one"><i class="fa-solid fa-plane"></i></span>
+            <span class="orbit-star orbit-star--two"><i class="fa-solid fa-location-dot"></i></span>
+          </div>
+          <div class="hero-date" id="dashboard-date"></div>
+        </section>
+
         <div class="stats-grid">
           <div class="card stat-card">
             <div>
@@ -147,15 +182,15 @@
               <div class="panel-title"><i class="fa-solid fa-shield-halved"></i> Master Controls</div>
             </div>
             <div class="panel-body">
-              <button class="control-btn" onclick="showToast('System cache cleared successfully — all nodes refreshed.','broom')">
+              <button class="control-btn" type="button" onclick="clearAiCache()">
                 <span><i class="fa-solid fa-broom left-icon"></i> &nbsp;Clear AI Response Cache</span>
                 <i class="fa-solid fa-chevron-right right"></i>
               </button>
-              <button class="control-btn" onclick="showToast('Broadcast sent to 1,420 active users!','bullhorn')">
+              <button class="control-btn" type="button" onclick="sendBroadcast()">
                 <span><i class="fa-solid fa-bullhorn left-icon"></i> &nbsp;Broadcast Announcement</span>
                 <i class="fa-solid fa-chevron-right right"></i>
               </button>
-              <button class="control-btn" onclick="showToast('Encrypted database backup downloaded.','database')">
+              <button class="control-btn" type="button" onclick="downloadBackup()">
                 <span><i class="fa-solid fa-database left-icon"></i> &nbsp;Download Database Dump</span>
                 <i class="fa-solid fa-chevron-right right"></i>
               </button>
@@ -166,13 +201,26 @@
 
       <!-- TAB 2: BOOKINGS & SPLIT BILLS -->
       <div id="tab-bookings" class="admin-tab">
+        <section class="dashboard-hero dashboard-hero--section" aria-labelledby="bookings-welcome">
+          <div class="dashboard-hero__content">
+            <span class="hero-eyebrow"><span class="hero-eyebrow__spark"></span> TRAVELER JOURNEYS</span>
+            <h1 id="bookings-welcome">Every great trip <span>has a story.</span></h1>
+            <p>Track bookings, payments, and shared plans across the Roamly community.</p>
+          </div>
+          <div class="hero-orbit" aria-hidden="true">
+            <span class="orbit orbit--one"></span><span class="orbit orbit--two"></span>
+            <span class="orbit-core"><i class="fa-solid fa-suitcase-rolling"></i></span>
+            <span class="orbit-star orbit-star--one"><i class="fa-solid fa-plane"></i></span>
+            <span class="orbit-star orbit-star--two"><i class="fa-solid fa-location-dot"></i></span>
+          </div>
+        </section>
         <div class="card">
           <div class="panel-head">
             <div>
               <div class="panel-title fs-16">Bookings &amp; Split Bills Ledger</div>
               <p class="panel-subtitle">Monitor payment modes, references, and split shares.</p>
             </div>
-            <input type="text" class="filter-input" id="bookings-filter" placeholder="Filter bookings…">
+            <input type="search" class="filter-input" id="bookings-filter" placeholder="Search bookings…" aria-label="Search bookings">
           </div>
           <div class="table-wrap">
             <table>
@@ -194,6 +242,19 @@
 
       <!-- TAB 3: AI PROMPTS & ACTIVITY -->
       <div id="tab-ai-monitor" class="admin-tab">
+        <section class="dashboard-hero dashboard-hero--section" aria-labelledby="ai-welcome">
+          <div class="dashboard-hero__content">
+            <span class="hero-eyebrow"><span class="hero-eyebrow__spark"></span> ROAMLY AI STUDIO</span>
+            <h1 id="ai-welcome">Little sparks of <span>travel inspiration.</span></h1>
+            <p>See how traveler ideas shape thoughtful, personal itineraries with Roamly AI.</p>
+          </div>
+          <div class="hero-orbit" aria-hidden="true">
+            <span class="orbit orbit--one"></span><span class="orbit orbit--two"></span>
+            <span class="orbit-core"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+            <span class="orbit-star orbit-star--one"><i class="fa-solid fa-star"></i></span>
+            <span class="orbit-star orbit-star--two"><i class="fa-solid fa-lightbulb"></i></span>
+          </div>
+        </section>
         <div class="card">
           <div class="panel-head">
             <div>
@@ -208,13 +269,26 @@
 
       <!-- TAB 4: PROMO CODES -->
       <div id="tab-promos" class="admin-tab">
+        <section class="dashboard-hero dashboard-hero--section" aria-labelledby="promos-welcome">
+          <div class="dashboard-hero__content">
+            <span class="hero-eyebrow"><span class="hero-eyebrow__spark"></span> OFFERS &amp; REWARDS</span>
+            <h1 id="promos-welcome">A little offer. <span>A lot more adventure.</span></h1>
+            <p>Create rewards that welcome new travelers and give every next trip a reason to begin.</p>
+          </div>
+          <div class="hero-orbit" aria-hidden="true">
+            <span class="orbit orbit--one"></span><span class="orbit orbit--two"></span>
+            <span class="orbit-core"><i class="fa-solid fa-ticket"></i></span>
+            <span class="orbit-star orbit-star--one"><i class="fa-solid fa-tag"></i></span>
+            <span class="orbit-star orbit-star--two"><i class="fa-solid fa-gift"></i></span>
+          </div>
+        </section>
         <div class="card card-padded">
           <div class="panel-head panel-head-clean">
             <div>
               <div class="panel-title fs-16">Promo Code Manager</div>
               <p class="panel-subtitle">Create and monitor active discount codes for Roamly subscriptions.</p>
             </div>
-            <button class="btn-gold" onclick="showToast('New promo code generated successfully!','ticket')">+ Add New Code</button>
+            <button class="btn-gold" type="button" onclick="addPromo()"><i class="fa-solid fa-plus"></i> Add New Code</button>
           </div>
           <div class="promo-grid" id="promo-grid"></div>
         </div>
@@ -222,33 +296,46 @@
 
       <!-- TAB 5: SYSTEM SETTINGS -->
       <div id="tab-settings" class="admin-tab">
+        <section class="dashboard-hero dashboard-hero--section" aria-labelledby="settings-welcome">
+          <div class="dashboard-hero__content">
+            <span class="hero-eyebrow"><span class="hero-eyebrow__spark"></span> ROAMLY PLATFORM</span>
+            <h1 id="settings-welcome">Set the tone for <span>every journey.</span></h1>
+            <p>Shape the brand, AI engine, pricing, and service status from one place.</p>
+          </div>
+          <div class="hero-orbit" aria-hidden="true">
+            <span class="orbit orbit--one"></span><span class="orbit orbit--two"></span>
+            <span class="orbit-core"><i class="fa-solid fa-sliders"></i></span>
+            <span class="orbit-star orbit-star--one"><i class="fa-solid fa-gear"></i></span>
+            <span class="orbit-star orbit-star--two"><i class="fa-solid fa-compass"></i></span>
+          </div>
+        </section>
         <div class="card card-padded">
           <div class="panel-title fs-16 mb-22">Platform Global Configuration</div>
           <div class="settings-grid">
             <div class="field-group">
-              <label>Platform Brand Name</label>
-              <input type="text" value="Roamly AI Travel">
+              <label for="setting-brand">Platform Brand Name</label>
+              <input id="setting-brand" type="text" value="Roamly AI Travel">
             </div>
             <div class="field-group">
-              <label>AI Inference Engine</label>
-              <select>
+              <label for="setting-engine">AI Inference Engine</label>
+              <select id="setting-engine">
                 <option>Roamly AI Engine (Optimized)</option>
                 <option>Claude Sonnet Integration</option>
               </select>
             </div>
             <div class="field-group">
-              <label>Pro Monthly Subscription Price ($)</label>
-              <input type="number" value="4.99">
+              <label for="setting-price">Pro Monthly Subscription Price ($)</label>
+              <input id="setting-price" type="number" min="0" step="0.01" value="4.99">
             </div>
             <div class="field-group">
-              <label>System Operational Status</label>
-              <select>
+              <label for="setting-status">System Operational Status</label>
+              <select id="setting-status">
                 <option>Fully Operational (Live)</option>
                 <option>Maintenance Mode</option>
               </select>
             </div>
           </div>
-          <button class="btn-gold mt-24" onclick="showToast('Global system settings successfully updated!','gear')">Save System Settings</button>
+          <button class="btn-gold mt-24" type="button" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i> Save System Settings</button>
         </div>
       </div>
 
@@ -256,12 +343,12 @@
   </div>
 
   <!-- ================= TOAST NOTIFICATION ================= -->
-  <div class="toast" id="toast">
+  <div class="toast" id="toast" role="status" aria-live="polite">
     <i class="fa-solid fa-circle-check" id="toast-icon"></i>
     <span id="toast-msg"></span>
   </div>
 
-  <!-- ربط ملف الـ JS المنفصل -->
+  <!-- Admin dashboard interactions -->
   <script src="admin.js"></script>
 </body>
 </html>

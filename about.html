@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>About Roamly · The Intelligent Travel Platform</title>
-  <meta name="description" content="Discover Roamly, the premier AI travel planning platform designed to craft your dream adventures effortlessly.">
+  <title>About Roamly | A more thoughtful way to travel</title>
+  <meta name="description" content="Meet Roamly: a thoughtful travel planning space that brings destination ideas, trip preferences, and saved itineraries together.">
   <link rel="icon" type="image/png" href="assets/img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,12 +38,9 @@
       </nav>
       <div class="header-actions">
         <div id="guestActions" class="nav-auth-group">
-            <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme" title="Switch Dark/Light Mode">
-             <i class="fa-solid fa-moon" id="themeIcon"></i>
-            </button>
-          <button type="button" class="btn btn--dark btn--md" id="simulateLoginBtn">
+          <a href="sign-in.html" class="btn btn--dark btn--md">
             <i class="fa-regular fa-circle-user" aria-hidden="true"></i> Sign In
-          </button>
+          </a>
         </div>
         <div class="user-menu-wrap" id="loggedActions" style="display: none;">
           <button type="button" class="user-menu-trigger" id="userMenuToggle" aria-expanded="false">
@@ -57,10 +54,10 @@
               <p class="user-dropdown__email">nada@roamly.com</p>
             </div>
             <ul class="user-dropdown__list">
-              <li><a href="#"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li>
-              <li><a href="ai-planner.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li>
+              <li><a href="profile.html"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li>
+              <li><a href="itineraries.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li>
               <li><button type="button" class="currency-switch-btn"><i class="fa-solid fa-globe" aria-hidden="true"></i> Currency: <strong>USD ($)</strong></button></li>
-              <li><a href="#"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li>
+              <li><a href="settings.html"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li>
               <li class="user-dropdown__divider"></li>
               <li><button type="button" id="logoutBtn" class="logout-link"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log Out</button></li>
             </ul>
@@ -70,82 +67,58 @@
     </div>
   </header>
 
-  <main id="main">
-    <!-- Hero Section -->
-    <section class="page-hero about-hero-modern">
-      <div class="container page-hero__inner about-hero-inner-modern">
-        <span class="about-tag-pill"><i class="fa-solid fa-sparkles"></i> THE ROAMLY ECOSYSTEM</span>
-        <h1 class="page-hero__title">Architecting the Future of Global Travel</h1>
-        <p class="page-hero__lead">Roamly merges cutting-edge artificial intelligence with curated luxury destinations, transforming complex travel planning into a seamless, inspiring digital experience.</p>
+  <main id="main" class="about-page">
+    <section class="about-hero" aria-labelledby="about-title">
+      <div class="about-hero__media" aria-hidden="true"><video autoplay muted loop playsinline preload="metadata"><source src="assets/img/aboutUsvedio.mp4" type="video/mp4"></video></div>
+      <div class="about-hero__veil" aria-hidden="true"></div>
+      <div class="container about-hero__inner">
+        <div class="about-hero__copy">
+          <p class="about-eyebrow"><span></span> MEET ROAMLY</p>
+          <h1 id="about-title">A better way to find your <em>somewhere.</em></h1>
+          <p>We bring destination inspiration and the pieces of trip planning into one considered space, so you can spend less time juggling details and more time looking forward to what’s next.</p>
+          <div class="about-hero__actions"><a class="btn btn--primary btn--xl" href="ai-planner.html"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Plan your trip</a><a class="about-hero__secondary" href="#our-way">Get to know us <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a></div>
+        </div>
+        <div class="about-hero__orbit" aria-hidden="true"><span class="about-hero__globe"><i class="fa-solid fa-earth-americas"></i></span><span class="about-hero__orbit-ring"></span><span class="about-hero__orbit-ring about-hero__orbit-ring--two"></span><i class="fa-solid fa-plane about-hero__plane"></i></div>
+      </div>
+      <a class="about-scroll-cue" href="#our-way"><span>SCROLL TO EXPLORE</span><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
+    </section>
+
+    <section class="about-intro container" id="our-way">
+      <div class="about-intro__copy about-reveal"><p class="about-section-kicker">WHY WE BUILT ROAMLY</p><h2>Travel planning should start with <em>excitement,</em> not twenty open tabs.</h2></div>
+      <div class="about-intro__body about-reveal"><p>A great trip is personal. It starts with the places you’re curious about, the people coming with you, the time you have, and what feels right for your budget.</p><p>Roamly gives those details a place to come together. Explore destinations, shape a trip around your preferences, and keep the ideas you love close at hand.</p><a class="about-text-link" href="destinations.html">Find a place that feels right <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
+    </section>
+
+    <section class="about-postcard container" aria-label="Travel inspiration">
+      <div class="about-postcard__visual about-reveal"><img src="assets/img/istanbul-map.png" alt="Illustrated map of Istanbul, a city to explore at your own pace" loading="lazy"><span class="about-postcard__pin about-postcard__pin--one"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span>Sultanahmet</span></span><span class="about-postcard__pin about-postcard__pin--two"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span>Bosphorus</span></span><span class="about-postcard__route" aria-hidden="true"></span><span class="about-postcard__stamp">A PLACE<br>TO BEGIN</span></div>
+      <div class="about-postcard__copy about-reveal"><p class="about-section-kicker">FROM “SOMEDAY” TO “LET’S GO”</p><h2>One spark of curiosity can become a trip that feels like yours.</h2><p>Maybe it’s a long weekend by the sea. Maybe it’s a city you’ve wanted to wander for years. Start with a destination or a feeling; Roamly helps you turn that first idea into a plan you can shape.</p><a class="btn btn--dark btn--lg" href="ai-planner.html"><i class="fa-solid fa-compass" aria-hidden="true"></i> Start with an idea</a></div>
+    </section>
+
+    <section class="about-principles" aria-labelledby="principles-title">
+      <div class="container"><div class="about-section-heading about-reveal"><p class="about-section-kicker">THE ROAMLY APPROACH</p><h2 id="principles-title">Thoughtful planning, at every step.</h2><p>Useful tools, clear choices, and room for the trip to be your own.</p></div>
+        <div class="about-principles__grid">
+          <article class="about-principle about-reveal"><span class="about-principle__number">01</span><span class="about-principle__icon"><i class="fa-solid fa-sliders" aria-hidden="true"></i></span><h3>Made around you</h3><p>Set your budget, travel style, dates, and group size. Your starting point should reflect the way you want to travel.</p><a href="settings.html">Set your preferences <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></article>
+          <article class="about-principle about-reveal"><span class="about-principle__number">02</span><span class="about-principle__icon"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i></span><h3>Ideas, brought together</h3><p>Explore destinations, review your plan, and save the itineraries you want to come back to in one connected journey.</p><a href="itineraries.html">See your trip desk <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></article>
+          <article class="about-principle about-reveal"><span class="about-principle__number">03</span><span class="about-principle__icon"><i class="fa-solid fa-feather-pointed" aria-hidden="true"></i></span><h3>Your pace, your call</h3><p>Use Roamly for a little inspiration or a more detailed outline. Keep what works, adjust what doesn’t, and make the choices.</p><a href="ai-planner.html">Meet the planner <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></article>
+        </div>
       </div>
     </section>
 
-    <!-- Bento Grid Showcase -->
-    <div class="container container--narrow page-main about-bento-main">
-      
-      <!-- Main Vision Card -->
-      <div class="bento-card bento-hero-feature">
-        <div class="bento-text-side">
-          <span class="bento-label">OUR CORE PHILOSOPHY</span>
-          <h2 class="bento-title">Built for Explorers Who Value Every Moment</h2>
-          <p class="bento-desc">
-            Traditional travel planning is cluttered with fragmented research, uncertain pricing, and rigid itineraries. Roamly was engineered to eliminate this friction entirely. By leveraging algorithmic intelligence and real-time data sync, we empower you to design, customize, and book your dream escape in seconds.
-          </p>
-        </div>
-        <div class="bento-media-side">
-          <img src="assets/img/santorini.png" alt="Santorini scenic view" loading="lazy">
-        </div>
+    <section class="about-how container" aria-labelledby="how-title">
+      <div class="about-how__heading about-reveal"><p class="about-section-kicker">A CLEARER WAY FORWARD</p><h2 id="how-title">From first thought to a trip worth looking forward to.</h2><p>No complicated setup. Just a few useful steps to get your ideas moving.</p></div>
+      <div class="about-how__steps">
+        <article class="about-step about-reveal"><span class="about-step__index">01 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span><div class="about-step__icon"><i class="fa-regular fa-lightbulb" aria-hidden="true"></i></div><h3>Tell us what sounds good</h3><p>Choose a destination, or explore until one catches your eye. Add the details that matter to your trip.</p></article>
+        <article class="about-step about-reveal"><span class="about-step__index">02 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span><div class="about-step__icon"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></div><h3>Shape your plan</h3><p>Use the planner to bring your dates, group, budget, and travel style into a single trip outline.</p></article>
+        <article class="about-step about-reveal"><span class="about-step__index">03 <i class="fa-solid fa-check" aria-hidden="true"></i></span><div class="about-step__icon"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></div><h3>Keep the good ideas</h3><p>Save a plan to My Itineraries, return to it later, and keep refining the journey as it takes shape.</p></article>
       </div>
+    </section>
 
-      <!-- Two Column Feature Matrix -->
-      <div class="bento-grid-2">
-        
-        <div class="bento-card bento-sub-feature">
-          <div class="bento-icon-box gold">
-            <i class="fa-solid fa-microchip"></i>
-          </div>
-          <h3 class="bento-sub-title">Dynamic AI Itinerary Synthesis</h3>
-          <p class="bento-sub-text">
-            Our proprietary engine evaluates weather trends, local transit conditions, and real traveler feedback to formulate optimized day-by-day itineraries tailored directly to your unique budget and travel style.
-          </p>
-        </div>
+    <section class="about-gallery" aria-label="Places that inspire a journey"><div class="container about-gallery__inner"><div class="about-gallery__heading about-reveal"><div><p class="about-section-kicker">A WORLD OF POSSIBILITIES</p><h2>Somewhere new is closer than it feels.</h2></div><a class="about-text-link" href="destinations.html">Explore destinations <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div><div class="about-destinations">
+      <a class="about-destination about-destination--large about-reveal" href="destinations.html"><img src="assets/img/santorini.png" alt="Whitewashed houses overlooking the sea in Santorini" loading="lazy"><span><small>ISLAND DAYS</small><strong>Santorini</strong></span></a>
+      <a class="about-destination about-reveal" href="destinations.html"><img src="assets/img/bali.png" alt="Tropical scenery in Bali" loading="lazy"><span><small>SLOW MORNINGS</small><strong>Bali</strong></span></a>
+      <a class="about-destination about-reveal" href="destinations.html"><img src="assets/img/iceland.png" alt="Wide open Icelandic landscape" loading="lazy"><span><small>WIDE OPEN</small><strong>Iceland</strong></span></a>
+    </div></div></section>
 
-        <div class="bento-card bento-sub-feature">
-          <div class="bento-icon-box sky">
-            <i class="fa-solid fa-headset"></i>
-          </div>
-          <h3 class="bento-sub-title">24/7 AI Captain Concierge</h3>
-          <p class="bento-sub-text">
-            Never travel alone. Our floating intelligent companion is embedded across the platform to provide instant assistance, route adjustments, and live recommendations around the clock.
-          </p>
-        </div>
-
-      </div>
-
-      <!-- Full Width Trust & Metrics Banner -->
-      <div class="bento-card bento-stats-banner">
-        <div class="stats-info">
-          <span class="bento-label">GLOBAL IMPACT &amp; RELIABILITY</span>
-          <h2 class="bento-title">Trusted by Explorers Worldwide</h2>
-          <p class="bento-desc">Delivering uncompromised security, verified luxury stays, and lightning-fast planning performance across continents.</p>
-        </div>
-        <div class="stats-grid-row">
-          <div class="stat-box">
-            <span class="s-num">25,000+</span>
-            <span class="s-lbl">Active Travelers</span>
-          </div>
-          <div class="stat-box">
-            <span class="s-num">150+</span>
-            <span class="s-lbl">Curated Cities</span>
-          </div>
-          <div class="stat-box">
-            <span class="s-num">98%</span>
-            <span class="s-lbl">AI Precision Rate</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
+    <section class="about-final-cta container about-reveal"><div class="about-final-cta__glow" aria-hidden="true"></div><div class="about-final-cta__mark" aria-hidden="true"><i class="fa-solid fa-compass"></i><span></span><i class="fa-solid fa-plane"></i></div><div><p class="about-section-kicker">YOUR NEXT CHAPTER STARTS SOMEWHERE</p><h2>Ready to find yours?</h2><p>Bring your ideas, we’ll help you bring the pieces together.</p></div><a class="btn btn--primary btn--xl" href="ai-planner.html">Plan your escape <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></section>
   </main>
 
   <footer class="site-footer">
@@ -181,7 +154,9 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="ai-planner.html">AI Planner </a></li>
             <li><a href="destinations.html">Destinations</a></li>
+            <li><a href="deals.html">Deals</a></li>
             <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="about.html" aria-current="page">About Us</a></li>
           </ul>
         </nav>
         <nav class="footer-col" aria-labelledby="footer-top">
@@ -198,10 +173,11 @@
           <h3 class="footer-col__title" id="footer-support">Support</h3>
           <ul>
             <li><a href="about.html">About Us</a></li>
-            <li><a href="support.html">Contact Us</a></li>
-            <li><a href="support.html#faq">FAQs</a></li>
-            <li><a href="#">Terms &amp; Conditions</a></li>
-            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="Contact-Us.html">Contact Us</a></li>
+            <li><a href="Contact-Us.html#faq">FAQs</a></li>
+            <li><a href="booking-guide.html">Booking Guide</a></li>
+            <li><a href="terms.html">Terms &amp; Conditions</a></li>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
           </ul>
         </nav>
       </div>

@@ -78,20 +78,36 @@ const promos = [
   }
 ];
 
+const bookingQuery = { value: '' };
+const promoStorageKey = 'roamly-admin-promos';
+const settingsStorageKey = 'roamly-admin-settings';
+const profileStorageKey = 'roamly-admin-profile';
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[char]);
+}
+
 /* ---------- 2. DYNAMIC RENDERING ---------- */
 function renderBookings(list) {
   const tbody = document.getElementById('bookings-tbody');
   if (!tbody) return;
 
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td class="empty-state" colspan="6">No bookings match your search.</td></tr>';
+    return;
+  }
+
   tbody.innerHTML = list.map(b => `
     <tr>
-      <td style="font-weight:700;color:var(--ink);">${b.name}</td>
-      <td>${b.dest}</td>
-      <td style="font-family:monospace;color:var(--muted);">${b.ref}</td>
-      <td><span class="badge" style="background:${b.payBg};color:${b.payFg};">${b.pay}</span></td>
-      <td><span class="badge" style="background:${b.statBg};color:${b.statFg};">${b.status}</span></td>
+      <td class="booking-name">${escapeHtml(b.name)}</td>
+      <td>${escapeHtml(b.dest)}</td>
+      <td class="booking-reference">${escapeHtml(b.ref)}</td>
+      <td><span class="badge" style="background:${b.payBg};color:${b.payFg};">${escapeHtml(b.pay)}</span></td>
+      <td><span class="badge" style="background:${b.statBg};color:${b.statFg};">${escapeHtml(b.status)}</span></td>
       <td style="text-align:right;">
-        <button class="icon-btn" title="Delete Booking" onclick="this.closest('tr').remove()">
+        <button class="icon-btn" type="button" title="Remove booking" aria-label="Remove booking ${escapeHtml(b.ref)}" data-delete-booking="${escapeHtml(b.ref)}">
           <i class="fa-solid fa-trash-can"></i>
         </button>
       </td>
@@ -122,11 +138,11 @@ function renderPromos() {
   container.innerHTML = promos.map(p => `
     <div class="promo-card">
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span class="promo-code">${p.code}</span>
+        <span class="promo-code">${escapeHtml(p.code)}</span>
         <span class="badge" style="background:var(--emerald-bg);color:var(--emerald);">Active</span>
       </div>
-      <p class="promo-desc">${p.desc}</p>
-      <p class="promo-redemp">Redemptions: ${p.redemp}</p>
+      <p class="promo-desc">${escapeHtml(p.desc)}</p>
+      <p class="promo-redemp">Redemptions: ${escapeHtml(p.redemp)}</p>
     </div>
   `).join('');
 }
@@ -141,6 +157,8 @@ const titles = {
 };
 
 function switchAdminTab(tabId) {
+  if (!titles[tabId]) return;
+  if (window.location.hash !== `#${tabId}`) history.replaceState(null, '', `#${tabId}`);
   // Hide all tabs & activate the selected one
   document.querySelectorAll('.admin-tab').forEach(el => el.classList.remove('active'));
   const targetTab = document.getElementById('tab-' + tabId);
@@ -149,11 +167,121 @@ function switchAdminTab(tabId) {
   // Update sidebar active link
   document.querySelectorAll('.admin-nav-link').forEach(el => el.classList.remove('active'));
   const targetNav = document.getElementById('nav-' + tabId);
-  if (targetNav) targetNav.classList.add('active');
+  document.querySelectorAll('.admin-nav-link').forEach(el => el.removeAttribute('aria-current'));
+  if (targetNav) {
+    targetNav.classList.add('active');
+    targetNav.setAttribute('aria-current', 'page');
+  }
 
   // Update topbar heading
   const titleEl = document.getElementById('admin-page-title');
   if (titleEl && titles[tabId]) titleEl.innerText = titles[tabId];
+}
+
+function clearAiCache() {
+  try { localStorage.removeItem('roamly-ai-cache'); } catch (error) { /* Storage may be unavailable in private browsing. */ }
+  showToast('AI response cache cleared. The next request will refresh results.', 'broom');
+}
+
+function sendBroadcast() {
+  const message = window.prompt('Write the announcement for active travelers:');
+  if (!message || !message.trim()) return;
+  try {
+    localStorage.setItem('roamly-admin-last-broadcast', JSON.stringify({ message: message.trim(), createdAt: new Date().toISOString() }));
+    showToast('Announcement saved in the dashboard.', 'bullhorn');
+  } catch (error) {
+    showToast('This browser could not save the announcement.', 'triangle-exclamation');
+  }
+}
+
+function downloadBackup() {
+  const backup = {
+    exportedAt: new Date().toISOString(),
+    bookings,
+    prompts,
+    promos,
+    settings: readSettings()
+  };
+  const url = URL.createObjectURL(new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `roamly-admin-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  link.click();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  showToast('Your dashboard backup has been downloaded.', 'database');
+}
+
+function addPromo() {
+  const code = window.prompt('Enter a promo code (for example, ROAM25):');
+  if (!code || !code.trim()) return;
+  const normalizedCode = code.trim().toUpperCase();
+  if (promos.some(promo => promo.code.toLowerCase() === normalizedCode.toLowerCase())) {
+    showToast('That promo code already exists.', 'triangle-exclamation');
+    return;
+  }
+  const desc = window.prompt('Describe the offer:');
+  if (!desc || !desc.trim()) return;
+  promos.unshift({ code: normalizedCode, desc: desc.trim(), redemp: '0 users' });
+  persistPromos();
+  renderPromos();
+  showToast(`${normalizedCode} is now in your promo list.`, 'ticket');
+}
+
+function persistPromos() {
+  try { localStorage.setItem(promoStorageKey, JSON.stringify(promos)); } catch (error) { /* Keep the current session usable if storage is unavailable. */ }
+}
+
+function readSettings() {
+  try { return JSON.parse(localStorage.getItem(settingsStorageKey) || '{}'); }
+  catch (error) { return {}; }
+}
+
+function readAdminProfile() {
+  try {
+    const profile = JSON.parse(localStorage.getItem(profileStorageKey) || '{}');
+    return profile && typeof profile === 'object' ? profile : {};
+  }
+  catch (error) { return {}; }
+}
+
+function updateAdminProfileSummary() {
+  const profile = readAdminProfile();
+  const name = String(profile.name || 'Nada Alawneh');
+  const role = String(profile.role || 'Lead System Architect');
+  const nameEl = document.getElementById('adminProfileName');
+  const roleEl = document.getElementById('adminProfileRole');
+  const avatarEl = document.getElementById('adminProfileAvatar');
+  if (nameEl) nameEl.textContent = name;
+  if (roleEl) roleEl.textContent = role;
+  if (avatarEl) {
+    avatarEl.textContent = name.trim().split(/\s+/).slice(0, 2).map(part => part.charAt(0)).join('').toUpperCase();
+    if (typeof profile.photo === 'string' && /^data:image\/(png|jpeg|webp);base64,/.test(profile.photo)) {
+      avatarEl.style.backgroundImage = `url("${profile.photo}")`;
+      avatarEl.classList.add('avatar--photo');
+    } else {
+      avatarEl.style.backgroundImage = '';
+      avatarEl.classList.remove('avatar--photo');
+    }
+  }
+}
+
+function saveSettings() {
+  const settings = {
+    brand: document.getElementById('setting-brand').value.trim(),
+    engine: document.getElementById('setting-engine').value,
+    price: document.getElementById('setting-price').value,
+    status: document.getElementById('setting-status').value
+  };
+  if (!settings.brand || Number(settings.price) < 0 || settings.price === '') {
+    showToast('Enter a platform name and a valid subscription price.', 'triangle-exclamation');
+    return;
+  }
+  try {
+    localStorage.setItem(settingsStorageKey, JSON.stringify(settings));
+    showToast('Platform settings saved on this device.', 'gear');
+  } catch (error) {
+    showToast('Settings could not be saved in this browser.', 'triangle-exclamation');
+  }
 }
 
 /* ---------- 4. TOAST NOTIFICATIONS ---------- */
@@ -175,9 +303,51 @@ function showToast(msg, icon) {
 
 /* ---------- 5. INITIALIZATION & LIVE FILTER ---------- */
 document.addEventListener('DOMContentLoaded', () => {
+  updateAdminProfileSummary();
+
+  const profileToggle = document.getElementById('profileMenuToggle');
+  const profileMenu = document.getElementById('profileMenu');
+  if (profileToggle && profileMenu) {
+    profileToggle.addEventListener('click', () => {
+      const open = profileToggle.getAttribute('aria-expanded') === 'true';
+      profileToggle.setAttribute('aria-expanded', String(!open));
+      profileMenu.hidden = open;
+    });
+    document.addEventListener('click', event => {
+      if (!event.target.closest('.profile-menu-wrap')) {
+        profileToggle.setAttribute('aria-expanded', 'false');
+        profileMenu.hidden = true;
+      }
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        profileToggle.setAttribute('aria-expanded', 'false');
+        profileMenu.hidden = true;
+        profileToggle.focus();
+      }
+    });
+  }
+
+  try {
+    const savedPromos = JSON.parse(localStorage.getItem(promoStorageKey) || 'null');
+    if (Array.isArray(savedPromos)) promos.splice(0, promos.length, ...savedPromos);
+  } catch (error) { /* Use the sample promo list if stored data is invalid. */ }
+
   renderBookings(bookings);
   renderPrompts();
   renderPromos();
+
+  const dateEl = document.getElementById('dashboard-date');
+  if (dateEl) dateEl.textContent = new Intl.DateTimeFormat(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }).format(new Date());
+
+  const settings = readSettings();
+  if (settings.brand) document.getElementById('setting-brand').value = settings.brand;
+  if (settings.engine) document.getElementById('setting-engine').value = settings.engine;
+  if (settings.price) document.getElementById('setting-price').value = settings.price;
+  if (settings.status) document.getElementById('setting-status').value = settings.status;
+
+  const initialTab = window.location.hash.slice(1);
+  if (titles[initialTab]) switchAdminTab(initialTab);
 
   // ميزة فلترة الجدول الحية عند الكتابة بمربع البحث
   const filterInput = document.getElementById('bookings-filter');
@@ -188,9 +358,28 @@ document.addEventListener('DOMContentLoaded', () => {
         b.name.toLowerCase().includes(q) ||
         b.dest.toLowerCase().includes(q) ||
         b.ref.toLowerCase().includes(q) ||
+        b.pay.toLowerCase().includes(q) ||
         b.status.toLowerCase().includes(q)
       );
       renderBookings(filtered);
+      bookingQuery.value = q;
     });
   }
+
+  document.getElementById('bookings-tbody')?.addEventListener('click', event => {
+    const deleteButton = event.target.closest('[data-delete-booking]');
+    if (!deleteButton) return;
+    const ref = deleteButton.dataset.deleteBooking;
+    if (!window.confirm(`Remove booking ${ref} from this session?`)) return;
+    const index = bookings.findIndex(booking => booking.ref === ref);
+    if (index < 0) return;
+    bookings.splice(index, 1);
+    renderBookings(bookings.filter(booking => `${booking.name} ${booking.dest} ${booking.ref} ${booking.pay} ${booking.status}`.toLowerCase().includes(bookingQuery.value)));
+    showToast(`Booking ${ref} removed from this session.`, 'trash-can');
+  });
+});
+
+window.addEventListener('hashchange', () => {
+  const tabId = window.location.hash.slice(1);
+  if (titles[tabId]) switchAdminTab(tabId);
 });

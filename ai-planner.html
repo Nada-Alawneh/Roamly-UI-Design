@@ -27,22 +27,19 @@
       </button>
       <nav class="site-nav" id="site-nav" aria-label="Main">
         <ul class="nav-pill">
-          <li><a class="nav-pill__link" href="index.html" aria-current="page">Home</a></li>
-          <li><a class="nav-pill__link" href="ai-planner.html">AI Planner</a></li>
+          <li><a class="nav-pill__link" href="index.html">Home</a></li>
+          <li><a class="nav-pill__link" href="ai-planner.html" aria-current="page">AI Planner</a></li>
           <li><a class="nav-pill__link" href="destinations.html">Destinations</a></li>
           <li><a class="nav-pill__link" href="pricing.html">Pricing</a></li>
-          <li><a class="nav-pill__link" href="about.html" aria-current="page">About Us</a></li>
+          <li><a class="nav-pill__link" href="about.html">About Us</a></li>
           <li><a class="nav-pill__link" href="Contact-Us.html">Contact Us</a></li>
         </ul>
       </nav>
       <div class="header-actions">
         <div id="guestActions" class="nav-auth-group">
-          <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme" title="Switch Dark/Light Mode">
-             <i class="fa-solid fa-moon" id="themeIcon"></i>
-            </button>
-          <button type="button" class="btn btn--dark btn--md" id="simulateLoginBtn">
+          <a href="sign-in.html" class="btn btn--dark btn--md">
             <i class="fa-regular fa-circle-user" aria-hidden="true"></i> Sign In
-          </button>
+          </a>
         </div>
 
         <div class="user-menu-wrap" id="loggedActions" style="display: none;">
@@ -57,10 +54,10 @@
               <p class="user-dropdown__email">nada@roamly.com</p>
             </div>
             <ul class="user-dropdown__list">
-              <li><a href="#"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li>
-              <li><a href="ai-planner.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li>
+              <li><a href="profile.html"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li>
+              <li><a href="itineraries.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li>
               <li><button type="button" class="currency-switch-btn"><i class="fa-solid fa-globe" aria-hidden="true"></i> Currency: <strong>USD ($)</strong></button></li>
-              <li><a href="#"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li>
+              <li><a href="settings.html"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li>
               <li class="user-dropdown__divider"></li>
               <li><button type="button" id="logoutBtn" class="logout-link"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log Out</button></li>
             </ul>
@@ -71,11 +68,16 @@
   </header>
 
   <main id="main">
-    <section class="page-hero">
+    <section class="page-hero page-hero--planner" aria-labelledby="planner-hero-title">
+      <div class="planner-hero__video" aria-hidden="true">
+        <video autoplay muted loop playsinline preload="metadata" tabindex="-1">
+          <source src="assets/img/AITravel.mp4" type="video/mp4">
+        </video>
+      </div>
       <div class="container page-hero__inner">
-        <p class="eyebrow">Roamly Studio</p>
-        <h1 class="page-hero__title">AI Itinerary Studio</h1>
-        <p class="page-hero__lead">Generate fully dynamic, day-by-day travel itineraries optimized for budget, local traffic, weather conditions, and personal preferences.</p>
+        <p class="eyebrow">YOUR NEXT JOURNEY STARTS HERE</p>
+        <h1 class="page-hero__title" id="planner-hero-title">A travel plan, <span>made for you.</span></h1>
+        <p class="page-hero__lead">Explore the planner freely. Sign in when you’re ready to create your first itinerary, which is free.</p>
       </div>
     </section>
 
@@ -85,19 +87,27 @@
         <div class="planner-fields">
           <label class="field">
             <span class="field__label">Destination</span>
-            <input class="input" name="destination" value="Istanbul, Turkey" autocomplete="off">
+            <div class="destination-combobox">
+              <input class="input" id="destinationSearch" name="destination" value="Istanbul, Turkey" placeholder="City, country, or somewhere new" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="destinationSuggestions" required>
+              <button class="destination-toggle" id="destinationToggle" type="button" aria-label="Show destination suggestions" aria-expanded="false" aria-controls="destinationSuggestions"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+              <div class="destination-suggestions" id="destinationSuggestions" role="listbox" aria-label="Destination suggestions" hidden></div>
+            </div>
           </label>
           <label class="field">
             <span class="field__label">Travelers</span>
             <input class="input" name="travelers" type="number" min="1" max="20" value="2" inputmode="numeric">
           </label>
           <label class="field">
-            <span class="field__label">Duration &amp; Dates</span>
+            <span class="field__label">Trip duration</span>
             <select class="input" name="duration">
               <option>3 Days Quick Escape</option>
               <option selected>6 Days Full Experience</option>
               <option>10 Days Grand Tour</option>
             </select>
+          </label>
+          <label class="field">
+            <span class="field__label">Start date</span>
+            <input class="input" name="travelDate" type="date" autocomplete="off" required>
           </label>
           <label class="field">
             <span class="field__label">Budget Preference</span>
@@ -118,7 +128,7 @@
           </label>
         </div>
         <div class="planner-panel__actions">
-          <button class="btn btn--primary btn--lg" type="submit"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Re-Generate AI Plan</button>
+          <button class="btn btn--primary btn--lg" type="submit"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Generate your free plan</button>
         </div>
       </form>
 
@@ -126,238 +136,168 @@
         <div class="plan__col">
           <header class="card plan-header">
             <div>
-              <span class="pill pill--emerald">100% AI Custom Plan</span>
-              <h2 class="plan-header__title">🕌 Istanbul, Turkey Dynamic AI Experience</h2>
-              <p class="plan-header__meta">Oct 12 - Oct 18 • <span data-quote="party">2 Adults</span> • Estimated Total: <span data-quote="total">$1,240</span></p>
+              <span class="pill pill--emerald">YOUR TRIP OUTLINE</span>
+              <h2 class="plan-header__title" data-plan-title>Istanbul, Turkey</h2>
+              <p class="plan-header__meta"><span data-plan-length>6 days</span> · <span data-quote="party">2 Adults</span> · Estimated total: <span data-quote="total">$1,240</span></p>
             </div>
             <div class="plan-header__tools">
               <button class="tool-btn tool-btn--sync" type="button"><span><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> Sync</span>Calendar</button>
               <button class="tool-btn tool-btn--pdf" type="button"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i>PDF</button>
               <button class="tool-btn tool-btn--share" type="button"><i class="fa-solid fa-users" aria-hidden="true"></i>Share to<br>Vote</button>
+              <button class="tool-btn tool-btn--save" type="button" data-save-itinerary><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>Save<br>Plan</span></button>
             </div>
           </header>
 
-          <div class="rain-banner">
-            <div class="rain-banner__body">
-              <span class="rain-banner__emoji" aria-hidden="true">🌧️</span>
-              <div>
-                <h3 class="rain-banner__title" id="rain-title">Rainy Day Auto-Replanner Enabled</h3>
-                <p class="rain-banner__text">If rain is predicted on any day, outdoor cruises automatically swap with museum passes.</p>
-              </div>
-            </div>
-            <label class="switch">
-              <input type="checkbox" checked aria-labelledby="rain-title">
-              <span class="switch__track"></span>
-            </label>
-          </div>
-
-          <div class="day-list">
-            <article class="card day-card">
-              <header class="day-card__head">
-                <div class="day-card__heading">
-                  <span class="day-card__chip">DAY 1</span>
-                  <h3 class="day-card__title">Historic Sultanahmet &amp; Hagia Sophia</h3>
-                </div>
-                <time class="day-card__date" datetime="2026-10-12">Oct 12</time>
-              </header>
-              <ol class="timeline">
-                <li class="timeline__item">
-                  <span class="timeline__time">🌅 09:30 AM</span>
-                  <div>
-                    <h4 class="timeline__title">Private VIP Tour of Hagia Sophia &amp; Blue Mosque <button class="timeline__swap" type="button" aria-label="Swap this activity with AI"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></button></h4>
-                    <p class="timeline__text">Skip the line entrance ticket included with local historian guide.</p>
-                  </div>
-                </li>
-                <li class="timeline__item">
-                  <span class="timeline__time">🍽️ 01:00 PM</span>
-                  <div>
-                    <h4 class="timeline__title">Authentic Ottoman Lunch at Matbah Restaurant <button class="timeline__swap" type="button" aria-label="Swap this activity with AI"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></button></h4>
-                    <p class="timeline__text">Traditional palace recipes featuring slow-cooked lamb and lamb pilaf.</p>
-                  </div>
-                </li>
-                <li class="timeline__item">
-                  <span class="timeline__time">⛵ 05:00 PM</span>
-                  <div>
-                    <h4 class="timeline__title">Sunset Bosphorus Cruise with Live Traditional Music <button class="timeline__swap" type="button" aria-label="Swap this activity with AI"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></button></h4>
-                    <p class="timeline__text">2-hour yacht cruise along the Asian &amp; European shores.</p>
-                  </div>
-                </li>
-              </ol>
-            </article>
-
-            <article class="card day-card">
-              <header class="day-card__head">
-                <div class="day-card__heading">
-                  <span class="day-card__chip">DAY 2</span>
-                  <h3 class="day-card__title">Grand Bazaar &amp; Spice Market Delights</h3>
-                </div>
-                <time class="day-card__date" datetime="2026-10-13">Oct 13</time>
-              </header>
-              <ol class="timeline">
-                <li class="timeline__item">
-                  <span class="timeline__time">🛍️ 10:00 AM</span>
-                  <div>
-                    <h4 class="timeline__title">Guided Shopping Experience in Grand Bazaar <button class="timeline__swap" type="button" aria-label="Swap this activity with AI"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></button></h4>
-                    <p class="timeline__text">Explore authentic carpets, ceramics, and spices with a trusted local advisor.</p>
-                  </div>
-                </li>
-                <li class="timeline__item">
-                  <span class="timeline__time">☕ 02:30 PM</span>
-                  <div>
-                    <h4 class="timeline__title">Turkish Coffee Masterclass &amp; Baklava Tasting <button class="timeline__swap" type="button" aria-label="Swap this activity with AI"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></button></h4>
-                    <p class="timeline__text">Learn sand-brewed coffee techniques at Hafiz Mustafa 1864.</p>
-                  </div>
-                </li>
-                <li class="timeline__item">
-                  <span class="timeline__time">🏰 07:00 PM</span>
-                  <div>
-                    <h4 class="timeline__title">Rooftop Dinner Overlooking Galata Tower <button class="timeline__swap" type="button" aria-label="Swap this activity with AI"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></button></h4>
-                    <p class="timeline__text">3-course meal with panoramic city lighting views.</p>
-                  </div>
-                </li>
-              </ol>
-            </article>
-          </div>
+          <div class="planner-edit-note"><i class="fa-regular fa-compass" aria-hidden="true"></i><span>Tailor any stop to your pace and preferences with the edit wand.</span></div>
+          <div class="day-list" data-day-list aria-label="Day-by-day itinerary"></div>
         </div>
 
         <aside class="plan__col plan__col--side">
           <section class="map-card" aria-labelledby="map-title">
             <div class="widget-head">
-              <h3 class="widget-head__title" id="map-title"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> Interactive Route Map</h3>
-              <span class="map-card__tag">Live GPS Sync</span>
+              <h3 class="widget-head__title" id="map-title"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> Area highlights</h3>
+              <span class="map-card__tag">Istanbul · 3 stops</span>
             </div>
             <div class="map-card__canvas media">
               <img src="assets/img/istanbul-map.png" alt="" width="600" height="400" loading="lazy">
               <div class="map-card__pin">
-                <span class="map-card__marker" aria-hidden="true">📍</span>
+                <span class="map-card__marker" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
                 <p class="map-card__place">Sultanahmet Square</p>
                 <p class="map-card__route">3 Stops • 4.2 km total walking</p>
               </div>
             </div>
-            <a class="map-card__link" href="https://www.google.com/maps/search/?api=1&amp;query=Sultanahmet+Square+Istanbul" target="_blank" rel="noopener">Open in Google Maps 🧭</a>
+            <a class="map-card__link" href="https://www.google.com/maps/search/?api=1&amp;query=Sultanahmet+Square+Istanbul" target="_blank" rel="noopener noreferrer">Explore the area in Google Maps <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
           </section>
 
           <section class="card weather-card" aria-labelledby="weather-title">
-            <h3 class="widget-head__title" id="weather-title"><i class="fa-solid fa-cloud-sun" aria-hidden="true"></i> Weather &amp; AI Packing Tips</h3>
+            <h3 class="widget-head__title" id="weather-title"><i class="fa-solid fa-cloud-sun" aria-hidden="true"></i> Weather backup</h3>
             <div class="forecast">
-              <span class="forecast__label">Istanbul Forecast</span>
-              <span class="forecast__value">19°C • Partly Cloudy</span>
+              <span class="forecast__label" data-weather-label>Plan mode</span>
+              <span class="forecast__value" data-weather-value>Switch to rain mode whenever you need indoor ideas.</span>
             </div>
+            <button class="btn btn--soft weather-refresh" type="button" data-weather-regenerate aria-pressed="false"><i class="fa-solid fa-cloud-rain" aria-hidden="true"></i> Rain outside? Refresh my ideas</button>
+            <p class="weather-feedback" data-weather-feedback role="status" aria-live="polite"></p>
             <ul class="tips">
-              <li><i class="fa-solid fa-check" aria-hidden="true"></i> Pack a light jacket for Bosphorus evening breeze.</li>
-              <li><i class="fa-solid fa-check" aria-hidden="true"></i> Comfortable walking shoes required for Old Town.</li>
+              <li><i class="fa-solid fa-check" aria-hidden="true"></i> Rain mode refreshes the itinerary with indoor and covered ideas.</li>
+              <li data-weather-clothing hidden><i class="fa-solid fa-shirt" aria-hidden="true"></i> Wear a light waterproof jacket and grippy shoes; bring a compact umbrella.</li>
             </ul>
           </section>
 
           <section class="quote-card" aria-labelledby="quote-title">
+            <video class="quote-card__video" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
+              <source src="assets/img/payment.mp4" type="video/mp4">
+            </video>
             <div class="quote-card__head">
               <div>
-                <h3 class="quote-card__title" id="quote-title">Lock In This Itinerary</h3>
-                <p class="quote-card__sub">All pre-trip essentials secured.</p>
+                <h3 class="quote-card__title" id="quote-title">Trip cost estimate</h3>
+                <p class="quote-card__sub">Estimated essentials for your selected trip.</p>
               </div>
-              <span class="travelers-badge">👥 <strong data-quote="travelers">2</strong> Travelers</span>
+              <span class="travelers-badge"><i class="fa-solid fa-user-group" aria-hidden="true"></i> <strong data-quote="travelers">2</strong> Travelers</span>
             </div>
             <dl class="breakdown">
-              <div class="breakdown__row"><dt><span aria-hidden="true">✈️</span> Round-trip Flights</dt><dd data-quote="flights">$600</dd></div>
-              <div class="breakdown__row"><dt><span aria-hidden="true">🏨</span> Boutique Hotel</dt><dd data-quote="hotel">$450</dd></div>
-              <div class="breakdown__row"><dt><span aria-hidden="true">🚕</span> Airport Transfers</dt><dd data-quote="transfers">$90</dd></div>
-              <div class="breakdown__row"><dt><span aria-hidden="true">🎟️</span> Fast-track Tickets</dt><dd data-quote="tickets">$100</dd></div>
+              <div class="breakdown__row"><dt><i class="fa-solid fa-plane" aria-hidden="true"></i> Round-trip flights</dt><dd data-quote="flights">$600</dd></div>
+              <div class="breakdown__row"><dt><i class="fa-solid fa-hotel" aria-hidden="true"></i> Accommodation</dt><dd data-quote="hotel">$450</dd></div>
+              <div class="breakdown__row"><dt><i class="fa-solid fa-car" aria-hidden="true"></i> Local transfers</dt><dd data-quote="transfers">$90</dd></div>
+              <div class="breakdown__row"><dt><i class="fa-solid fa-ticket" aria-hidden="true"></i> Activities</dt><dd data-quote="tickets">$100</dd></div>
             </dl>
             <p class="quote-note">
-              <span class="quote-note__icon" aria-hidden="true">💡</span>
-              <span><strong>Pay Now, Relax Later:</strong> This price covers all your core bookings. You only pay out-of-pocket for local meals, shopping, and spontaneous activities on the ground.</span>
+              <span class="quote-note__icon" aria-hidden="true"><i class="fa-solid fa-circle-info"></i></span>
+              <span><strong>Included in this estimate:</strong> Return flights, accommodation, local transfers, and listed activities. Meals, shopping, and personal expenses are not included; pay for those during your trip based on what you choose. Provider prices and availability can change until confirmed.</span>
             </p>
             <div class="quote-total">
               <div>
                 <p class="quote-total__label" data-quote="total-label">Total (For 2)</p>
                 <p class="quote-total__amount" data-quote="total">$1,240</p>
               </div>
-              <button class="btn btn--gold" type="button" data-dialog-open="checkout">Book Trip ➔</button>
+              <button class="btn btn--gold" type="button" data-dialog-open="checkout">Review cost details <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
             </div>
           </section>
         </aside>
       </section>
     </div>
+
+    <dialog class="modal plan-change-modal" data-plan-change-dialog aria-labelledby="plan-change-title">
+      <form class="modal__card plan-change-form" data-plan-change-form>
+        <button class="close-btn modal__close" type="button" data-plan-change-close aria-label="Close request form"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        <span class="plan-change-form__icon" aria-hidden="true"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+        <p class="planner-requests__eyebrow">LET’S MAKE IT MORE YOU</p>
+        <h2 class="modal__title" id="plan-change-title">Not quite your kind of stop?</h2>
+        <p class="modal__text">Tell us what feels off and choose an experience that suits you better.</p>
+        <div class="plan-change-form__activity"><span data-change-day-label>DAY 01</span><strong data-change-activity-label>Selected activity</strong></div>
+        <label class="field"><span class="field__label">What doesn’t work for you?</span><textarea class="input" name="reason" rows="3" maxlength="500" required placeholder="For example: too crowded, too much walking, or not my kind of place."></textarea></label>
+        <label class="field"><span class="field__label">What would you rather do?</span><textarea class="input" name="preference" rows="3" maxlength="180" placeholder="Share a place, activity, or the kind of experience you prefer." required></textarea></label>
+        <p class="plan-change-form__note"><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span>Your change will be applied to this itinerary.</span></p>
+        <div class="plan-change-form__actions"><button class="btn btn--soft" type="button" data-plan-change-close>Keep this stop</button><button class="btn btn--primary" type="submit">Update this stop <i class="fa-solid fa-check" aria-hidden="true"></i></button></div>
+        <p class="plan-change-form__feedback" data-plan-change-feedback role="status" hidden></p>
+      </form>
+    </dialog>
   </main>
-<!-- Checkout modal -->
+<!-- Booking and payment options -->
   <dialog class="modal" id="checkout" aria-labelledby="checkout-title">
-    <form class="modal__card checkout" action="trip.html" method="get">
-      <button class="close-btn modal__close" type="button" data-dialog-close aria-label="Close">✕</button>
+    <form class="modal__card checkout" action="#" method="dialog">
+      <button class="close-btn modal__close" type="button" data-dialog-close aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
       <div class="checkout__head">
-        <span class="pill pill--emerald pill--xs">🔒 256-Bit Encrypted Checkout</span>
-        <h2 class="modal__title" id="checkout-title">Complete Reservation</h2>
-        <p class="modal__text">Instant confirmation with Roamly Best Price Guarantee.</p>
+        <span class="pill pill--emerald pill--xs"><i class="fa-solid fa-receipt" aria-hidden="true"></i> Booking summary</span>
+        <h2 class="modal__title" id="checkout-title">Choose how you’d like to pay</h2>
+        <p class="modal__text">Review your trip total, included essentials, and payment split.</p>
       </div>
 
       <div class="checkout__summary">
         <div class="checkout__summary-row">
-          <span>Istanbul Dynamic Experience</span>
+          <span><span data-plan-title>Istanbul, Turkey</span> · <span data-plan-length>6 days</span></span>
           <strong data-quote="total-cents">$1,240.00</strong>
         </div>
-        <p class="checkout__inclusions">Inclusions: Flights + 5★ Hotel + AI Concierge Pass</p>
+        <ul class="cost-inclusions">
+          <li><i class="fa-solid fa-check" aria-hidden="true"></i> Return flights</li>
+          <li><i class="fa-solid fa-check" aria-hidden="true"></i> Accommodation</li>
+          <li><i class="fa-solid fa-check" aria-hidden="true"></i> Local transfers and listed activities</li>
+        </ul>
       </div>
+      <p class="checkout__inclusions">Meals, shopping, and personal spending are not included. You can choose and pay for them locally during your trip. Final rates depend on provider availability and confirmation.</p>
 
-      <div class="promo">
-        <label class="sr-only" for="promo-code">Promo code</label>
-        <input class="input" id="promo-code" placeholder="Promo code (e.g. ROAM20)" autocomplete="off">
-        <button class="btn btn--dark" type="button">Apply</button>
-      </div>
-
-      <div class="checkout__form">
-        <label class="field">
-          <span class="field__label field__label--caps">Cardholder Name</span>
-          <input class="input" value="Nada Alawneh" autocomplete="cc-name">
-        </label>
-        <label class="field">
-          <span class="field__label field__label--caps">Card Number</span>
-          <input class="input" value="4532 •••• •••• 8921" inputmode="numeric" autocomplete="cc-number">
-        </label>
-        <div class="form-row">
-          <label class="field">
-            <span class="field__label field__label--caps">Expiry Date</span>
-            <input class="input" value="08/28" autocomplete="cc-exp">
+      <fieldset class="pay-methods">
+        <legend class="field__label">Payment option</legend>
+        <div class="pay-methods__options">
+          <label class="pay-option">
+            <input type="radio" name="payment-option" value="full" checked>
+            <span class="pay-option__copy"><span class="pay-option__title">Pay in Full</span><span class="pay-option__text">Pay the full trip total in one payment.</span></span>
           </label>
-          <label class="field">
-            <span class="field__label field__label--caps">CVC</span>
-            <input class="input" value="888" inputmode="numeric" autocomplete="cc-csc">
+          <label class="pay-option">
+            <input type="radio" name="payment-option" value="split">
+            <span class="pay-option__copy"><span class="pay-option__title">Split Bill</span><span class="pay-option__text">Divide the total equally between travelers.</span></span>
           </label>
         </div>
-
-        <fieldset class="pay-methods">
-          <legend class="field__label field__label--caps">Payment Method</legend>
-          <div class="pay-methods__options">
-            <label class="pay-option">
-              <input type="radio" name="payment" value="full" checked>
-              <span>
-                <span class="pay-option__title">Pay in Full</span><br>
-                <span class="pay-option__text">Pay the total amount now</span>
-              </span>
-            </label>
-            <label class="pay-option">
-              <input type="radio" name="payment" value="split">
-              <span>
-                <span class="pay-option__title">Split Bill</span><br>
-                <!-- Filled by renderQuote() in js/main.js (total ÷ travelers); text below is the no-JS fallback for the default 2 travelers -->
-                <span class="pay-option__text" data-quote="per-person">$620.00 per person</span><br>
-                <span class="pay-option__text" data-quote="split-formula">$1,240.00 ÷ 2 travelers</span>
-              </span>
-            </label>
-          </div>
-        </fieldset>
-
-        <button class="btn btn--primary btn--block" type="submit"><i class="fa-solid fa-lock" aria-hidden="true"></i> Confirm Reservation</button>
+      </fieldset>
+      <div class="payment-due" aria-live="polite">
+        <span><strong data-payment-label>Amount due today</strong><small data-payment-detail>One payment for the full trip</small></span>
+        <strong class="payment-due__amount" data-payment-amount>$1,240.00</strong>
       </div>
+      <p class="split-payment-note" data-split-payment-note hidden><strong>Group payment window: 48 hours.</strong> Every traveler must complete their share within 48 hours. If the group does not complete payment in time, a 10% administrative fee is deducted and the remaining amount is refunded.</p>
+
+      <section class="checkout__form" aria-labelledby="payment-details-title">
+        <div class="checkout__payment-head"><h3 id="payment-details-title">Payment details</h3><span><i class="fa-regular fa-credit-card" aria-hidden="true"></i> Card payment</span></div>
+        <label class="field"><span class="field__label">Name on card</span><input class="input" name="cardholder" autocomplete="cc-name" placeholder="Full name on card" required></label>
+        <label class="field"><span class="field__label">Card number</span><input class="input" name="cardnumber" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="19" pattern="[0-9 ]{13,19}" required></label>
+        <div class="form-row">
+          <label class="field"><span class="field__label">Expiry date</span><input class="input" name="expiry" autocomplete="cc-exp" placeholder="MM / YY" maxlength="7" pattern="(0[1-9]|1[0-2])\s*/\s*([0-9]{2}|20[0-9]{2})" required></label>
+          <label class="field"><span class="field__label">Security code</span><input class="input" name="securityCode" inputmode="numeric" autocomplete="cc-csc" placeholder="CVV" maxlength="4" pattern="[0-9]{3,4}" required></label>
+        </div>
+        <p class="checkout__privacy-note">Your card details are used for this payment step and are not saved in your Roamly profile.</p>
+      </section>
+
+      <p class="checkout__status" data-payment-status role="status" hidden></p>
+      <div class="checkout__actions"><button class="btn btn--soft" type="button" data-dialog-close>Back to itinerary</button><button class="btn btn--primary" type="button" data-payment-continue>Pay $1,240.00</button></div>
     </form>
   </dialog>
 
   <!-- Paywall modal -->
   <dialog class="modal modal--dense" id="paywall" aria-labelledby="paywall-title">
     <div class="modal__card paywall">
-      <button class="close-btn modal__close" type="button" data-dialog-close aria-label="Close">✕</button>
-      <span class="paywall__icon" aria-hidden="true">👑</span>
-      <h2 class="modal__title" id="paywall-title">Unlock Unlimited AI</h2>
-      <p class="paywall__text">You've used your free AI generation. Upgrade to a Pro or Family plan to unlock unlimited itinerary generations, calendar sync, and offline maps.</p>
-      <a class="btn btn--primary btn--block" href="pricing.html">View Pricing Plans ➔</a>
+      <button class="close-btn modal__close" type="button" data-dialog-close aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      <span class="paywall__icon" aria-hidden="true"><i class="fa-solid fa-route"></i></span>
+      <h2 class="modal__title" id="paywall-title">Ready to plan another trip?</h2>
+      <p class="paywall__text">Your account includes one free itinerary. Choose a plan with unlimited generations to create your next one.</p>
+      <a class="btn btn--primary btn--block" href="pricing.html">Explore plans</a>
     </div>
   </dialog>
 
@@ -365,7 +305,7 @@
     <div class="container container--narrow site-footer__inner">
       <section class="newsletter" aria-labelledby="newsletter-title">
         <div>
-          <h2 class="newsletter__title" id="newsletter-title">📩 Subscribe to our newsletter</h2>
+          <h2 class="newsletter__title" id="newsletter-title">Subscribe to our newsletter</h2>
           <p class="newsletter__text">Get exclusive deals, AI travel tips, and destination inspiration straight to your inbox.</p>
         </div>
         <form class="newsletter__form" action="#" method="post">
@@ -413,9 +353,9 @@
           <ul>
             <li><a href="Contact-Us.html">Contact Us</a></li>
             <li><a href="Contact-Us.html#faq">FAQs</a></li>
-            <li><a href="Contact-Us.html#booking">Booking Guide</a></li>
-            <li><a href="#">Terms &amp; Conditions</a></li>
-            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="booking-guide.html">Booking Guide</a></li>
+            <li><a href="terms.html">Terms &amp; Conditions</a></li>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
           </ul>
         </nav>
       </div>

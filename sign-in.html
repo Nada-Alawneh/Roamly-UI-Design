@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sign In · Roamly</title>
+  <title>Sign In | Roamly</title>
   <meta name="description" content="Sign in to access your saved itineraries and calendar sync settings.">
   <link rel="icon" type="image/png" href="assets/img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,156 +15,67 @@
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages/sign-in.css">
 </head>
-<body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header">
-    <div class="container site-header__inner">
-      <a class="brand" href="index.html" aria-label="Roamly home">
-       <span class="brand__mark"><img src="assets/img/logo.png" alt="" width="180" height="70"></span>
-      </a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
-        <i class="fa-solid fa-bars" aria-hidden="true"></i><span class="sr-only">Menu</span>
-      </button>
-      <nav class="site-nav" id="site-nav" aria-label="Main">
-        <ul class="nav-pill">
-          <li><a class="nav-pill__link" href="index.html" aria-current="page">Home</a></li>
-          <li><a class="nav-pill__link" href="ai-planner.html">AI Planner</a></li>
-          <li><a class="nav-pill__link" href="destinations.html">Destinations</a></li>
-          <li><a class="nav-pill__link" href="pricing.html">Pricing</a></li>
-          <li><a class="nav-pill__link" href="about.html" aria-current="page">About Us</a></li>
-          <li><a class="nav-pill__link" href="Contact-Us.html">Contact Us</a></li>
-        </ul>
-      </nav>
-      <div class="header-actions">
-        <!-- الحالة الأولى: قبل تسجيل الدخول (Guest) -->
-        <div id="guestActions" class="nav-auth-group">
-          <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme" title="Switch Dark/Light Mode">
-             <i class="fa-solid fa-moon" id="themeIcon"></i>
-            </button>
-          <button type="button" class="btn btn--dark btn--md" id="simulateLoginBtn">
-            <i class="fa-regular fa-circle-user" aria-hidden="true"></i> Sign In
-          </button>
-        </div>
-
-        <!-- الحالة الثانية: بعد تسجيل الدخول (Logged-In مع Dropdown) -->
-        <div class="user-menu-wrap" id="loggedActions" style="display: none;">
-          <button type="button" class="user-menu-trigger" id="userMenuToggle" aria-expanded="false">
-            <span class="user-avatar">N</span>
-            <span class="user-name">Nada Alawneh</span>
-            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-          </button>
-          <div class="user-dropdown" id="userDropdownMenu">
-            <div class="user-dropdown__header">
-              <p class="user-dropdown__title">Signed in as</p>
-              <p class="user-dropdown__email">nada@roamly.com</p>
-            </div>
-            <ul class="user-dropdown__list">
-              <li><a href="#"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li>
-              <li><a href="ai-planner.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li>
-              <li><button type="button" class="currency-switch-btn"><i class="fa-solid fa-globe" aria-hidden="true"></i> Currency: <strong>USD ($)</strong></button></li>
-              <li><a href="#"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li>
-              <li class="user-dropdown__divider"></li>
-              <li><button type="button" id="logoutBtn" class="logout-link"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log Out</button></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
-
+<body class="auth-page">
+  <a class="skip-link" href="#main">Skip to sign in</a>
   <main id="main" class="auth-stage">
-    <div class="modal__card auth">
-      <a class="close-btn modal__close" href="index.html" aria-label="Close and go back home">✕</a>
-
-      <div class="auth__head">
-        <span class="icon-tile icon-tile--dark" aria-hidden="true">✈️</span>
-        <h1 class="modal__title">Sign In to Roamly</h1>
-        <p class="modal__text">Access your saved itineraries and calendar sync settings.</p>
-      </div>
-
-      <button class="auth__google" type="button"><i class="fa-brands fa-google" aria-hidden="true"></i> Continue with Google</button>
-
-      <p class="auth__divider">or email</p>
-
-      <form class="auth__form" action="#" method="post">
-        <label class="field">
-          <span class="field__label field__label--caps">Email Address</span>
-          <input class="input" type="email" name="email" placeholder="nada@example.com" autocomplete="email" required>
-        </label>
-        <label class="field">
-          <span class="field__label field__label--caps">Password</span>
-          <input class="input" type="password" name="password" placeholder="••••••••" autocomplete="current-password" required>
-        </label>
-        <button class="btn btn--dark btn--block" type="submit">Sign In</button>
-      </form>
-
-      <p class="auth__switch">Don't have an account?<a href="#">Register</a></p>
-    </div>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container container--narrow site-footer__inner">
-      <section class="newsletter" aria-labelledby="newsletter-title">
-        <div>
-          <h2 class="newsletter__title" id="newsletter-title">📩 Subscribe to our newsletter</h2>
-          <p class="newsletter__text">Get exclusive deals, AI travel tips, and destination inspiration straight to your inbox.</p>
+    <section class="auth-panel" aria-labelledby="auth-title">
+      <div class="auth-panel__inner">
+        <a class="auth-brand" href="index.html" aria-label="Roamly home"><img src="assets/img/logo.png" alt="Roamly" width="180" height="70"></a>
+        <div class="auth-heading">
+          <p class="auth-kicker"><span></span> YOUR JOURNEY, YOUR WAY</p>
+          <h1 id="auth-title">Welcome <span>back.</span></h1>
+          <p class="auth-intro" id="authIntro">Sign in to pick up where your next great journey begins.</p>
         </div>
-        <form class="newsletter__form" action="#" method="post">
-          <label class="sr-only" for="newsletter-email">Email address</label>
-          <input class="newsletter__input" id="newsletter-email" type="email" name="email" placeholder="Enter your email..." autocomplete="email" required>
-          <button class="btn btn--primary" type="submit">Subscribe</button>
+        <form class="auth-form" data-signin-form novalidate>
+          <label class="auth-field" data-register-only hidden><span>Full name</span><span class="auth-input-wrap"><i class="fa-regular fa-user" aria-hidden="true"></i><input class="input" type="text" name="fullName" placeholder="Your name" autocomplete="name" minlength="2"></span></label>
+          <label class="auth-field"><span>Email address</span><span class="auth-input-wrap"><i class="fa-regular fa-envelope" aria-hidden="true"></i><input class="input" type="email" name="email" value="nada@roamly.com" placeholder="you@example.com" autocomplete="email" required data-auth-email></span></label>
+          <label class="auth-field"><span>Password</span><span class="auth-input-wrap"><i class="fa-solid fa-lock" aria-hidden="true"></i><input class="input" type="password" name="password" value="123456" placeholder="Enter your password" autocomplete="current-password" minlength="6" required data-auth-password><button class="auth-password-toggle" type="button" aria-label="Show password"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></span></label>
+          <label class="auth-field" data-register-only hidden><span>Confirm password</span><span class="auth-input-wrap"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><input class="input" type="password" name="confirmPassword" placeholder="Enter your password again" autocomplete="new-password" minlength="6"></span></label>
+          <div class="auth-options" data-login-only><label class="auth-remember"><input type="checkbox" name="remember" checked><span>Keep me signed in</span></label><a href="mailto:info@roamly.com?subject=Roamly%20password%20reset">Forgot password?</a></div>
+          <label class="auth-terms" data-register-only hidden><input type="checkbox" name="terms"><span>I agree to Roamly's <a href="terms.html">terms</a> and <a href="privacy-policy.html">privacy policy</a>.</span></label>
+          <p class="auth-message" data-auth-message role="status" aria-live="polite" hidden></p>
+          <button class="auth-submit" type="submit"><span data-submit-label>Sign In</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
         </form>
-      </section>
-
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a class="brand" href="index.html" aria-label="Roamly home">
-            <span class="brand__mark"><img src="assets/img/logo.png" alt="" width="32" height="28"></span>
-          </a><br>
-          <p class="footer-brand__text" style="color: var(--slate-400);">Roamly is your travel companion</p><br>
-          <div class="socials">
-            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
-            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
-            <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter" aria-hidden="true"></i></a>
-            <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a>
-          </div>
+        <div class="auth-social-divider"><span>Or continue with</span></div>
+        <div class="auth-socials" aria-label="Other sign-in options">
+          <button class="auth-social-button" type="button" data-social-provider="Google"><i class="fa-brands fa-google" aria-hidden="true"></i><span>Google</span></button>
+          <button class="auth-social-button" type="button" data-social-provider="Apple"><i class="fa-brands fa-apple" aria-hidden="true"></i><span>Apple</span></button>
         </div>
-        <nav class="footer-col" aria-labelledby="footer-quick">
-          <h3 class="footer-col__title" id="footer-quick">Quick Links</h3>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="ai-planner.html">AI Planner </a></li>
-            <li><a href="destinations.html">Destinations</a></li>
-            <li><a href="deals.html">Packages &amp; Deals</a></li>
-            <li><a href="pricing.html">Pricing</a></li>
-          </ul>
-        </nav>
-        <nav class="footer-col" aria-labelledby="footer-top">
-          <h3 class="footer-col__title" id="footer-top">Top Destinations</h3>
-          <ul>
-            <li><a href="ai-planner.html?destination=Istanbul%2C%20Turkey">Istanbul, Turkey</a></li>
-            <li><a href="ai-planner.html?destination=Bali%2C%20Indonesia">Bali, Indonesia</a></li>
-            <li><a href="ai-planner.html?destination=Maldives">Maldives Resort</a></li>
-            <li><a href="ai-planner.html?destination=Santorini%2C%20Greece">Santorini, Greece</a></li>
-            <li><a href="ai-planner.html?destination=Dubai%2C%20UAE">Dubai, UAE</a></li>
-          </ul>
-        </nav>
-        <nav class="footer-col" aria-labelledby="footer-support">
-          <h3 class="footer-col__title" id="footer-support">Support</h3>
-          <ul>
-            <li><a href="Contact-Us.html">Contact Us</a></li>
-            <li><a href="Contact-Us.html#faq">FAQs</a></li>
-            <li><a href="Contact-Us.html#booking">Booking Guide</a></li>
-            <li><a href="#">Terms &amp; Conditions</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-          </ul>
-        </nav>
+        <p class="auth-switch"><span data-switch-prompt>New to Roamly?</span> <button type="button" data-auth-switch>Create an account</button></p>
+        <aside class="auth-demo-access" aria-label="Demo access"><div><strong>Demo access</strong><span>nada@roamly.com · 123456</span></div><button type="button" data-fill-account>Use</button></aside>
+        <p class="auth-note"><i class="fa-solid fa-compass" aria-hidden="true"></i> A smoother journey starts with Roamly</p>
       </div>
- 
-      <p class="copyright">© Roamly AI Travel Planner. All Rights Reserved.</p>
-    </div>
-  </footer>
-
+    </section>
+    <section class="auth-film" aria-label="Roamly travel film">
+      <video class="auth-film__video" autoplay muted loop playsinline preload="auto" aria-label="Roamly travel animation"><source src="assets/img/signInVedio.mp4" type="video/mp4"></video>
+    </section>
+  </main>
+  <svg class="auth-takeoff__route-layer" id="authTakeoffLayer" aria-hidden="true"><defs><linearGradient id="takeoffTrail" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#182d4c" stop-opacity=".48"/><stop offset=".55" stop-color="#b9934e"/><stop offset="1" stop-color="#edcf89"/></linearGradient><clipPath id="takeoffRevealClip" clipPathUnits="userSpaceOnUse"><path id="authTakeoffReveal" fill="none" stroke="#fff" stroke-width="28" stroke-linecap="round"/></clipPath></defs><path class="auth-takeoff__route" id="authTakeoffRoute" clip-path="url(#takeoffRevealClip)"/><circle class="auth-takeoff__departure" id="authTakeoffDeparture" r="6"/></svg>
+  <svg class="auth-takeoff__plane" id="authTakeoffPlane" viewBox="0 0 280 150" role="presentation" aria-hidden="true">
+    <defs>
+      <linearGradient id="planeWing" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#526b8d"/><stop offset=".32" stop-color="#263e61"/><stop offset=".7" stop-color="#172b49"/><stop offset="1" stop-color="#0c172b"/></linearGradient>
+      <linearGradient id="planeBody" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#526b8d"/><stop offset=".18" stop-color="#30496e"/><stop offset=".42" stop-color="#1d3455"/><stop offset=".76" stop-color="#101e36"/><stop offset="1" stop-color="#0a1426"/></linearGradient>
+      <linearGradient id="planeGold" x1="0" y1="0" x2="1" y2=".5"><stop stop-color="#f5dfa7"/><stop offset=".5" stop-color="#c49a4a"/><stop offset="1" stop-color="#fff0c4"/></linearGradient>
+      <linearGradient id="planeEngine" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#0b1528"/><stop offset=".22" stop-color="#526b8d"/><stop offset=".48" stop-color="#203958"/><stop offset=".78" stop-color="#101e36"/><stop offset="1" stop-color="#455d7c"/></linearGradient>
+      <filter id="planeDepth" x="-30%" y="-40%" width="170%" height="190%"><feGaussianBlur in="SourceAlpha" stdDeviation="5"/><feOffset dy="8"/><feComponentTransfer><feFuncA type="linear" slope=".45"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    <g filter="url(#planeDepth)" stroke-linejoin="round">
+      <path d="M119 76 37 17 18 12 72 74 111 91Z" fill="url(#planeWing)" stroke="#d9e4ef" stroke-opacity=".42" stroke-width="1.4"/>
+      <path d="m119 79 83 9 71 43 9 11-28-1-102-39-61-11Z" fill="url(#planeWing)" stroke="#d9e4ef" stroke-opacity=".38" stroke-width="1.4"/>
+      <path d="m216 83 33-29 25-20-8 38-23 23Z" fill="url(#planeWing)" stroke="#d9e4ef" stroke-opacity=".45" stroke-width="1.3"/>
+      <path d="m216 87 38 2 25 13-31 2-36-7Z" fill="url(#planeWing)" stroke="#d9e4ef" stroke-opacity=".35" stroke-width="1.2"/>
+      <path d="M132 88c2-5 7-7 14-5l17 4c6 2 9 7 7 12l-3 5-27-6c-6-2-10-5-8-10Z" fill="url(#planeEngine)" stroke="#d9e3ed" stroke-width="1.1"/>
+      <path d="M179 98c2-5 7-7 13-5l16 4c6 2 8 6 6 11l-3 5-25-6c-6-2-9-5-7-9Z" fill="url(#planeEngine)" stroke="#d9e3ed" stroke-width="1.1"/>
+      <path d="M14 68c13-10 45-11 87-4l103 17c19 3 39 8 60 15-13 8-30 11-53 9l-105-12c-37-4-69-10-84-17-8-3-11-5-8-8Z" fill="url(#planeBody)" stroke="#e6edf4" stroke-opacity=".7" stroke-width="1.6"/>
+      <path d="m18 68 45-5 71 9 75 14c15 3 29 7 41 12-28-4-58-8-89-13L83 74c-28-3-49-4-65-2Z" fill="#f7fbff" opacity=".3"/>
+      <path d="m20 67 18-3 8 6-12 5-13-2Z" fill="#10233f" stroke="#dce7f3" stroke-width="1"/>
+      <path d="m218 83 32-28 23-20-10 37-22 27-25-3Z" fill="url(#planeGold)" opacity=".9"/>
+      <path d="m60 69 43 5 62 10 65 12" fill="none" stroke="url(#planeGold)" stroke-width="2.2" opacity=".9"/>
+      <path d="m77 70 8 1m8 1 8 1m8 1 8 2m8 1 8 2m8 1 8 2m8 1 8 2" stroke="#f4d994" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="m249 96 18 4" stroke="url(#planeGold)" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+  </svg>
+  <div class="auth-arrival" id="authArrival" role="status" aria-live="polite">Landing at Roamly</div>
   <script src="js/main.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Profile | Roamly</title>
+  <meta name="description" content="Manage your personal Roamly account details and password.">
+  <link rel="icon" type="image/png" href="assets/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&amp;display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/user-profile.css">
+</head>
+<body class="user-profile-page" data-profile-page>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="index.html" aria-label="Roamly home">
+       <span class="brand__mark"><img src="assets/img/logo.png" alt="" width="180" height="70"></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+        <i class="fa-solid fa-bars" aria-hidden="true"></i><span class="sr-only">Menu</span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul class="nav-pill">
+          <li><a class="nav-pill__link" href="index.html">Home</a></li>
+          <li><a class="nav-pill__link" href="ai-planner.html">AI Planner</a></li>
+          <li><a class="nav-pill__link" href="destinations.html">Destinations</a></li>
+          <li><a class="nav-pill__link" href="pricing.html">Pricing</a></li>
+          <li><a class="nav-pill__link" href="about.html">About Us</a></li>
+          <li><a class="nav-pill__link" href="Contact-Us.html">Contact Us</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <!-- Ø§Ù„Ø­Ø§Ù„Ø© Ø§Ù„Ø£ÙˆÙ„Ù‰: Ù‚Ø¨Ù„ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„ (Guest) -->
+        <div id="guestActions" class="nav-auth-group">
+          <a href="sign-in.html" class="btn btn--dark btn--md">
+            <i class="fa-regular fa-circle-user" aria-hidden="true"></i> Sign In
+          </a>
+        </div>
+
+        <!-- Ø§Ù„Ø­Ø§Ù„Ø© Ø§Ù„Ø«Ø§Ù†ÙŠØ©: Ø¨Ø¹Ø¯ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„ (Logged-In Ù…Ø¹ Dropdown) -->
+        <div class="user-menu-wrap" id="loggedActions" style="display: none;">
+          <button type="button" class="user-menu-trigger" id="userMenuToggle" aria-expanded="false">
+            <span class="user-avatar">N</span>
+            <span class="user-name">Nada Alawneh</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="user-dropdown" id="userDropdownMenu">
+            <div class="user-dropdown__header">
+              <p class="user-dropdown__title">Signed in as</p>
+              <p class="user-dropdown__email">nada@roamly.com</p>
+            </div>
+            <ul class="user-dropdown__list">
+              <li><a href="profile.html"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li>
+              <li><a href="itineraries.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li>
+              <li><button type="button" class="currency-switch-btn"><i class="fa-solid fa-globe" aria-hidden="true"></i> Currency: <strong>USD ($)</strong></button></li>
+              <li><a href="settings.html"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li>
+              <li class="user-dropdown__divider"></li>
+              <li><button type="button" id="logoutBtn" class="logout-link"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log Out</button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="user-profile-hero" aria-labelledby="profile-page-title">
+      <div class="user-profile-hero__glow" aria-hidden="true"></div>
+      <div class="container user-profile-hero__inner">
+        <div>
+          <p class="user-profile-kicker"><span></span> A LITTLE PLACE TO CALL YOURS</p>
+          <h1 id="profile-page-title">Your Roamly, <span>your way.</span></h1>
+          <p class="user-profile-hero__lead">Keep your personal details up to date and get back to planning the journeys you love.</p>
+        </div>
+        <div class="profile-flight-stamp" aria-hidden="true"><span class="profile-flight-stamp__orbit"></span><i class="fa-solid fa-compass"></i><span class="profile-flight-stamp__label">YOUR<br>JOURNEY</span><i class="fa-solid fa-plane profile-flight-stamp__plane"></i><i class="fa-solid fa-sparkles profile-flight-stamp__spark"></i></div>
+      </div>
+    </section>
+
+    <section class="user-profile-content container" aria-label="Profile settings">
+      <aside class="profile-overview card">
+        <div class="profile-overview__cover"><span class="profile-overview__orbit"></span><span class="profile-overview__cover-label">ROAMLY TRAVELER</span></div>
+        <div class="profile-overview__body">
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar" data-profile-avatar aria-label="Profile photo"><span data-profile-initials>R</span></div>
+            <label class="profile-avatar-edit" for="profilePhoto" aria-label="Upload profile photo"><i class="fa-solid fa-camera" aria-hidden="true"></i></label>
+            <input class="sr-only" id="profilePhoto" type="file" accept="image/*" data-profile-photo>
+          </div>
+          <h2 data-profile-name>Traveler</h2>
+          <p class="profile-overview__email" data-profile-email></p>
+          <span class="profile-member-pill"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Roamly member</span>
+          <div class="profile-completion">
+            <div class="profile-completion__top"><span>Profile completion</span><strong data-profile-completion-text>0%</strong></div>
+            <div class="profile-progress"><span data-profile-progress></span></div>
+          <p>Your account details, all in one place.</p>
+          </div>
+          <button class="profile-remove-photo" type="button" data-remove-photo><i class="fa-regular fa-trash-can" aria-hidden="true"></i> Remove photo</button>
+        </div>
+      </aside>
+
+      <div class="profile-sections">
+        <section class="profile-card card" id="details" aria-labelledby="details-title">
+          <div class="profile-card__heading">
+            <div class="profile-card__icon"><i class="fa-regular fa-id-card" aria-hidden="true"></i></div>
+            <div><p class="profile-section-eyebrow">THE BASICS</p><h2 id="details-title">Personal details</h2><p>Make sure your account information is up to date.</p></div>
+          </div>
+          <form class="profile-form" data-personal-form>
+            <label class="profile-field"><span>Full name</span><input type="text" name="fullName" autocomplete="name" required minlength="2" placeholder="Your name"></label>
+            <label class="profile-field"><span>Email address</span><span class="profile-input-icon"><i class="fa-regular fa-envelope" aria-hidden="true"></i><input type="email" name="email" readonly aria-describedby="email-help"></span><small id="email-help">Your email is used to sign in and cannot be changed here.</small></label>
+            <label class="profile-field"><span>Phone number <em>Optional</em></span><input type="tel" name="phone" autocomplete="tel" placeholder="+1 555 000 0000"></label>
+            <label class="profile-field"><span>City or country of residence <em>Optional</em></span><input type="text" name="country" autocomplete="off" placeholder="For example, Amman, Jordan"></label>
+            <div class="profile-form__footer"><p class="profile-feedback" data-personal-feedback role="status" aria-live="polite"></p><button class="btn btn--primary profile-save" type="submit">Save details <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button></div>
+          </form>
+        </section>
+
+        <section class="profile-card profile-security-card card" id="security" aria-labelledby="security-title">
+          <div class="profile-card__heading">
+            <div class="profile-card__icon profile-card__icon--navy"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+            <div><p class="profile-section-eyebrow">ACCOUNT ACCESS</p><h2 id="security-title">Password &amp; security</h2><p>Keep your account safe with a password only you know.</p></div>
+          </div>
+          <div class="profile-security-action"><p>Update your password whenever you need to. We’ll ask for your current one first.</p><button class="btn btn--dark profile-save" type="button" data-open-password><i class="fa-solid fa-lock" aria-hidden="true"></i> Change password</button></div>
+        </section>
+
+        <dialog class="profile-password-dialog" data-password-dialog aria-labelledby="password-dialog-title">
+          <div class="profile-password-dialog__top"><span class="profile-password-dialog__icon"><i class="fa-solid fa-lock" aria-hidden="true"></i></span><button class="profile-password-dialog__close" type="button" data-close-password aria-label="Close change password dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
+          <p class="profile-section-eyebrow">ACCOUNT SECURITY</p><h2 id="password-dialog-title">Change your password</h2><p class="profile-password-dialog__lead">Choose a new password to keep your Roamly account secure.</p>
+          <form class="profile-form profile-security-form" data-password-form>
+            <label class="profile-field"><span>Current password</span><input type="password" name="currentPassword" autocomplete="current-password" required minlength="6" placeholder="Enter current password"></label>
+            <label class="profile-field"><span>New password</span><input type="password" name="newPassword" autocomplete="new-password" required minlength="6" placeholder="At least 6 characters"></label>
+            <label class="profile-field"><span>Confirm new password</span><input type="password" name="confirmPassword" autocomplete="new-password" required minlength="6" placeholder="Enter it again"></label>
+            <div class="profile-form__footer"><p class="profile-feedback" data-password-feedback role="status" aria-live="polite"></p><button class="btn btn--primary profile-save" type="submit">Update password <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button></div>
+          </form>
+        </dialog>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container container--narrow site-footer__inner">
+      <section class="newsletter" aria-labelledby="newsletter-title">
+        <div>
+          <h2 class="newsletter__title" id="newsletter-title">📩 Subscribe to our newsletter</h2>
+          <p class="newsletter__text">Get exclusive deals, AI travel tips, and destination inspiration straight to your inbox.</p>
+        </div>
+        <form class="newsletter__form" action="#" method="post">
+          <label class="sr-only" for="newsletter-email">Email address</label>
+          <input class="newsletter__input" id="newsletter-email" type="email" name="email" placeholder="Enter your email..." autocomplete="email" required>
+          <button class="btn btn--primary" type="submit">Subscribe</button>
+        </form>
+      </section>
+
+      <div class="footer-grid">
+        <div class="footer-brand">
+           <a class="brand" href="index.html" aria-label="Roamly home">
+           <span class="brand__mark"><img src="assets/img/logo.png" alt="" width="180" height="70"></span>
+          </a><br>
+          <p class="footer-brand__text" style="color: var(--slate-400);">Roamly is your travel companion</p><br>
+          <div class="socials">
+            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter" aria-hidden="true"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a>
+          </div>
+        </div>
+        <nav class="footer-col" aria-labelledby="footer-quick">
+          <h3 class="footer-col__title" id="footer-quick">Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="ai-planner.html">AI Planner </a></li>
+            <li><a href="destinations.html">Destinations</a></li>
+            <li><a href="deals.html">Packages &amp; Deals</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col" aria-labelledby="footer-top">
+          <h3 class="footer-col__title" id="footer-top">Top Destinations</h3>
+          <ul>
+            <li><a href="ai-planner.html?destination=Istanbul%2C%20Turkey">Istanbul, Turkey</a></li>
+            <li><a href="ai-planner.html?destination=Bali%2C%20Indonesia">Bali, Indonesia</a></li>
+            <li><a href="ai-planner.html?destination=Maldives">Maldives Resort</a></li>
+            <li><a href="ai-planner.html?destination=Santorini%2C%20Greece">Santorini, Greece</a></li>
+            <li><a href="ai-planner.html?destination=Dubai%2C%20UAE">Dubai, UAE</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col" aria-labelledby="footer-support">
+          <h3 class="footer-col__title" id="footer-support">Support</h3>
+          <ul>
+            <li><a href="Contact-Us.html">Contact Us</a></li>
+            <li><a href="Contact-Us.html#faq">FAQs</a></li>
+            <li><a href="booking-guide.html">Booking Guide</a></li>
+            <li><a href="terms.html">Terms &amp; Conditions</a></li>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <p class="copyright">© Roamly AI Travel Planner. All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

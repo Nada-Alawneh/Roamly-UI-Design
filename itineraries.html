@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Itineraries | Roamly</title>
+  <meta name="description" content="Keep your Roamly travel plans together and pick up where your next journey begins.">
+  <link rel="icon" type="image/png" href="assets/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&amp;display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/itineraries.css">
+</head>
+<body class="itineraries-page" data-itineraries-page>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="index.html" aria-label="Roamly home"><span class="brand__mark"><img src="assets/img/logo.png" alt="" width="180" height="70"></span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle><i class="fa-solid fa-bars" aria-hidden="true"></i><span class="sr-only">Menu</span></button>
+      <nav class="site-nav" id="site-nav" aria-label="Main"><ul class="nav-pill">
+        <li><a class="nav-pill__link" href="index.html">Home</a></li><li><a class="nav-pill__link" href="ai-planner.html">AI Planner</a></li><li><a class="nav-pill__link" href="destinations.html">Destinations</a></li><li><a class="nav-pill__link" href="pricing.html">Pricing</a></li><li><a class="nav-pill__link" href="about.html">About Us</a></li><li><a class="nav-pill__link" href="Contact-Us.html">Contact Us</a></li>
+      </ul></nav>
+      <div class="header-actions">
+        <div id="guestActions" class="nav-auth-group"><a href="sign-in.html" class="btn btn--dark btn--md"><i class="fa-regular fa-circle-user" aria-hidden="true"></i> Sign In</a></div>
+        <div class="user-menu-wrap" id="loggedActions" style="display: none;">
+          <button type="button" class="user-menu-trigger" id="userMenuToggle" aria-expanded="false"><span class="user-avatar">N</span><span class="user-name">Nada Alawneh</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+          <div class="user-dropdown" id="userDropdownMenu"><div class="user-dropdown__header"><p class="user-dropdown__title">Signed in as</p><p class="user-dropdown__email">nada@roamly.com</p></div>
+            <ul class="user-dropdown__list"><li><a href="profile.html"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li><li><a href="itineraries.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li><li><button type="button" class="currency-switch-btn"><i class="fa-solid fa-globe" aria-hidden="true"></i> Currency: <strong>USD ($)</strong></button></li><li><a href="settings.html"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li><li class="user-dropdown__divider"></li><li><button type="button" id="logoutBtn" class="logout-link"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log Out</button></li></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="itinerary-hero" aria-labelledby="itinerary-title">
+      <div class="itinerary-hero__glow" aria-hidden="true"></div>
+      <div class="container itinerary-hero__inner">
+        <div class="itinerary-hero__copy"><p class="itinerary-kicker"><span></span> YOUR JOURNEYS, BEAUTIFULLY GATHERED</p><h1 id="itinerary-title">Every plan has a <em>somewhere.</em></h1><p>Keep your favorite escapes close, pick up your plans anytime, and let the next chapter take shape.</p><a class="btn btn--primary itinerary-create" href="ai-planner.html"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Plan a new journey</a></div>
+        <div class="itinerary-hero__art" aria-hidden="true"><span class="itinerary-orbit itinerary-orbit--one"></span><span class="itinerary-orbit itinerary-orbit--two"></span><span class="itinerary-globe"><i class="fa-solid fa-earth-americas"></i></span><i class="fa-solid fa-plane itinerary-plane"></i><span class="itinerary-stamp">ROAM<br>FAR</span><span class="itinerary-hero__caption">YOUR NEXT<br>STORY AWAITS</span></div>
+      </div>
+    </section>
+
+    <section class="itinerary-content container" aria-label="Saved travel plans">
+      <div class="itinerary-overview"><div><p class="itinerary-section-kicker">THE TRIP DESK</p><h2>Your journeys</h2><p class="itinerary-overview__lead">A thoughtful little home for every trip you’re dreaming up.</p></div><div class="itinerary-count"><span class="itinerary-count__icon"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></span><span><strong data-itinerary-count>0</strong><small>saved plans</small></span></div></div>
+      <div class="itinerary-filters" role="group" aria-label="Filter itineraries"><button type="button" class="is-active" data-itinerary-filter="all">All plans <span data-filter-count="all">0</span></button><button type="button" data-itinerary-filter="upcoming">Upcoming <span data-filter-count="upcoming">0</span></button></div>
+      <div class="itinerary-grid" data-itinerary-list></div>
+      <div class="itinerary-empty" data-itinerary-empty hidden><span class="itinerary-empty__icon"><i class="fa-solid fa-route" aria-hidden="true"></i></span><p class="itinerary-section-kicker">YOUR MAP IS STILL OPEN</p><h2>Your first escape starts with an idea.</h2><p>In AI Planner, choose your destination and trip details, generate a plan, then press <strong>Save Plan</strong>. It will appear here under your account.</p><a class="btn btn--dark" href="ai-planner.html"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Create your first itinerary</a></div>
+      <p class="itinerary-feedback" data-itinerary-feedback role="status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container container--narrow site-footer__inner">
+      <section class="newsletter" aria-labelledby="newsletter-title"><div><h2 class="newsletter__title" id="newsletter-title">📩 Subscribe to our newsletter</h2><p class="newsletter__text">Get exclusive deals, AI travel tips, and destination inspiration straight to your inbox.</p></div><form class="newsletter__form" action="#" method="post"><label class="sr-only" for="newsletter-email">Email address</label><input class="newsletter__input" id="newsletter-email" type="email" name="email" placeholder="Enter your email..." autocomplete="email" required><button class="btn btn--primary" type="submit">Subscribe</button></form></section>
+      <div class="footer-grid"><div class="footer-brand"><a class="brand" href="index.html" aria-label="Roamly home"><span class="brand__mark"><img src="assets/img/logo.png" alt="" width="180" height="70"></span></a><br><p class="footer-brand__text" style="color: var(--slate-400);">Roamly is your travel companion</p><br><div class="socials"><a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a><a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a><a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter" aria-hidden="true"></i></a><a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a></div></div>
+        <nav class="footer-col" aria-labelledby="footer-quick"><h3 class="footer-col__title" id="footer-quick">Quick Links</h3><ul><li><a href="index.html">Home</a></li><li><a href="ai-planner.html">AI Planner</a></li><li><a href="destinations.html">Destinations</a></li><li><a href="deals.html">Packages &amp; Deals</a></li><li><a href="pricing.html">Pricing</a></li></ul></nav>
+        <nav class="footer-col" aria-labelledby="footer-top"><h3 class="footer-col__title" id="footer-top">Top Destinations</h3><ul><li><a href="ai-planner.html?destination=Istanbul%2C%20Turkey">Istanbul, Turkey</a></li><li><a href="ai-planner.html?destination=Bali%2C%20Indonesia">Bali, Indonesia</a></li><li><a href="ai-planner.html?destination=Maldives">Maldives Resort</a></li><li><a href="ai-planner.html?destination=Santorini%2C%20Greece">Santorini, Greece</a></li><li><a href="ai-planner.html?destination=Dubai%2C%20UAE">Dubai, UAE</a></li></ul></nav>
+        <nav class="footer-col" aria-labelledby="footer-support"><h3 class="footer-col__title" id="footer-support">Support</h3><ul><li><a href="Contact-Us.html">Contact Us</a></li><li><a href="Contact-Us.html#faq">FAQs</a></li><li><a href="booking-guide.html">Booking Guide</a></li><li><a href="terms.html">Terms &amp; Conditions</a></li><li><a href="privacy-policy.html">Privacy Policy</a></li></ul></nav>
+      </div><p class="copyright">© Roamly AI Travel Planner. All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1120">
+  <title>Admin Profile - Roamly Command Hub</title>
+  <link rel="icon" type="image/png" href="../assets/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body class="profile-page">
+  <aside>
+    <div class="sidebar-top">
+      <div class="logo-row">
+        <img class="sidebar-logo" src="../assets/img/logo.png" alt="Roamly Command Hub">
+        <span class="sidebar-brand-caption">Command Hub</span>
+      </div>
+      <nav class="sidebar-nav" aria-label="Admin sections">
+        <a href="admin.html#overview" class="admin-nav-link"><i class="fa-solid fa-chart-pie"></i><span>Dashboard Overview</span></a>
+        <a href="admin.html#bookings" class="admin-nav-link"><i class="fa-solid fa-suitcase-rolling"></i><span>Bookings &amp; Split Bills</span></a>
+        <a href="admin.html#ai-monitor" class="admin-nav-link"><i class="fa-solid fa-wand-magic-sparkles"></i><span>AI Prompts &amp; Activity</span></a>
+        <a href="admin.html#promos" class="admin-nav-link"><i class="fa-solid fa-ticket"></i><span>Promo Codes &amp; Offers</span></a>
+        <a href="admin.html#settings" class="admin-nav-link"><i class="fa-solid fa-gear"></i><span>System Settings</span></a>
+        <a href="profile.html#profile" class="admin-nav-link active" aria-current="page"><i class="fa-regular fa-user"></i><span>My Profile</span></a>
+      </nav>
+    </div>
+    <div class="sidebar-bottom">
+      <a href="../sign-in.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i><span>Log Out</span></a>
+      <a href="../index.html" class="back-link"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Back to Main Site</span></a>
+    </div>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <div class="topbar-left">
+        <h2>Admin Profile</h2>
+        <span class="live-pill"><span class="live-dot"></span> Account center</span>
+      </div>
+      <a class="profile-back" href="admin.html"><i class="fa-solid fa-arrow-left"></i> Back to dashboard</a>
+    </header>
+
+    <main class="content profile-main">
+    <section class="profile-hero" aria-labelledby="profile-title">
+      <div class="profile-hero__copy">
+        <span class="profile-kicker"><span></span> YOUR ROAMLY IDENTITY</span>
+        <h1 id="profile-title">A little more <em>you.</em></h1>
+        <p>Keep your details current and make your Command Hub feel like home.</p>
+      </div>
+      <div class="profile-hero__art" aria-hidden="true">
+        <span class="profile-hero__ring profile-hero__ring--one"></span>
+        <span class="profile-hero__ring profile-hero__ring--two"></span>
+        <i class="fa-regular fa-id-card"></i>
+      </div>
+    </section>
+
+    <div class="profile-heading-row">
+      <div>
+        <span class="section-kicker">ACCOUNT CENTER</span>
+        <h2>Profile &amp; preferences</h2>
+      </div>
+      <span class="local-save-note"><i class="fa-solid fa-lock"></i> Your changes stay on this device</span>
+    </div>
+
+    <div class="profile-layout">
+      <div class="profile-rail" role="complementary" aria-label="Profile sections">
+        <section class="portrait-card">
+          <div class="profile-avatar" id="profileAvatar" aria-label="Profile photo preview">NA</div>
+          <h3 id="portraitName">Nada Alawneh</h3>
+          <p id="portraitRole">Lead System Architect</p>
+          <label class="upload-photo" for="profilePhotoInput"><i class="fa-solid fa-camera"></i> Change photo</label>
+          <input id="profilePhotoInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+          <button class="remove-photo" id="removePhoto" type="button">Remove photo</button>
+          <div class="portrait-divider"></div>
+          <div class="profile-completion"><span>Profile details</span><strong id="profileCompletion">0%</strong></div>
+          <div class="completion-track"><span id="completionBar"></span></div>
+        </section>
+        <nav class="profile-section-nav">
+          <a href="#profile" class="profile-section-link is-active"><i class="fa-regular fa-id-card"></i> Personal information</a>
+          <a href="#preferences" class="profile-section-link"><i class="fa-solid fa-sliders"></i> Preferences</a>
+        </nav>
+        <div class="profile-rail-note"><i class="fa-solid fa-sparkles"></i><span>Small details make a profile feel like yours.</span></div>
+      </div>
+
+      <div class="profile-sections">
+        <section class="profile-panel" id="profile" aria-labelledby="personal-title">
+          <div class="profile-panel__heading">
+            <div class="section-icon"><i class="fa-regular fa-user"></i></div>
+            <div><h2 id="personal-title">Personal information</h2><p>How your team sees you in the Command Hub.</p></div>
+          </div>
+          <form id="profileForm" class="profile-form">
+            <div class="profile-form-grid">
+              <div class="profile-field"><label for="profileName">Full name</label><input id="profileName" name="name" autocomplete="name" required maxlength="70" placeholder="Your name"></div>
+              <div class="profile-field"><label for="profileRole">Role / job title</label><input id="profileRole" name="role" autocomplete="organization-title" maxlength="70" placeholder="Your role"></div>
+              <div class="profile-field"><label for="profileEmail">Work email</label><input id="profileEmail" name="email" type="email" autocomplete="email" required maxlength="120" placeholder="you@roamly.com"></div>
+              <div class="profile-field"><label for="profilePhone">Phone number</label><input id="profilePhone" name="phone" type="tel" autocomplete="tel" maxlength="32" placeholder="+962 7X XXX XXXX"></div>
+              <div class="profile-field profile-field--full"><label for="profileBio">A little about you <span>OPTIONAL</span></label><textarea id="profileBio" name="bio" rows="3" maxlength="240" placeholder="What do you love about helping people travel?"></textarea></div>
+            </div>
+            <div class="profile-form-footer"><span id="profileSaveStatus" class="save-status" aria-live="polite"></span><button class="profile-save-button" type="submit"><i class="fa-solid fa-check"></i> Save profile</button></div>
+          </form>
+        </section>
+
+        <section class="profile-panel" id="preferences" aria-labelledby="preferences-title">
+          <div class="profile-panel__heading">
+            <div class="section-icon section-icon--gold"><i class="fa-solid fa-sliders"></i></div>
+            <div><h2 id="preferences-title">Preferences</h2><p>Set the language and updates that work for you.</p></div>
+          </div>
+          <div class="profile-form-grid preferences-grid">
+            <div class="profile-field"><label for="profileLanguage">Preferred language</label><select id="profileLanguage"><option value="English">English</option><option value="Arabic">Arabic</option></select></div>
+            <div class="profile-field"><label for="profileTimezone">Time zone</label><select id="profileTimezone"><option value="Asia/Amman">Amman (GMT+3)</option><option value="Europe/London">London (GMT+0)</option><option value="Europe/Paris">Paris (GMT+1)</option><option value="America/New_York">New York (GMT-5)</option><option value="Asia/Dubai">Dubai (GMT+4)</option></select></div>
+          </div>
+          <div class="preference-row">
+            <div class="preference-copy"><span class="preference-symbol"><i class="fa-regular fa-envelope"></i></span><span><strong>Product updates</strong><small>Occasional news and feature notes.</small></span></div>
+            <label class="switch-control"><input id="prefProductUpdates" type="checkbox"><span class="switch-track"></span><span class="sr-only">Receive product updates</span></label>
+          </div>
+          <div class="preference-row">
+            <div class="preference-copy"><span class="preference-symbol"><i class="fa-regular fa-calendar"></i></span><span><strong>Weekly admin summary</strong><small>A quick recap of dashboard activity.</small></span></div>
+            <label class="switch-control"><input id="prefWeeklySummary" type="checkbox"><span class="switch-track"></span><span class="sr-only">Receive a weekly admin summary</span></label>
+          </div>
+          <div class="profile-form-footer"><span id="preferencesSaveStatus" class="save-status" aria-live="polite"></span><button class="profile-save-button" id="savePreferences" type="button"><i class="fa-solid fa-check"></i> Save preferences</button></div>
+        </section>
+
+        <p class="profile-footnote"><i class="fa-solid fa-circle-info"></i> Your profile details and preferences are saved in this browser.</p>
+      </div>
+    </div>
+    </main>
+  </div>
+
+  <div class="profile-toast" id="profileToast" role="status" aria-live="polite"><i class="fa-solid fa-circle-check"></i><span id="profileToastMessage"></span></div>
+  <script src="profile.js"></script>
+</body>
+</html>

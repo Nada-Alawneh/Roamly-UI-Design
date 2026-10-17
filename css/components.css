@@ -335,7 +335,7 @@
   height: 62px;
   border-radius: 50%;
   border: 2px solid rgba(245, 158, 11, 0.75);
-  background: radial-gradient(circle at 30% 25%, #1e293b 0%, #0f172a 75%);
+  background: radial-gradient(circle at 30% 25%, var(--roamly-navy-mid) 0%, var(--roamly-navy) 75%);
   box-shadow:
     0 14px 30px -6px rgba(15, 23, 42, 0.65),
     0 0 20px rgba(245, 158, 11, 0.35),
@@ -497,7 +497,7 @@
   justify-content: space-between;
   gap: 12px;
   padding: 16px 18px;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  background: linear-gradient(135deg, var(--roamly-navy) 0%, var(--roamly-navy-mid) 100%);
   color: #ffffff;
   border-bottom: 1px solid rgba(245, 158, 11, 0.25);
   cursor: move;
@@ -593,7 +593,7 @@
 
 .roamly-ai-bubble--me {
   align-self: flex-end;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  background: linear-gradient(135deg, var(--roamly-navy) 0%, var(--roamly-navy-mid) 100%);
   color: #ffffff;
   border-color: #0f172a;
   border-bottom-left-radius: 16px;
@@ -687,3 +687,36 @@
   opacity: 1;
   transform: translateY(-50%) translateX(0);
 }
+
+/* Searchable global currency picker */
+dialog.currency-dialog { position: fixed; top: 50%; right: auto; bottom: auto; left: 50%; width: min(100% - 32px, 500px); max-width: 500px; max-height: min(82vh, 720px); margin: 0; padding: 26px; overflow: hidden; border: 1px solid #e4eaf2; border-radius: 22px; background: #fff; color: #17243b; box-shadow: 0 28px 90px rgba(11,25,46,.24); transform: translate(-50%,-50%); }
+dialog.currency-dialog[open] { animation: currency-dialog-in .2s ease-out both; }
+@keyframes currency-dialog-in { from { opacity: 0; transform: translate(-50%,-48%) scale(.985); } to { opacity: 1; transform: translate(-50%,-50%) scale(1); } }
+dialog.currency-dialog::backdrop { background: rgba(12,24,42,.48); backdrop-filter: blur(5px); }
+.currency-dialog__top { display: flex; align-items: center; justify-content: space-between; }
+.currency-dialog__icon { display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid #eadfc9; border-radius: 13px; background: #fbf6e9; color: #a8803d; font-size: 17px; }
+.currency-dialog__close { display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid #e8edf3; border-radius: 11px; background: #fff; color: #748197; cursor: pointer; transition: .2s ease; }
+.currency-dialog__close:hover { border-color: #d6deea; background: #f6f8fb; color: #17243b; }
+.currency-dialog__eyebrow { margin-top: 18px; color: #ae8744; font-size: 9px; font-weight: 800; letter-spacing: .15em; }
+.currency-dialog h2 { margin-top: 4px; color: #17243b; font-size: 23px; line-height: 29px; font-weight: 800; letter-spacing: -.03em; }
+.currency-dialog__lead { margin-top: 6px; color: #8491a4; font-size: 11px; line-height: 17px; }
+.currency-dialog__search { display: flex; height: 44px; align-items: center; gap: 10px; margin-top: 17px; padding: 0 13px; border: 1px solid #dfe5ed; border-radius: 12px; background: #fafbfd; color: #98a3b3; }
+.currency-dialog__search:focus-within { border-color: #c7a45e; background: #fff; box-shadow: 0 0 0 3px rgba(199,164,94,.12); }
+.currency-dialog__search input { width: 100%; border: 0; outline: 0; background: transparent; color: #24334b; font: inherit; font-size: 11px; }
+.currency-dialog__search input::placeholder { color: #9aa4b2; }
+.currency-dialog__status { min-height: 16px; margin: 9px 1px 5px; color: #929dae; font-size: 9px; }
+.currency-dialog__list { display: grid; max-height: min(42vh, 370px); gap: 4px; overflow: auto; padding-right: 3px; overscroll-behavior: contain; }
+.currency-option { display: flex; min-height: 48px; align-items: center; gap: 12px; padding: 7px 10px; border: 1px solid transparent; border-radius: 11px; background: #fff; color: #263650; text-align: left; cursor: pointer; transition: .16s ease; }
+.currency-option:hover { border-color: #e7ebf1; background: #f8fafc; }
+.currency-option.is-selected { border-color: #e9ddc3; background: #fcf8ef; }
+.currency-option__details { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: 2px; }
+.currency-option__details strong { overflow: hidden; color: #34435a; font-size: 11px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.currency-option__details small { color: #98a2b0; font-size: 9px; }
+.currency-option__symbol { min-width: 34px; color: #6e7c91; font-size: 11px; font-weight: 700; text-align: right; }
+.currency-option > i { width: 16px; color: #ac843e; font-size: 11px; text-align: center; }
+.currency-option > i[hidden] { display: none; }
+.currency-option:disabled { cursor: not-allowed; opacity: .48; }
+.currency-dialog__no-results { padding: 22px 10px; color: #8793a5; font-size: 11px; line-height: 18px; text-align: center; }
+.currency-dialog__attribution { margin-top: 12px; color: #a0a9b6; font-size: 9px; text-align: right; }
+.currency-dialog__attribution a { color: #96743d; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+@media (max-width: 520px) { dialog.currency-dialog { padding: 21px 17px; border-radius: 19px; } .currency-dialog__list { max-height: 42vh; } }

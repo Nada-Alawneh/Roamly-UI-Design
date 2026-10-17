@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages/home.css">
 </head>
-<body>
+<body class="home-page">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="container site-header__inner">
@@ -31,19 +31,16 @@
           <li><a class="nav-pill__link" href="ai-planner.html">AI Planner</a></li>
           <li><a class="nav-pill__link" href="destinations.html">Destinations</a></li>
           <li><a class="nav-pill__link" href="pricing.html">Pricing</a></li>
-          <li><a class="nav-pill__link" href="about.html" aria-current="page">About Us</a></li>
+          <li><a class="nav-pill__link" href="about.html">About Us</a></li>
           <li><a class="nav-pill__link" href="Contact-Us.html">Contact Us</a></li>
         </ul>
       </nav>
       <div class="header-actions">
         <!-- الحالة الأولى: قبل تسجيل الدخول (Guest) -->
         <div id="guestActions" class="nav-auth-group">
-          <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme" title="Switch Dark/Light Mode">
-             <i class="fa-solid fa-moon" id="themeIcon"></i>
-            </button>
-          <button type="button" class="btn btn--dark btn--md" id="simulateLoginBtn">
+          <a href="sign-in.html" class="btn btn--dark btn--md">
             <i class="fa-regular fa-circle-user" aria-hidden="true"></i> Sign In
-          </button>
+          </a>
         </div>
 
         <!-- الحالة الثانية: بعد تسجيل الدخول (Logged-In مع Dropdown) -->
@@ -59,10 +56,10 @@
               <p class="user-dropdown__email">nada@roamly.com</p>
             </div>
             <ul class="user-dropdown__list">
-              <li><a href="#"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li>
-              <li><a href="ai-planner.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li>
+              <li><a href="profile.html"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li>
+              <li><a href="itineraries.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li>
               <li><button type="button" class="currency-switch-btn"><i class="fa-solid fa-globe" aria-hidden="true"></i> Currency: <strong>USD ($)</strong></button></li>
-              <li><a href="#"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li>
+              <li><a href="settings.html"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li>
               <li class="user-dropdown__divider"></li>
               <li><button type="button" id="logoutBtn" class="logout-link"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log Out</button></li>
             </ul>
@@ -98,22 +95,22 @@
     <section class="hero-video-section" aria-labelledby="hero-title">
       <div class="hero-video-wrapper" aria-hidden="true">
         <video class="hero-video-bg" autoplay muted loop playsinline preload="auto">
-          <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_091828_e240eb17-6edc-4129-ad9d-98678e3fd238.mp4" type="video/mp4">
+          <source src="assets/img/roamly.mp4" type="video/mp4">
         </video>
         <div class="hero-video-overlay"></div>
       </div>
 
       <div class="container hero-video-content">
         <h1 class="hero-overlap-title" id="hero-title">
-          <span class="title-line-1">Plan Farther.</span><br>
-          <span class="title-line-2">Live Better.</span>
+          <span class="title-line-1">Your next escape</span><br>
+          <span class="title-line-2">impeccably planned.</span>
         </h1>
         <p class="hero-subtitle">
-          Discover breathtaking places, generate personalized dynamic itineraries, and unlock curated luxury escapes in seconds with intelligent AI.
+          A considered escape, shaped around your style, your dates, and the places you long to see.
         </p>
         <div class="hero-cta-group">
           <a class="btn-hero-primary" href="ai-planner.html">
-            <span>AI Planner</span>
+            <span>Plan My Trip</span>
             <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
           </a>
           <a class="btn-hero-glass" href="destinations.html">
@@ -132,34 +129,55 @@
 
     <!-- Search widget -->
     <div class="container container--narrow search-wrap">
-      <form class="search-widget" action="ai-planner.html" method="get" aria-label="Plan a trip">
+      <form class="search-widget" action="ai-planner.html" method="get" aria-label="Design your escape">
         <label class="search-field">
-          <span class="search-field__label">📍 Where to?</span>
-          <input class="search-field__control" name="destination" value="Istanbul, Turkey" autocomplete="off">
+          <span class="search-field__label"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Destination</span>
+          <div class="destination-combobox">
+            <input class="search-field__control" id="destinationSearch" name="destination" placeholder="City, country, or somewhere new" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="destinationSuggestions" required>
+            <button class="destination-toggle" id="destinationToggle" type="button" aria-label="Show destination suggestions" aria-expanded="false" aria-controls="destinationSuggestions"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+            <div class="destination-suggestions" id="destinationSuggestions" role="listbox" aria-label="Destination suggestions" hidden></div>
+          </div>
         </label>
         <label class="search-field">
-          <span class="search-field__label">📅 Check in / out</span>
-          <input class="search-field__control" name="dates" value="12 Oct - 18 Oct" autocomplete="off">
-        </label>
-        <label class="search-field">
-          <span class="search-field__label">👥 Travelers</span>
-          <select class="search-field__control" name="travelers">
-            <option value="1">1 Adult (Solo)</option>
-            <option value="2" selected>2 Adults (Couple)</option>
-            <option value="4">4 Travelers (Family)</option>
-            <option value="6">6 Travelers (Group)</option>
+          <span class="search-field__label"><i class="fa-solid fa-calendar-days" aria-hidden="true"></i> Trip length</span>
+          <select class="search-field__control" name="duration">
+            <option value="3 Days Quick Escape">3 days · Quick escape</option>
+            <option value="6 Days Full Experience" selected>6 days · Full experience</option>
+            <option value="10 Days Grand Tour">10 days · Grand tour</option>
           </select>
         </label>
         <label class="search-field">
-          <span class="search-field__label">💳 Budget / Vibe</span>
+          <span class="search-field__label"><i class="fa-solid fa-compass" aria-hidden="true"></i> Travel mood</span>
+          <select class="search-field__control" name="style">
+            <option value="" selected>Choose your style</option>
+            <option value="Culture &amp; Food">Culture &amp; Food</option>
+            <option value="Adventure &amp; Outdoors">Adventure &amp; Outdoors</option>
+            <option value="Relax &amp; Beach">Relax &amp; Beach</option>
+            <option value="Nightlife">Nightlife</option>
+          </select>
+        </label>
+        <label class="search-field">
+          <span class="search-field__label"><i class="fa-solid fa-users" aria-hidden="true"></i> Travelers</span>
+          <select class="search-field__control" name="travelers">
+            <option value="1">1 traveler</option>
+            <option value="2" selected>2 travelers</option>
+            <option value="3">3 travelers</option>
+            <option value="4">4 travelers</option>
+            <option value="5">5 travelers</option>
+            <option value="6">6 travelers</option>
+            <option value="8">8 travelers</option>
+          </select>
+        </label>
+        <label class="search-field">
+          <span class="search-field__label"><i class="fa-solid fa-coins" aria-hidden="true"></i> Budget</span>
           <select class="search-field__control" name="budget">
-            <option value="Budget">Budget ($)</option>
-            <option value="Balanced" selected>Balanced ($$)</option>
-            <option value="Luxury">Luxury ($$$)</option>
+            <option value="Budget">Budget-friendly</option>
+            <option value="Balanced" selected>Balanced</option>
+            <option value="Luxury">Luxury</option>
           </select>
         </label>
         <button class="btn btn--dark search-widget__submit" type="submit">
-          <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> AI Search Plan
+          <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Design My Escape
         </button>
       </form>
     </div>
@@ -281,58 +299,60 @@
       </div>
     </section>
 
-    <!-- Why Roamly + customizer quiz -->
+    <!-- Roamly Air Concierge -->
     <section class="home-section why" aria-labelledby="why-title">
       <div class="container">
         <header class="why__head">
-          <p class="eyebrow eyebrow--amber-dark eyebrow--wide">Why travel with Roamly</p>
-          <h2 class="why__title" id="why-title">We Make Your Journey Amazing</h2>
-          <p class="why__lead">More than just a trip, we design unforgettable experiences. Let us turn your travel dreams into a seamless reality.</p>
+          <p class="eyebrow eyebrow--amber-dark eyebrow--wide"> WHY CHOOSE ROAMLY?</p>
+          <h2 class="why__title" id="why-title">Your next trip, planned around you. <span>From first idea to takeoff.</span></h2>
+          <p class="why__lead">Tell us when you want to travel, what you enjoy, and your budget. Roamly turns those details into destination ideas and a day-by-day plan, so you can spend less time searching and more time looking forward to the trip.</p>
         </header>
 
         <ul class="features">
           <li class="feature">
-            <span class="icon-tile icon-tile--amber" aria-hidden="true">🏷️</span>
-            <h3 class="feature__title">Best Price Guarantee</h3>
-            <p class="feature__text">Always get unmatched rates on luxury stays.</p>
+            <span class="icon-tile icon-tile--amber" aria-hidden="true"><i class="fa-solid fa-sliders"></i></span>
+            <span class="feature__step">01 <span>PERSONALIZED PLANNING</span></span>
+            <h3 class="feature__title">A trip shaped around you</h3>
+            <p class="feature__text">Set your dates, travel mood, and budget. Get an itinerary made for the way you like to travel.</p>
           </li>
           <li class="feature">
-            <span class="icon-tile icon-tile--sky" aria-hidden="true">🏨</span>
-            <h3 class="feature__title">Handpicked Hotels</h3>
-            <p class="feature__text">Vetted for high rating &amp; luxury comfort.</p>
+            <span class="icon-tile icon-tile--sky" aria-hidden="true"><i class="fa-solid fa-earth-americas"></i></span>
+            <span class="feature__step">02 <span>DESTINATION DISCOVERY</span></span>
+            <h3 class="feature__title">Find your kind of place</h3>
+            <p class="feature__text">Explore memorable escapes, from laid-back beaches to culture-rich city breaks.</p>
           </li>
           <li class="feature">
-            <span class="icon-tile icon-tile--purple" aria-hidden="true">🎧</span>
-            <h3 class="feature__title">24/7 AI Support</h3>
-            <p class="feature__text">Instant answers during your live trip.</p>
+            <span class="icon-tile icon-tile--purple" aria-hidden="true"><i class="fa-solid fa-map"></i></span>
+            <span class="feature__step">03 <span>DAY-BY-DAY ITINERARY</span></span>
+            <h3 class="feature__title">Every day, thoughtfully planned</h3>
+            <p class="feature__text">See your destination and daily itinerary come together before you set off.</p>
           </li>
           <li class="feature">
-            <span class="icon-tile icon-tile--emerald" aria-hidden="true">🔒</span>
-            <h3 class="feature__title">Secure Booking</h3>
-            <p class="feature__text">Bank-level 256-bit payment safety.</p>
-          </li>
-          <li class="feature">
-            <span class="icon-tile icon-tile--rose" aria-hidden="true">🌟</span>
-            <h3 class="feature__title">Trusted by Millions</h3>
-            <p class="feature__text">Over 25,000+ satisfied travelers.</p>
+            <span class="icon-tile icon-tile--emerald" aria-hidden="true"><i class="fa-solid fa-cloud-sun"></i></span>
+            <span class="feature__step">04 <span>TRAVEL DETAILS</span></span>
+            <h3 class="feature__title">The details, in sync</h3>
+            <p class="feature__text">Keep your travel dates and local weather in view while your plans take shape.</p>
           </li>
         </ul>
 
-        <form class="quiz" action="ai-planner.html" method="get" aria-labelledby="quiz-title">
-          <h3 class="quiz__title" id="quiz-title">Not sure where to go?</h3>
-          <p class="quiz__lead">Get personalized recommendations tailored to your exact budget and travel party in seconds.</p>
+        <form class="quiz" action="destinations.html" method="get" aria-labelledby="quiz-title">
+          <div class="quiz__intro">
+            <p class="quiz__eyebrow">LET’S FIND YOUR SOMEWHERE</p>
+            <h3 class="quiz__title" id="quiz-title">Not sure where to go?</h3>
+            <p class="quiz__lead">Tell us your travel style and budget, and we will suggest a destination that feels right for you.</p>
+          </div>
           <div class="quiz__fields">
             <label class="field">
-              <span class="field__label">Travel Style / Vibe</span>
+              <span class="field__label">The kind of trip you want</span>
               <select class="input" name="vibe">
-                <option selected>Honeymoon &amp; Relaxing</option>
-                <option>Family Fun</option>
-                <option>Adventure &amp; Outdoors</option>
-                <option>Culture &amp; Food</option>
+                <option value="Relax &amp; Beach" selected>Honeymoon &amp; Relaxing</option>
+                <option value="Family Fun">Family Fun</option>
+                <option value="Adventure &amp; Outdoors">Adventure &amp; Outdoors</option>
+                <option value="Culture &amp; Food">Culture &amp; Food</option>
               </select>
             </label>
             <label class="field">
-              <span class="field__label">Target Budget</span>
+              <span class="field__label">Your budget per traveler</span>
               <select class="input" name="range">
                 <option>Budget: Under $500</option>
                 <option selected>Budget: $500 - $1,000</option>
@@ -341,7 +361,7 @@
               </select>
             </label>
           </div>
-          <button class="btn btn--primary quiz__submit" type="submit">Share My Ideas </button>
+          <button class="btn btn--primary quiz__submit" type="submit">Find my destination <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
         </form>
       </div>
     </section>
@@ -542,9 +562,9 @@
           <ul>
             <li><a href="Contact-Us.html">Contact Us</a></li>
             <li><a href="Contact-Us.html#faq">FAQs</a></li>
-            <li><a href="Contact-Us.html#booking">Booking Guide</a></li>
-            <li><a href="#">Terms &amp; Conditions</a></li>
-            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="booking-guide.html">Booking Guide</a></li>
+            <li><a href="terms.html">Terms &amp; Conditions</a></li>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
           </ul>
         </nav>
       </div>

@@ -74,7 +74,7 @@
 .plan-card--featured {
   margin-top: -16px;
   padding-top: 56px;
-  background: var(--slate-900);
+  background: var(--roamly-navy);
   border-color: var(--brand);
   box-shadow: var(--shadow-2xl);
 }
