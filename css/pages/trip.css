@@ -36,8 +36,6 @@
 
 .trip-card__title { font-size: 24px; line-height: 32px; font-weight: 900; }
 
-.trip-card__ref { color: var(--slate-500); }
-.trip-card__ref strong { color: var(--slate-900); }
 
 .status-note {
   width: 100%;
@@ -67,6 +65,41 @@
 .trip-card__actions .btn--dark i { color: var(--amber-500); }
 .trip-card__actions .btn--soft { color: var(--slate-700); }
 
+.boarding-pass-modal { z-index: 1100; }
+.boarding-pass-dialog { width: min(100%, 840px); max-width: 840px; max-height: calc(100vh - 32px); overflow-y: auto; padding: 34px; border: 1px solid rgba(202, 166, 94, .32); background: linear-gradient(145deg, #fdfefe, #f5f7fb); }
+.boarding-pass-close { position: absolute; top: 20px; right: 20px; }
+.boarding-pass-eyebrow { color: var(--gold-600); font-size: 10px; font-weight: 900; letter-spacing: .15em; }
+.boarding-pass-heading { margin-top: 8px; color: var(--roamly-navy); font-size: 27px; line-height: 34px; font-weight: 900; }
+.boarding-pass-intro { max-width: 620px; margin-top: 7px; color: var(--slate-500); font-size: 12px; line-height: 19px; }
+.boarding-pass-list { display: grid; gap: 14px; margin-top: 22px; }
+.boarding-pass { display: grid; grid-template-columns: minmax(0, 1fr) 138px; overflow: hidden; border: 1px solid #d8dfeb; border-radius: 18px; background: #fff; box-shadow: 0 10px 26px rgba(15, 30, 54, .08); animation: boarding-pass-enter .48s cubic-bezier(.2,.75,.25,1) both; }
+.boarding-pass:nth-child(2) { animation-delay: 70ms; }
+.boarding-pass:nth-child(3) { animation-delay: 140ms; }
+.boarding-pass__main { min-width: 0; padding: 21px 24px 19px; }
+.boarding-pass__brand { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 13px; border-bottom: 1px solid #e8edf4; color: var(--roamly-navy); }
+.boarding-pass__brand strong { font-size: 12px; font-weight: 900; letter-spacing: .14em; }
+.boarding-pass__brand span { padding: 5px 8px; border-radius: 999px; background: #f8f1e1; color: #94703a; font-size: 8px; font-weight: 900; letter-spacing: .08em; }
+.boarding-pass__passenger-block { display: grid; gap: 4px; margin-top: 15px; }
+.boarding-pass__passenger-block > span,.boarding-pass__airport small,.boarding-pass__meta span,.boarding-pass__details span,.boarding-pass__stub > span { color: #7c899d; font-size: 8px; font-weight: 800; letter-spacing: .1em; }
+.boarding-pass__passenger { overflow: hidden; margin: 0; color: var(--roamly-navy); font-size: 17px; line-height: 22px; font-weight: 900; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+.boarding-pass__route { display: grid; grid-template-columns: minmax(0, 1fr) 82px minmax(0, 1fr); align-items: center; gap: 12px; margin-top: 16px; padding: 15px 0; border-top: 1px solid #e8edf4; border-bottom: 1px solid #e8edf4; }
+.boarding-pass__airport { display: grid; gap: 3px; min-width: 0; }
+.boarding-pass__airport strong { color: var(--roamly-navy); font-size: 31px; line-height: 34px; font-weight: 900; letter-spacing: .03em; }
+.boarding-pass__airport span { overflow: hidden; color: #53627a; font-size: 10px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.boarding-pass__flight-path { position: relative; display: grid; place-items: center; color: var(--gold-600); }
+.boarding-pass__flight-path::before { position: absolute; width: 100%; border-top: 1px dashed #c9b47e; content: ""; }
+.boarding-pass__flight-path i { position: relative; padding: 5px; background: #fff; font-size: 15px; transform: rotate(0deg); }
+.boarding-pass__meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 13px; }
+.boarding-pass__meta > div,.boarding-pass__details > div { display: grid; gap: 4px; min-width: 0; }
+.boarding-pass__meta strong,.boarding-pass__details strong { overflow: hidden; color: var(--roamly-navy); font-size: 10px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+.boarding-pass__details { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px 9px; margin-top: 16px; padding-top: 14px; border-top: 1px dashed #d8dfeb; }
+.boarding-pass__stub { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 18px 12px; border-left: 1px dashed rgba(255,255,255,.45); background: linear-gradient(160deg, #17294b, #0d1830); color: #fff; text-align: center; }
+.boarding-pass__stub > span { color: #c4cede; font-size: 7px; }
+.boarding-pass__stub > strong { color: #f1cf7b; font-size: 17px; line-height: 20px; letter-spacing: .14em; }
+.boarding-pass__barcode { width: 100%; height: 92px; border: 5px solid #fff; background: repeating-linear-gradient(90deg, #101a2d 0 2px, #fff 2px 4px, #101a2d 4px 5px, #fff 5px 8px, #101a2d 8px 11px, #fff 11px 13px, #101a2d 13px 14px, #fff 14px 17px); }
+.boarding-pass__stub > span:last-child { color: #f4f6fa; font-size: 9px; letter-spacing: .08em; }
+@keyframes boarding-pass-enter { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: none; } }
+
 /* State switching */
 .trip-card[data-payment="split"] [data-when="full"],
 .trip-card:not([data-payment="split"]) [data-when="split"] { display: none; }
@@ -74,4 +107,18 @@
 @media (max-width: 640px) {
   .trip-card { padding: 28px 20px; }
   .trip-card__actions .btn { width: 100%; }
+  .boarding-pass-dialog { padding: 29px 17px 18px; }
+  .boarding-pass-heading { font-size: 23px; }
+  .boarding-pass { grid-template-columns: minmax(0, 1fr); border-radius: 15px; }
+  .boarding-pass__main { padding: 17px 15px; }
+  .boarding-pass__route { grid-template-columns: minmax(0, 1fr) 45px minmax(0, 1fr); gap: 7px; }
+  .boarding-pass__airport strong { font-size: 26px; }
+  .boarding-pass__airport span { font-size: 9px; }
+  .boarding-pass__meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .boarding-pass__details { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 11px 7px; }
+  .boarding-pass__stub { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; justify-items: center; gap: 8px; padding: 12px 15px; border-top: 1px dashed rgba(255,255,255,.45); border-left: 0; }
+  .boarding-pass__barcode { width: 100%; height: 34px; border-width: 3px; }
+  .boarding-pass__stub > span:last-child { grid-column: 1 / -1; }
 }
+
+@media (prefers-reduced-motion: reduce) { .boarding-pass { animation: none; } }

@@ -83,8 +83,35 @@
 
     <div class="container container--narrow page-main planner-main">
       <form class="card planner-panel" data-planner-form aria-labelledby="planner-title">
-        <h2 class="planner-panel__title" id="planner-title"><i class="fa-solid fa-sliders" aria-hidden="true"></i> Customize Your Travel Parameters</h2>
-        <div class="planner-fields">
+        <button class="planner-customize-trigger" type="button" data-dialog-open="planner-options" aria-haspopup="dialog" aria-controls="planner-options">
+          <span class="planner-customize-trigger__icon"><i class="fa-solid fa-sliders" aria-hidden="true"></i></span>
+          <span class="planner-customize-trigger__copy">
+            <span class="planner-customize-trigger__title" id="planner-title">Customize Your Travel Parameters</span>
+            <span class="planner-customize-trigger__hint">Choose your route, dates, and travel style</span>
+          </span>
+          <span class="planner-customize-trigger__badge"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Your trip, your way</span>
+          <span class="planner-customize-trigger__arrow"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+        </button>
+
+        <dialog class="modal planner-options-modal" id="planner-options" aria-labelledby="planner-options-title">
+          <section class="modal__card planner-options-dialog">
+            <header class="planner-options__head">
+              <div>
+                <p class="planner-options__eyebrow">PLAN YOUR ESCAPE</p>
+                <h2 id="planner-options-title">Make this trip yours</h2>
+                <p class="planner-options__lead">Set the details that will shape your day-by-day plan.</p>
+              </div>
+              <button class="close-btn" type="button" data-dialog-close aria-label="Close trip preferences"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </header>
+            <div class="planner-fields">
+          <label class="field">
+            <span class="field__label">Leaving from</span>
+            <div class="destination-combobox">
+              <input class="input" id="originSearch" name="origin" value="Amman, Jordan" placeholder="City, country, or somewhere new" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="originSuggestions">
+              <button class="destination-toggle" id="originToggle" type="button" aria-label="Show departure suggestions" aria-expanded="false" aria-controls="originSuggestions"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+              <div class="destination-suggestions" id="originSuggestions" role="listbox" aria-label="Departure suggestions" hidden></div>
+            </div>
+          </label>
           <label class="field">
             <span class="field__label">Destination</span>
             <div class="destination-combobox">
@@ -126,10 +153,13 @@
               <option>Nightlife</option>
             </select>
           </label>
-        </div>
-        <div class="planner-panel__actions">
-          <button class="btn btn--primary btn--lg" type="submit"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Generate your free plan</button>
-        </div>
+            </div>
+            <div class="planner-panel__actions">
+              <button class="btn btn--soft" type="button" data-dialog-close>Cancel</button>
+              <button class="btn btn--primary btn--lg" type="submit"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Generate your free plan</button>
+            </div>
+          </section>
+        </dialog>
       </form>
 
       <section class="plan" id="plan" data-plan hidden aria-label="Your generated itinerary">
@@ -305,7 +335,7 @@
     <div class="container container--narrow site-footer__inner">
       <section class="newsletter" aria-labelledby="newsletter-title">
         <div>
-          <h2 class="newsletter__title" id="newsletter-title">Subscribe to our newsletter</h2>
+          <h2 class="newsletter__title" id="newsletter-title"><i class="fa-regular fa-envelope" aria-hidden="true"></i> Subscribe to our newsletter</h2>
           <p class="newsletter__text">Get exclusive deals, AI travel tips, and destination inspiration straight to your inbox.</p>
         </div>
         <form class="newsletter__form" action="#" method="post">

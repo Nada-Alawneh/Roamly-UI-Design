@@ -720,3 +720,6 @@ dialog.currency-dialog::backdrop { background: rgba(12,24,42,.48); backdrop-filt
 .currency-dialog__attribution { margin-top: 12px; color: #a0a9b6; font-size: 9px; text-align: right; }
 .currency-dialog__attribution a { color: #96743d; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
 @media (max-width: 520px) { dialog.currency-dialog { padding: 21px 17px; border-radius: 19px; } .currency-dialog__list { max-height: 42vh; } }
+
+/* Shared newsletter envelope icon */
+.site-footer .newsletter__title i { display: inline-block; margin-right: 7px; color: #ecd495; font-size: .8em; vertical-align: .06em; }

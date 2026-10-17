@@ -65,12 +65,11 @@
 .auth-demo-access button:hover { background: #e8d8b4; }
 .auth-social-divider { display: flex; align-items: center; gap: 13px; margin-top: 17px; color: #99a2b0; font-size: 10px; }
 .auth-social-divider::before,.auth-social-divider::after { height: 1px; flex: 1; content: ""; background: #e4e8ee; }
-.auth-socials { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin-top: 10px; }
+.auth-socials { display: grid; grid-template-columns: minmax(0,1fr); gap: 10px; margin-top: 10px; }
 .auth-social-button { display: flex; min-height: 42px; align-items: center; justify-content: center; gap: 9px; border: 1px solid #dfe4eb; border-radius: 11px; background: rgba(255,255,255,.86); color: #354258; font-size: 11px; font-weight: 700; transition: border-color .2s ease,background .2s ease,transform .2s ease,box-shadow .2s ease; }
 .auth-social-button:hover { transform: translateY(-1px); border-color: #c8d1de; background: #fff; box-shadow: 0 7px 16px rgba(27,43,66,.08); }
 .auth-social-button i { font-size: 15px; }
 .auth-social-button[data-social-provider="Google"] i { color: #4285f4; }
-.auth-social-button[data-social-provider="Apple"] i { color: #17243b; }
 .auth-note { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 25px; color: #9aa3b1; font-size: 10px; }
 .auth-note i { color: #b58d47; }
 .auth-film { position: sticky; z-index: 1; top: 0; display: block; min-width: 0; height: 100svh; min-height: 100svh; align-self: start; overflow: hidden; padding: 0; perspective: 1400px; background: #f7f8fb; }

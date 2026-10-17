@@ -2,6 +2,24 @@
    Roamly — Destinations page (Figma frame "Destinations")
    ========================================================================== */
 
+.page-hero--destinations { position: relative; isolation: isolate; min-height: 410px; display: flex; align-items: center; overflow: hidden; padding-block: 42px; background: var(--roamly-navy); }
+.destinations-hero__video { position: absolute; z-index: -2; inset: 0; overflow: hidden; }
+.destinations-hero__video video { width: 100%; height: 100%; object-fit: cover; object-position: center 24%; filter: brightness(1.12) contrast(1.04) saturate(1.06); }
+.page-hero--destinations::after { position: absolute; z-index: -1; inset: 0; content: ""; background: linear-gradient(90deg, rgba(8, 19, 41, .86) 0%, rgba(8, 19, 41, .7) 27%, rgba(8, 19, 41, .38) 46%, rgba(8, 19, 41, .08) 72%, transparent 100%), linear-gradient(0deg, rgba(8, 19, 41, .18), transparent 55%); pointer-events: none; }
+.page-hero--destinations .page-hero__inner { position: relative; z-index: 1; width: 100%; max-width: calc(1200px + 2 * var(--gutter)); gap: 13px; }
+.page-hero--destinations .eyebrow { color: #efd38c; }
+.page-hero--destinations .page-hero__title { max-width: 760px; font-size: clamp(34px, 4vw, 52px); line-height: 1.08; letter-spacing: -.035em; text-shadow: 0 3px 22px rgba(5, 14, 30, .48); }
+.page-hero--destinations .page-hero__title span { color: #e9c979; }
+.page-hero--destinations .page-hero__lead { max-width: 640px; color: rgba(238, 243, 250, .96); font-size: 15px; line-height: 1.65; text-shadow: 0 2px 15px rgba(5, 14, 30, .55); }
+
+@media (max-width: 640px) {
+  .page-hero--destinations { min-height: 340px; padding-block: 34px; }
+  .page-hero--destinations::after { background: linear-gradient(90deg, rgba(8, 19, 41, .88), rgba(8, 19, 41, .58) 68%, rgba(8, 19, 41, .2)), linear-gradient(0deg, rgba(8, 19, 41, .2), transparent 55%); }
+  .page-hero--destinations .page-hero__title { font-size: 34px; }
+}
+
+@media (prefers-reduced-motion: reduce) { .destinations-hero__video video { display: none; } }
+
 .filter-bar {
   display: flex;
   align-items: center;

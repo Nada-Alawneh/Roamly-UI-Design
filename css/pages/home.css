@@ -216,7 +216,8 @@
 .welcome-film__head { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 2px 2px 18px; color: #fff; }
 .welcome-film__eyebrow { margin-bottom: 5px; color: #e9c979; font-size: 10px; font-weight: 800; letter-spacing: .16em; }
 .welcome-film__head h2 { color: #fff; font-size: 20px; line-height: 1.25; font-weight: 800; }
-.welcome-film__head .close-btn { flex: none; color: #e8edf5; }
+.welcome-film__head .close-btn { flex: none; width: 38px; height: 38px; border: 1px solid rgba(233, 201, 121, .42); background: rgba(233, 201, 121, .13); color: #f0cf78; transition: background .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease; }
+.welcome-film__head .close-btn:hover { transform: rotate(90deg); border-color: #e9c979; background: #e9c979; color: #101d38; box-shadow: 0 6px 20px rgba(233, 201, 121, .24); }
 .welcome-film__video { display: block; width: 100%; max-height: min(70vh, 660px); aspect-ratio: 16 / 9; border: 1px solid rgba(255, 255, 255, .12); border-radius: 18px; background: #050a14; object-fit: contain; box-shadow: 0 18px 48px rgba(0, 0, 0, .24); }
 
 @media (max-width: 640px) {

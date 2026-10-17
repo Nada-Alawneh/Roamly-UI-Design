@@ -21,7 +21,7 @@
 .about-page .btn--dark { color: #fff; border: 1px solid rgba(25,48,76,.1); box-shadow: 0 9px 22px rgba(22,38,59,.15); }
 .about-page .btn--dark:hover { transform: translateY(-2px); box-shadow: 0 13px 26px rgba(22,38,59,.2); }
 
-.about-hero { min-height: 610px; position: relative; display: flex; align-items: center; overflow: hidden; isolation: isolate; color: #fff; background: #173456; }
+.about-hero { min-height: clamp(580px, 70vh, 740px); position: relative; display: flex; align-items: center; overflow: hidden; isolation: isolate; color: #fff; background: #173456; }
 .about-hero__media, .about-hero__veil { position: absolute; inset: 0; z-index: -2; }
 .about-hero__media video { width: 100%; height: 100%; object-fit: cover; object-position: center 54%; }
 .about-hero__veil { z-index: -1; background: linear-gradient(90deg, rgba(11,24,44,.82) 0%, rgba(17,35,58,.62) 48%, rgba(17,35,58,.18) 100%), linear-gradient(0deg, rgba(10,23,42,.48), transparent 45%); }
@@ -119,7 +119,7 @@
 @keyframes about-nudge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
 
 @media (max-width: 900px) {
-  .about-hero { min-height: 590px; }
+  .about-hero { min-height: clamp(580px, 70vh, 740px); }
   .about-hero__inner { grid-template-columns: 1fr .65fr; gap: 20px; }
   .about-hero__orbit { width: min(30vw, 280px); }
   .about-intro { gap: 7%; }
@@ -130,13 +130,13 @@
   .about-how__heading { max-width: 650px; }
 }
 @media (max-width: 650px) {
-  .about-hero { min-height: 700px; align-items: start; }
+  .about-hero { min-height: 580px; align-items: start; }
   .about-hero__media video { object-position: 58% center; }
   .about-hero__veil { background: linear-gradient(90deg, rgba(11,24,44,.83), rgba(17,35,58,.48)), linear-gradient(0deg, rgba(10,23,42,.6), transparent 55%); }
-  .about-hero__inner { grid-template-columns: 1fr; gap: 4px; padding-block: 76px 80px; }
+  .about-hero__inner { grid-template-columns: 1fr; gap: 4px; padding-block: 58px 48px; }
   .about-hero h1 { font-size: clamp(42px, 12vw, 58px); }
   .about-hero__copy > p:not(.about-eyebrow) { font-size: 15px; }
-  .about-hero__orbit { width: min(58vw, 245px); margin-top: 12px; }
+  .about-hero__orbit { width: min(50vw, 205px); margin-top: 8px; }
   .about-hero__actions { flex-wrap: wrap; gap: 17px; }
   .about-page .btn--xl { min-height: 52px; padding-inline: 22px; }
   .about-final-cta .btn { align-self: stretch; }

@@ -80,8 +80,6 @@
       <section class="card trip-card" data-payment="full" aria-labelledby="trip-title">
         <span class="trip-card__qr" aria-hidden="true"><i class="fa-solid fa-qrcode"></i></span>
         <h2 class="trip-card__title" id="trip-title">Your Travel Magic is Ready!</h2>
-        <p class="trip-card__ref">Booking Reference: <strong>#RMLY-9824X</strong></p>
-
         <p class="status-note status-note--full" data-when="full">
           <strong>Payment Status:</strong> Paid in Full! Your entire trip is fully confirmed and secured.
         </p>
@@ -90,18 +88,28 @@
         </p>
 
         <div class="trip-card__actions">
-          <a class="btn btn--dark" href="#" data-when="full"><i class="fa-solid fa-ticket" aria-hidden="true"></i> View Boarding Passes</a>
+          <button class="btn btn--dark" type="button" data-boarding-passes-open data-when="full"><i class="fa-solid fa-ticket" aria-hidden="true"></i> View Boarding Passes</button>
           <a class="btn btn--soft" href="#"><i class="fa-solid fa-download" aria-hidden="true"></i> Download Offline Mode</a>
         </div>
       </section>
     </div>
+
+    <dialog class="modal boarding-pass-modal" id="boarding-passes" aria-labelledby="boarding-pass-title">
+      <section class="modal__card boarding-pass-dialog">
+        <button class="close-btn boarding-pass-close" type="button" data-dialog-close aria-label="Close boarding passes"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        <p class="boarding-pass-eyebrow">ROAMLY TRIP WALLET</p>
+        <h2 class="boarding-pass-heading" id="boarding-pass-title">Your boarding passes</h2>
+        <p class="boarding-pass-intro">Flight details for your journey, arranged in a familiar boarding-pass format.</p>
+        <div class="boarding-pass-list" data-boarding-pass-list></div>
+      </section>
+    </dialog>
   </main>
 
   <footer class="site-footer">
     <div class="container container--narrow site-footer__inner">
       <section class="newsletter" aria-labelledby="newsletter-title">
         <div>
-          <h2 class="newsletter__title" id="newsletter-title">📩 Subscribe to our newsletter</h2>
+          <h2 class="newsletter__title" id="newsletter-title"><i class="fa-regular fa-envelope" aria-hidden="true"></i> Subscribe to our newsletter</h2>
           <p class="newsletter__text">Get exclusive deals, AI travel tips, and destination inspiration straight to your inbox.</p>
         </div>
         <form class="newsletter__form" action="#" method="post">

@@ -310,6 +310,7 @@ function initPlannerPayment() {
         if (!fields[index].reportValidity()) return;
       }
       var selected = checkout.querySelector('input[name="payment-option"]:checked');
+      prepareTripConfirmation(selected ? selected.value : "full");
       window.location.href = "trip.html?payment=" + (selected ? selected.value : "full");
     });
     checkout.addEventListener("submit", function (event) {
@@ -318,6 +319,217 @@ function initPlannerPayment() {
     });
   }
   updatePaymentSummary();
+}
+
+function prepareTripConfirmation(paymentType) {
+  var form = document.querySelector("[data-planner-form]");
+  var email = (sessionStorage.getItem("roamlySignedInEmail") || localStorage.getItem("roamlySignedInEmail") || "").trim().toLowerCase();
+  var profile = {};
+  var accounts = [];
+  try { profile = JSON.parse(localStorage.getItem("roamlyUserProfile:" + email) || "{}"); } catch (error) {}
+  try { accounts = JSON.parse(localStorage.getItem("roamlyLocalAccounts") || "[]"); } catch (error) {}
+  var account = accounts.find(function (item) { return item.email === email; });
+  var travelerCount = form ? Math.max(1, Math.min(20, parseInt(form.elements.travelers.value, 10) || 1)) : 1;
+  var durationText = form ? form.elements.duration.value : "6 Days Full Experience";
+  var durationMatch = durationText.match(/(\d+)/);
+  var durationDays = durationMatch ? parseInt(durationMatch[1], 10) : 6;
+  var startValue = form ? form.elements.travelDate.value : "";
+  var endValue = "";
+  if (startValue) {
+    var start = new Date(startValue + "T12:00:00");
+    var end = new Date(start);
+    end.setDate(end.getDate() + durationDays - 1);
+    endValue = end.getFullYear() + "-" + String(end.getMonth() + 1).padStart(2, "0") + "-" + String(end.getDate()).padStart(2, "0");
+  }
+  var total = document.querySelector('.quote-total [data-quote="total"]');
+  var amount = document.querySelector("[data-payment-amount]");
+  var trip = {
+    reference: "RMLY-" + Math.random().toString(36).slice(2, 7).toUpperCase(),
+    passengerName: profile.fullName || (account && account.name) || (email.endsWith("@roamly.com") ? "Nada Alawneh" : (email ? email.split("@")[0] : "Traveler")),
+    email: email,
+    origin: form ? form.elements.origin.value.trim() : "Amman, Jordan",
+    destination: form ? form.elements.destination.value.trim() : "Your destination",
+    travelers: travelerCount,
+    startDate: startValue,
+    endDate: endValue,
+    duration: durationDays,
+    travelStyle: form ? form.elements.style.value : "",
+    budget: form ? form.elements.budget.value : "",
+    total: total ? total.textContent.trim() : "",
+    dueNow: amount ? amount.textContent.trim() : "",
+    payment: paymentType,
+    createdAt: new Date().toISOString()
+  };
+  sessionStorage.setItem("roamlyTripConfirmation", JSON.stringify(trip));
+}
+
+function initTripConfirmation() {
+  var tripCard = document.querySelector(".trip-card");
+  if (!tripCard) { return; }
+  var boardingPassButton = document.querySelector("[data-boarding-passes-open]");
+  var boardingPassDialog = document.getElementById("boarding-passes");
+  if (boardingPassButton && boardingPassDialog) {
+    boardingPassButton.addEventListener("click", function () {
+      if (!boardingPassDialog.open) boardingPassDialog.showModal();
+    });
+  }
+  var trip = {};
+  try { trip = JSON.parse(sessionStorage.getItem("roamlyTripConfirmation") || "{}"); } catch (error) {}
+  var params = new URLSearchParams(window.location.search);
+  var paymentType = params.get("payment") || trip.payment || "full";
+  tripCard.setAttribute("data-payment", paymentType === "split" ? "split" : "full");
+  if (!trip.destination) {
+    var fallbackStart = new Date();
+    fallbackStart.setDate(fallbackStart.getDate() + 7);
+    var fallbackEnd = new Date(fallbackStart);
+    fallbackEnd.setDate(fallbackEnd.getDate() + 5);
+    var demoEmail = (sessionStorage.getItem("roamlySignedInEmail") || localStorage.getItem("roamlySignedInEmail") || "").trim().toLowerCase();
+    var demoProfile = {};
+    try { demoProfile = JSON.parse(localStorage.getItem("roamlyUserProfile:" + demoEmail) || "{}"); } catch (error) {}
+    trip = {
+      reference: "RMLY-" + Math.random().toString(36).slice(2, 7).toUpperCase(),
+      passengerName: demoProfile.fullName || (demoEmail.endsWith("@roamly.com") ? "Nada Alawneh" : (demoEmail ? demoEmail.split("@")[0] : "Nada Alawneh")),
+      origin: "Amman, Jordan",
+      destination: "Istanbul, Turkey",
+      travelers: 2,
+      startDate: fallbackStart.toISOString().slice(0, 10),
+      endDate: fallbackEnd.toISOString().slice(0, 10),
+      duration: 6,
+      travelStyle: "Cultural",
+      budget: "Balanced",
+      total: "$1,240",
+      payment: paymentType
+    };
+  }
+
+  function formatDate(value) {
+    if (!value) { return "To be confirmed"; }
+    var date = new Date(value + "T12:00:00");
+    return new Intl.DateTimeFormat("en", { day: "numeric", month: "short", year: "numeric" }).format(date);
+  }
+  var dates = trip.startDate ? formatDate(trip.startDate) + (trip.endDate ? " – " + formatDate(trip.endDate) : "") : "Dates to be confirmed";
+  var reference = trip.reference || "RMLY-TRIP";
+  var passengers = Math.max(1, parseInt(trip.travelers, 10) || 1);
+  var departure = trip.origin || "Amman, Jordan";
+  var destination = trip.destination || "Your destination";
+  var durationDays = Math.max(1, parseInt(trip.duration, 10) || 6);
+  var fullName = trip.passengerName || "Traveler";
+  var airportCode = function (place) {
+    var text = String(place || "").toLowerCase();
+    if (text.indexOf("amman") !== -1 || text.indexOf("jordan") !== -1) return "AMM";
+    if (text.indexOf("istanbul") !== -1 || text.indexOf("turkey") !== -1 || text.indexOf("türkiye") !== -1) return "IST";
+    if (text.indexOf("dubai") !== -1) return "DXB";
+    if (text.indexOf("bali") !== -1 || text.indexOf("denpasar") !== -1) return "DPS";
+    if (text.indexOf("paris") !== -1 || text.indexOf("france") !== -1) return "CDG";
+    if (text.indexOf("london") !== -1 || text.indexOf("uk") !== -1) return "LHR";
+    if (text.indexOf("rome") !== -1 || text.indexOf("italy") !== -1) return "FCO";
+    if (text.indexOf("new york") !== -1 || text.indexOf("usa") !== -1) return "JFK";
+    return String(place || "TRIP").replace(/[^a-z]/gi, "").slice(0, 3).toUpperCase() || "TRP";
+  };
+  var originCode = airportCode(departure);
+  var destinationCode = airportCode(destination);
+  var flightDate = trip.startDate ? new Date(trip.startDate + "T12:00:00") : new Date();
+  var flightDateLabel = new Intl.DateTimeFormat("en", { weekday: "short", day: "numeric", month: "short", year: "numeric" }).format(flightDate);
+  var setText = function (selector, value) {
+    var element = document.querySelector(selector);
+    if (element) element.textContent = value;
+  };
+  setText("[data-trip-reference]", "#" + reference);
+  setText("[data-trip-origin]", departure);
+  setText("[data-trip-destination]", destination);
+  setText("[data-trip-dates]", dates);
+  setText("[data-trip-travelers]", passengers + (passengers === 1 ? " traveler" : " travelers"));
+
+  var passList = document.querySelector("[data-boarding-pass-list]");
+  if (!passList) { return; }
+  passList.replaceChildren();
+  for (var index = 0; index < passengers; index++) {
+    var pass = document.createElement("article");
+    pass.className = "boarding-pass";
+
+    var main = document.createElement("div");
+    main.className = "boarding-pass__main";
+    var brand = document.createElement("header");
+    brand.className = "boarding-pass__brand";
+    var brandName = document.createElement("strong");
+    brandName.textContent = "ROAMLY AIR";
+    var sample = document.createElement("span");
+    sample.textContent = "SAMPLE BOARDING PASS";
+    brand.append(brandName, sample);
+
+    var passenger = document.createElement("div");
+    passenger.className = "boarding-pass__passenger-block";
+    var passengerLabel = document.createElement("span");
+    passengerLabel.textContent = "PASSENGER NAME";
+    var passengerName = document.createElement("h3");
+    passengerName.className = "boarding-pass__passenger";
+    passengerName.textContent = index === 0 ? fullName : "GUEST TRAVELER " + String(index + 1).padStart(2, "0");
+    passenger.append(passengerLabel, passengerName);
+
+    var route = document.createElement("div");
+    route.className = "boarding-pass__route";
+    [[originCode, departure, "FROM"], [destinationCode, destination, "TO"]].forEach(function (place, placeIndex) {
+      if (placeIndex === 1) {
+        var flightPath = document.createElement("div");
+        flightPath.className = "boarding-pass__flight-path";
+        var planeIcon = document.createElement("i");
+        planeIcon.className = "fa-solid fa-plane";
+        planeIcon.setAttribute("aria-hidden", "true");
+        flightPath.appendChild(planeIcon);
+        route.appendChild(flightPath);
+      }
+      var airport = document.createElement("div");
+      airport.className = "boarding-pass__airport";
+      var code = document.createElement("strong");
+      code.textContent = place[0];
+      var city = document.createElement("span");
+      city.textContent = place[1];
+      var label = document.createElement("small");
+      label.textContent = place[2];
+      airport.append(label, code, city);
+      route.appendChild(airport);
+    });
+
+    var tripMeta = document.createElement("div");
+    tripMeta.className = "boarding-pass__meta";
+    [["TRIP LENGTH", durationDays + (durationDays === 1 ? " DAY" : " DAYS")], ["TRAVEL STYLE", trip.travelStyle || "Flexible"], ["BUDGET", trip.budget || "Balanced"], ["ESTIMATED TOTAL", trip.total || "See trip estimate"]].forEach(function (fact) {
+      var item = document.createElement("div");
+      var label = document.createElement("span");
+      label.textContent = fact[0];
+      var value = document.createElement("strong");
+      value.textContent = fact[1];
+      item.append(label, value);
+      tripMeta.appendChild(item);
+    });
+
+    var details = document.createElement("div");
+    details.className = "boarding-pass__details";
+    [["FLIGHT", "RA 204"], ["DATE", flightDateLabel], ["BOARDING", "08:15"], ["DEPARTURE", "09:05"], ["ARRIVAL", "11:30"], ["GATE", "B12"], ["SEAT", "14A"], ["GROUP", "02"], ["PASSENGER", String(index + 1) + " / " + String(passengers)]].forEach(function (fact) {
+      var item = document.createElement("div");
+      var label = document.createElement("span");
+      label.textContent = fact[0];
+      var value = document.createElement("strong");
+      value.textContent = fact[1];
+      item.append(label, value);
+      details.appendChild(item);
+    });
+    main.append(brand, passenger, route, tripMeta, details);
+
+    var stub = document.createElement("aside");
+    stub.className = "boarding-pass__stub";
+    var tripCode = document.createElement("span");
+    tripCode.textContent = "BOOKING CODE";
+    var code = document.createElement("strong");
+    code.textContent = reference.slice(-5);
+    var barcode = document.createElement("div");
+    barcode.className = "boarding-pass__barcode";
+    barcode.setAttribute("aria-hidden", "true");
+    var stubRoute = document.createElement("span");
+    stubRoute.textContent = originCode + "  →  " + destinationCode;
+    stub.append(tripCode, code, barcode, stubRoute);
+    pass.append(main, stub);
+    passList.appendChild(pass);
+  }
 }
 
 function prefillPlannerFromQuery(form) {
@@ -372,10 +584,10 @@ function prefillPlannerFromQuery(form) {
   }
 }
 
-function initDestinationAutocomplete() {
-  var input = document.getElementById("destinationSearch");
-  var list = document.getElementById("destinationSuggestions");
-  var toggle = document.getElementById("destinationToggle");
+function initDestinationAutocomplete(inputId, listId, toggleId) {
+  var input = document.getElementById(inputId || "destinationSearch");
+  var list = document.getElementById(listId || "destinationSuggestions");
+  var toggle = document.getElementById(toggleId || "destinationToggle");
   if (input === null || list === null || toggle === null) return;
 
   var countries = "Afghanistan|Albania|Algeria|Andorra|Angola|Antigua and Barbuda|Argentina|Armenia|Australia|Austria|Azerbaijan|Bahamas|Bahrain|Bangladesh|Barbados|Belarus|Belgium|Belize|Benin|Bhutan|Bolivia|Bosnia and Herzegovina|Botswana|Brazil|Brunei|Bulgaria|Burkina Faso|Burundi|Cambodia|Cameroon|Canada|Cape Verde|Central African Republic|Chad|Chile|China|Colombia|Comoros|Congo|Costa Rica|Croatia|Cuba|Cyprus|Czechia|Denmark|Djibouti|Dominica|Dominican Republic|Ecuador|Egypt|El Salvador|Equatorial Guinea|Eritrea|Estonia|Eswatini|Ethiopia|Fiji|Finland|France|Gabon|Gambia|Georgia|Germany|Ghana|Greece|Grenada|Guatemala|Guinea|Guinea-Bissau|Guyana|Haiti|Honduras|Hungary|Iceland|India|Indonesia|Iran|Iraq|Ireland|Israel|Italy|Jamaica|Japan|Jordan|Kazakhstan|Kenya|Kiribati|Kuwait|Kyrgyzstan|Laos|Latvia|Lebanon|Lesotho|Liberia|Libya|Liechtenstein|Lithuania|Luxembourg|Madagascar|Malawi|Malaysia|Maldives|Mali|Malta|Marshall Islands|Mauritania|Mauritius|Mexico|Micronesia|Moldova|Monaco|Mongolia|Montenegro|Morocco|Mozambique|Myanmar|Namibia|Nauru|Nepal|Netherlands|New Zealand|Nicaragua|Niger|Nigeria|North Korea|North Macedonia|Norway|Oman|Pakistan|Palau|Palestine|Panama|Papua New Guinea|Paraguay|Peru|Philippines|Poland|Portugal|Qatar|Romania|Russia|Rwanda|Saint Kitts and Nevis|Saint Lucia|Saint Vincent and the Grenadines|Samoa|San Marino|Sao Tome and Principe|Saudi Arabia|Senegal|Serbia|Seychelles|Sierra Leone|Singapore|Slovakia|Slovenia|Solomon Islands|Somalia|South Africa|South Korea|South Sudan|Spain|Sri Lanka|Sudan|Suriname|Sweden|Switzerland|Syria|Taiwan|Tajikistan|Tanzania|Thailand|Timor-Leste|Togo|Tonga|Trinidad and Tobago|Tunisia|Turkey|Turkmenistan|Tuvalu|Uganda|Ukraine|United Arab Emirates|United Kingdom|United States|Uruguay|Uzbekistan|Vanuatu|Vatican City|Venezuela|Vietnam|Yemen|Zambia|Zimbabwe".split("|").map(function (name) {
@@ -521,6 +733,7 @@ function initPlanner() {
   var form = document.querySelector("[data-planner-form]");
   var plan = document.querySelector("[data-plan]");
   if (form === null || plan === null) { return; }
+  var optionsDialog = document.getElementById("planner-options");
 
   prefillPlannerFromQuery(form);
 
@@ -543,6 +756,7 @@ function initPlanner() {
 
   function readPlannerValues() {
     return {
+      origin: form.elements.namedItem("origin").value,
       destination: form.elements.namedItem("destination").value,
       travelers: form.elements.namedItem("travelers").value,
       duration: form.elements.namedItem("duration").value,
@@ -561,7 +775,7 @@ function initPlanner() {
     sessionStorage.removeItem("roamlyPendingPlanner");
     if (!pending) return false;
 
-    ["destination", "travelers", "duration", "travelDate", "budget", "style"].forEach(function (name) {
+    ["origin", "destination", "travelers", "duration", "travelDate", "budget", "style"].forEach(function (name) {
       var field = form.elements.namedItem(name);
       if (field && pending[name] !== undefined) field.value = pending[name];
     });
@@ -818,12 +1032,14 @@ function initPlanner() {
     var usageKey = "roamlyFreePlanUsed:" + email;
     if (hasUsedFreePlan(email)) {
       var paywall = document.getElementById("paywall");
+      if (optionsDialog && optionsDialog.open) optionsDialog.close();
       if (paywall && typeof paywall.showModal === "function") paywall.showModal();
       else window.location.href = "pricing.html";
       return;
     }
 
     showPlan();
+    if (optionsDialog && optionsDialog.open) optionsDialog.close();
     try { localStorage.setItem(usageKey, "1"); } catch (error) {
       try { sessionStorage.setItem(usageKey, "1"); } catch (sessionError) {}
     }
@@ -835,6 +1051,7 @@ function initPlanner() {
 
   if (shouldResumeGeneration) {
     window.setTimeout(function () {
+      if (optionsDialog && !optionsDialog.open && typeof optionsDialog.showModal === "function") optionsDialog.showModal();
       if (typeof form.requestSubmit === "function") form.requestSubmit();
       else form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
     }, 80);
@@ -1942,7 +2159,8 @@ initMenu();
 initDialogs();
 initWelcomeFilm();
 initCurrencySelector();
-initDestinationAutocomplete();
+initDestinationAutocomplete("destinationSearch", "destinationSuggestions", "destinationToggle");
+initDestinationAutocomplete("originSearch", "originSuggestions", "originToggle");
 initPlanner();
 initPlannerPayment();
 initItineraries();
@@ -1950,6 +2168,7 @@ initDestinationFilter();
 initCountdown();
 initChat();
 initFlightJourney();
+initTripConfirmation();
 initSignInJourney();
 initAuthSession();
 initUserSettings();
