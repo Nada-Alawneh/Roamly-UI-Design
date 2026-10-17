@@ -113,10 +113,10 @@
             <span>Plan My Trip</span>
             <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
           </a>
-          <a class="btn-hero-glass" href="destinations.html">
-            <span>Explore Destinations</span>
-            <i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>
-          </a>
+          <button class="btn-hero-glass hero-film-trigger" type="button" data-dialog-open="welcome-film">
+            <i class="fa-regular fa-circle-play" aria-hidden="true"></i>
+            <span>Welcome to Roamly</span>
+          </button>
         </div>
         <div class="hero-proof-bar">
           <div class="hero-stars-row" aria-hidden="true">
@@ -126,6 +126,19 @@
         </div>
       </div>
     </section>
+
+    <dialog class="modal welcome-film-modal" id="welcome-film" aria-labelledby="welcome-film-title">
+      <section class="modal__card welcome-film">
+        <header class="welcome-film__head">
+          <div><p class="welcome-film__eyebrow">A LITTLE ROAMLY INSPIRATION</p><h2 id="welcome-film-title">Your journey starts here.</h2></div>
+          <button class="close-btn" type="button" data-dialog-close aria-label="Close welcome video"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </header>
+        <video class="welcome-film__video" controls playsinline preload="metadata">
+          <source src="assets/img/welcome.mp4" type="video/mp4">
+          Your browser does not support video playback.
+        </video>
+      </section>
+    </dialog>
 
     <!-- Search widget -->
     <div class="container container--narrow search-wrap">

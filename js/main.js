@@ -216,6 +216,25 @@ function initDialogs() {
   }
 }
 
+function initWelcomeFilm() {
+  var dialog = document.getElementById("welcome-film");
+  if (!dialog) { return; }
+  var video = dialog.querySelector("video");
+  var trigger = document.querySelector('[data-dialog-open="welcome-film"]');
+  if (trigger && video) {
+    trigger.addEventListener("click", function () {
+      video.currentTime = 0;
+      var playback = video.play();
+      if (playback && typeof playback.catch === "function") playback.catch(function () {});
+    });
+  }
+  dialog.addEventListener("close", function () {
+    if (!video) { return; }
+    video.pause();
+    video.currentTime = 0;
+  });
+}
+
 function renderQuote(travelers) {
   // Never divide by zero / NaN, whatever the caller passes in
   travelers = parseInt(travelers, 10);
@@ -1921,6 +1940,7 @@ initAboutStory();
 initTermsNavigation();
 initMenu();
 initDialogs();
+initWelcomeFilm();
 initCurrencySelector();
 initDestinationAutocomplete();
 initPlanner();
