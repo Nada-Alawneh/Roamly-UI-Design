@@ -1106,11 +1106,11 @@ select.search-field__control { appearance: none; cursor: pointer; }
   box-shadow: 0 8px 22px rgba(0,0,0,.14);
 }
 
-/* Keep the Roamly aircraft in its original deep-navy finish over the sky video. */
+/* Keep the moving aircraft gold across every section; the flight path stays unchanged. */
 .flight-plane .jet-icon,
 .flight-plane.on-light-sec .jet-icon {
-  color: #102747;
-  filter: drop-shadow(0 2px 5px rgba(255,255,255,.82)) drop-shadow(0 5px 10px rgba(11,34,62,.35));
+  color: #d6aa4f;
+  filter: drop-shadow(0 0 5px rgba(255,224,153,.75)) drop-shadow(0 5px 10px rgba(11,34,62,.35));
 }
 
 .search-wrap {
