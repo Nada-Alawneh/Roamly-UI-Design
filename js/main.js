@@ -811,10 +811,62 @@ function initPlanner() {
     setGenerateButtonLabel("Generate another plan");
     var count = getTravelersCount();
     renderQuote(count);
+    renderPlannerDays();
     setWeatherMode(false, true);
   }
 
   var dayList = plan.querySelector("[data-day-list]");
+  var partnerExperiences = plan.querySelector("[data-partner-experiences]");
+  function renderPartnerExperiences() {
+    if (!partnerExperiences) return;
+    var values = readPlannerValues();
+    var destination = String(values.destination || "").trim().toLowerCase();
+    var category = String(values.style || "").trim().toLowerCase();
+    var accounts = [];
+    try { accounts = JSON.parse(localStorage.getItem("roamlyLocalAccounts") || "[]"); } catch (error) {}
+    var currentEmail = readPlannerUser();
+    var activities = [];
+    accounts.filter(function (account) { return account.role === "supplier" && account.status === "approved"; }).forEach(function (supplier) {
+      var entries = [];
+      try { entries = JSON.parse(localStorage.getItem("roamlySupplierActivities:" + supplier.email) || "[]"); } catch (error) {}
+      entries.filter(function (activity) {
+        var place = String(activity.destination || "").toLowerCase();
+        var placeMatches = !destination || place.includes(destination) || destination.includes(place);
+        return activity.published && String(activity.category || "").toLowerCase() === category && placeMatches;
+      }).forEach(function (activity) { activities.push({ supplier: supplier, activity: activity }); });
+    });
+    partnerExperiences.replaceChildren();
+    if (!activities.length) {
+      var empty = document.createElement("p");
+      empty.className = "partner-experiences__empty";
+      empty.textContent = "No published partner activities match this destination and travel style yet.";
+      partnerExperiences.appendChild(empty);
+      return;
+    }
+    activities.forEach(function (entry) {
+      var card = document.createElement("article");
+      card.className = "partner-experience";
+      var info = document.createElement("div");
+      var title = document.createElement("h4");
+      title.textContent = entry.activity.title;
+      var details = document.createElement("p");
+      details.textContent = entry.activity.type + " · " + entry.activity.destination + " · " + (entry.supplier.businessName || entry.supplier.name) + " · $" + Number(entry.activity.price).toFixed(2) + " per person";
+      info.append(title, details);
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "btn btn--soft partner-experience__request";
+      button.dataset.partnerRequest = "true";
+      button.dataset.supplierEmail = entry.supplier.email;
+      button.dataset.activityId = entry.activity.id;
+      var existing = [];
+      try { existing = JSON.parse(localStorage.getItem("roamlySupplierRequests:" + entry.supplier.email) || "[]"); } catch (error) {}
+      var alreadyRequested = existing.some(function (request) { return request.activityId === entry.activity.id && request.traveler === currentEmail && request.destination === values.destination; });
+      button.disabled = alreadyRequested;
+      button.textContent = alreadyRequested ? "Request sent" : "Request to book";
+      card.append(info, button);
+      partnerExperiences.appendChild(card);
+    });
+  }
   var dayTemplates = [
     ["Historic Istanbul", ["Start in Sultanahmet", "Visit Hagia Sophia and the Blue Mosque", "Lunch near the historic square", "Walk the waterfront at sunset"]],
     ["Markets and the old city", ["Browse the Grand Bazaar", "Explore the Spice Bazaar", "Pause for Turkish coffee", "See the city from a Galata viewpoint"]],
@@ -926,6 +978,7 @@ function initPlanner() {
       dayCard.append(timeline);
       dayList.append(dayCard);
     }
+    renderPartnerExperiences();
   }
 
   var weatherButton = plan.querySelector("[data-weather-regenerate]");
@@ -967,6 +1020,25 @@ function initPlanner() {
   var changeForm = document.querySelector("[data-plan-change-form]");
   var activeChange = null;
   plan.addEventListener("click", function (event) {
+    var requestButton = event.target.closest("[data-partner-request]");
+    if (requestButton) {
+      var supplierEmail = requestButton.dataset.supplierEmail;
+      var supplierRequests = [];
+      try { supplierRequests = JSON.parse(localStorage.getItem("roamlySupplierRequests:" + supplierEmail) || "[]"); } catch (error) {}
+      var travelerEmail = readPlannerUser();
+      var travelerAccounts = [];
+      try { travelerAccounts = JSON.parse(localStorage.getItem("roamlyLocalAccounts") || "[]"); } catch (error) {}
+      var travelerAccount = travelerAccounts.find(function (account) { return account.email === travelerEmail; });
+      var supplierEntries = [];
+      try { supplierEntries = JSON.parse(localStorage.getItem("roamlySupplierActivities:" + supplierEmail) || "[]"); } catch (error) {}
+      var requestedActivity = supplierEntries.find(function (activity) { return activity.id === requestButton.dataset.activityId; });
+      if (!requestedActivity || !travelerEmail) return;
+      supplierRequests.unshift({ id: Date.now().toString(36), activityId: requestedActivity.id, activity: requestedActivity.title, traveler: travelerEmail, travelerName: travelerAccount ? travelerAccount.name : travelerEmail.split("@")[0], destination: readPlannerValues().destination, date: readPlannerValues().travelDate, travelers: readPlannerValues().travelers, status: "New" });
+      localStorage.setItem("roamlySupplierRequests:" + supplierEmail, JSON.stringify(supplierRequests));
+      requestButton.disabled = true;
+      requestButton.textContent = "Request sent";
+      return;
+    }
     var button = event.target.closest("[data-plan-change]");
     if (!button || !changeDialog || typeof changeDialog.showModal !== "function") return;
     activeChange = { button: button, dayNumber: Number(button.dataset.dayNumber), dayTitle: button.dataset.dayTitle, activityTitle: button.dataset.activityTitle };
@@ -1497,6 +1569,10 @@ function initSignInJourney() {
   var password = form.querySelector('[name="password"]');
   var confirmPassword = form.querySelector('[name="confirmPassword"]');
   var fullName = form.querySelector('[name="fullName"]');
+  var accountType = form.querySelector('[name="accountType"]');
+  var businessName = form.querySelector('[name="businessName"]');
+  var supplierType = form.querySelector('[name="supplierType"]');
+  var supplierOnly = document.querySelectorAll('[data-supplier-only]');
   var terms = form.querySelector('[name="terms"]');
   var feedback = form.querySelector("[data-auth-message]");
   var title = document.getElementById("auth-title");
@@ -1529,6 +1605,10 @@ function initSignInJourney() {
     fullName.required = registering;
     confirmPassword.required = registering;
     terms.required = registering;
+    accountType.required = registering;
+    supplierType.required = registering && accountType.value === "supplier";
+    supplierOnly.forEach(function (element) { element.hidden = !registering || accountType.value !== "supplier"; });
+    businessName.required = registering && accountType.value === "supplier";
     password.autocomplete = registering ? "new-password" : "current-password";
     confirmPassword.autocomplete = "new-password";
     feedback.hidden = true;
@@ -1628,17 +1708,28 @@ function initSignInJourney() {
       sessionStorage.setItem("roamlySignedInEmail", emailValue);
       localStorage.removeItem("roamlySignedInEmail");
     }
-    showMessage(mode === "register" ? "Your Roamly account is ready. Signing you in..." : "Welcome back. Your journey is ready.", false);
+    var enteringAccount = readAccounts().find(function (account) { return account.email === emailValue; });
+    var entryMessage = mode === "register" && enteringAccount && enteringAccount.role === "supplier"
+      ? "Your supplier application is submitted. Opening your account status and specialty details..."
+      : (mode === "register" ? "Your Roamly account is ready. Signing you in..." : "Welcome back. Your journey is ready.");
+    showMessage(entryMessage, false);
     form.querySelector(".auth-submit").disabled = true;
     var nextPage = new URLSearchParams(window.location.search).get("next");
-    var destination = nextPage === "ai-planner.html" && sessionStorage.getItem("roamlyPendingPlanner")
+    var destination = enteringAccount && enteringAccount.role === "supplier" ? "supplierDashboard/supplier.html" : (nextPage === "ai-planner.html" && sessionStorage.getItem("roamlyPendingPlanner")
       ? "ai-planner.html?resume=1"
-      : "index.html";
+      : "index.html");
     playTakeoff(function () { window.location.href = destination; });
   }
 
   switchButton.addEventListener("click", function () {
     setMode(mode === "login" ? "register" : "login");
+  });
+  accountType.addEventListener("change", function () {
+    var showSupplier = mode === "register" && accountType.value === "supplier";
+    supplierOnly.forEach(function (element) { element.hidden = !showSupplier; });
+    businessName.required = showSupplier;
+    supplierType.required = showSupplier;
+    if (showSupplier && !businessName.value.trim()) businessName.value = "Sky & Sea Adventure Center";
   });
 
   var fillAccountButton = document.querySelector("[data-fill-account]");
@@ -1684,6 +1775,9 @@ function initSignInJourney() {
     if (mode === "register") {
       var nameValue = fullName.value.trim();
       if (nameValue.length < 2) { showMessage("Please enter your name.", true); fullName.focus(); return; }
+      var isSupplier = accountType.value === "supplier";
+      var businessValue = businessName.value.trim();
+      if (isSupplier && businessValue.length < 2) { showMessage("Please enter your business name.", true); businessName.focus(); return; }
       if (passwordValue !== confirmPassword.value) { showMessage("The passwords do not match. Please check them and try again.", true); confirmPassword.focus(); return; }
       if (!terms.checked) { showMessage("Please agree to the terms to create your account.", true); terms.focus(); return; }
       if (readAccounts().some(function (account) { return account.email === emailValue; })) {
@@ -1694,7 +1788,15 @@ function initSignInJourney() {
       submit.disabled = true;
       encodePassword(passwordValue).then(function (passwordHash) {
         var accounts = readAccounts();
-        accounts.push({ name: nameValue, email: emailValue, passwordHash: passwordHash });
+        var createdAt = new Date().toISOString();
+        var newAccount = { name: nameValue, email: emailValue, passwordHash: passwordHash, role: isSupplier ? "supplier" : "traveler", businessName: isSupplier ? businessValue : "", supplierType: isSupplier ? supplierType.value : "", status: isSupplier ? "pending" : "approved", category: isSupplier ? "Adventure & Nature" : "", createdAt: createdAt };
+        if (isSupplier) {
+          newAccount.statusReason = "Your application was submitted and is waiting for admin review.";
+          newAccount.statusUpdatedAt = createdAt;
+          newAccount.statusUpdatedBy = "system";
+          newAccount.statusHistory = [{ from: "new", status: "pending", reason: newAccount.statusReason, updatedAt: createdAt, updatedBy: "system" }];
+        }
+        accounts.push(newAccount);
         localStorage.setItem("roamlyLocalAccounts", JSON.stringify(accounts));
         saveAndEnter(emailValue, true);
       }).catch(function (error) {
@@ -2177,6 +2279,11 @@ initUserSettings();
    8. Global Draggable AI Captain Chatbot Widget (All Pages)
    ========================================================================== */
 function initFloatingAIChat() {
+  // Keep the global concierge off the sign-in/register screen.
+  if (document.body.classList.contains("auth-page")) {
+    return;
+  }
+
   if (document.getElementById("roamlyAiWidget") !== null) {
     return;
   }

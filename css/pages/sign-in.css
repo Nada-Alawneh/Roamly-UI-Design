@@ -34,6 +34,7 @@
 .auth-intro { margin-top: 11px; color: #758196; font-size: 14px; line-height: 1.7; }
 .auth-form { display: flex; flex-direction: column; gap: 17px; }
 .auth-field { display: flex; min-width: 0; flex-direction: column; gap: 8px; color: #344258; font-size: 12px; font-weight: 700; }
+.auth-field__hint { color:#7d8999; font-size:11px; font-weight:500; line-height:1.5; }
 .auth-input-wrap { position: relative; display: flex; align-items: center; }
 .auth-input-wrap > i:first-child { position: absolute; left: 15px; z-index: 1; color: #9aa4b3; font-size: 13px; pointer-events: none; }
 .auth-input-wrap .input { width: 100%; min-height: 52px; padding: 13px 44px; border: 1px solid #dfe4eb; border-radius: 13px; background: rgba(255,255,255,.86); color: #17243b; font-size: 13px; font-weight: 600; transition: border-color .2s ease, box-shadow .2s ease, background .2s ease; }

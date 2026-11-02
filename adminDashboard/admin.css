@@ -77,6 +77,35 @@ input, select, textarea {
 }
 
 /* ===== SIDEBAR ===== */
+.supplier-review-list { display: grid; gap: 14px; }
+.supplier-review-row { display:flex; align-items:center; justify-content:space-between; gap:18px; padding:18px; border:1px solid var(--border-cool); border-radius:14px; background:#fff; }
+.supplier-review-row strong { color:var(--ink); }
+.supplier-review-row p { margin-top:6px; color:var(--muted); font-size:13px; }
+.supplier-review-actions { display:flex; align-items:center; gap:9px; }
+.supplier-account-status { display:inline-flex; margin-top:10px; padding:5px 9px; border-radius:999px; font-size:11px; font-weight:750; }
+.supplier-account-status--pending { color:#8a5a12; background:var(--amber-bg); }
+.supplier-account-status--approved { color:var(--emerald); background:var(--emerald-bg); }
+.supplier-account-status--rejected { color:var(--rose); background:var(--rose-bg); }
+.supplier-review-actions button:disabled { cursor:default; opacity:.48; }
+.supplier-review-actions .btn-secondary { padding:10px 14px; border:1px solid var(--border-cool); border-radius:9px; background:#fff; color:var(--ink); font-weight:700; }
+.supplier-review-actions .btn-secondary:hover { background:#f4f6f8; }
+.supplier-review-actions .btn-danger { padding:10px 14px; border:1px solid #f0c8c3; border-radius:9px; background:#fff7f6; color:var(--rose); font-weight:700; }
+.supplier-review-actions .btn-danger:hover { background:var(--rose-bg); }
+.supplier-review-reason { margin-top:10px; color:var(--ink) !important; }
+.supplier-review-updated { display:block; margin-top:7px; color:var(--muted); font-size:11px; }
+.supplier-status-dialog { width:min(520px, calc(100vw - 32px)); margin:auto; padding:0; border:1px solid var(--border-cool); border-radius:18px; background:#fff; color:var(--ink); box-shadow:0 25px 80px #09122440; }
+.supplier-status-dialog::backdrop { background:#08142688; backdrop-filter:blur(3px); }
+.supplier-status-dialog form { display:grid; gap:12px; padding:26px; }
+.supplier-status-dialog h2 { font-size:20px; }
+.supplier-status-dialog form > p:not(.supplier-status-dialog__error) { color:var(--muted); font-size:13px; }
+.supplier-status-dialog label { font-size:13px; font-weight:700; }
+.supplier-status-dialog select,.supplier-status-dialog textarea { width:100%; padding:11px 12px; border:1px solid var(--border-cool); border-radius:9px; color:var(--ink); background:#fff; font:inherit; }
+.supplier-status-dialog textarea { resize:vertical; }
+.supplier-status-dialog__error { color:var(--rose); font-size:12px; }
+.supplier-status-dialog__actions { display:flex; justify-content:flex-end; gap:9px; margin-top:5px; }
+.supplier-status-dialog__actions button { padding:10px 14px; border-radius:9px; font-weight:700; }
+@media (max-width: 700px) { .supplier-review-row { align-items:flex-start; flex-direction:column; } }
+
 aside {
   width: 264px;
   background: var(--navy-950);

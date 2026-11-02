@@ -781,3 +781,11 @@
   .planner-customize-trigger__icon { width: 42px; height: 42px; border-radius: 13px; }
   .planner-customize-trigger__arrow { width: 34px; height: 34px; }
 }
+.partner-experiences { margin-top: 20px; padding: 22px; }
+.partner-experiences__intro { margin: -10px 0 16px; color: var(--slate-500); font-size: .9rem; }
+.partner-experiences__empty { margin: 0; padding: 16px; border: 1px dashed var(--slate-300); border-radius: 12px; color: var(--slate-500); }
+.partner-experience { display:flex; align-items:center; justify-content:space-between; gap:18px; padding:16px 0; border-top:1px solid var(--slate-200); }
+.partner-experience h4 { margin:0 0 5px; color:var(--slate-800); font-size:1rem; }
+.partner-experience p { margin:0; color:var(--slate-500); font-size:.84rem; }
+.partner-experience__request { flex:none; }
+@media (max-width:600px) { .partner-experience { align-items:flex-start; flex-direction:column; } }

@@ -153,8 +153,72 @@ const titles = {
   bookings: 'Bookings & Split Bills Ledger',
   'ai-monitor': 'AI Prompts & Activity Monitor',
   promos: 'Promo Codes Management',
+  suppliers: 'Supplier Accounts',
   settings: 'System Settings'
 };
+
+function renderSupplierApplications() {
+  const container = document.getElementById('supplier-review-list');
+  if (!container) return;
+  let accounts = [];
+  try { accounts = JSON.parse(localStorage.getItem('roamlyLocalAccounts') || '[]'); } catch (error) {}
+  const suppliers = accounts.filter(account => account.role === 'supplier');
+  container.replaceChildren();
+  if (!suppliers.length) {
+    const empty = document.createElement('p');
+    empty.className = 'panel-subtitle';
+    empty.textContent = 'No provider accounts yet. New provider applications will appear here.';
+    container.appendChild(empty);
+    return;
+  }
+  suppliers.forEach(account => {
+    const status = account.status || 'pending';
+    const row = document.createElement('article');
+    row.className = 'supplier-review-row';
+    const details = document.createElement('div');
+    const name = document.createElement('strong');
+    name.textContent = account.businessName || account.name;
+    const meta = document.createElement('p');
+    meta.textContent = `${account.name} · ${account.email} · ${account.category || 'Adventure & Nature'} · ${account.supplierType || 'Specialty not selected'}`;
+    details.append(name, meta);
+    const statusBadge = document.createElement('span');
+    statusBadge.className = `supplier-account-status supplier-account-status--${status}`;
+    statusBadge.textContent = status === 'approved' ? 'Approved' : status === 'rejected' ? 'Rejected' : 'Pending review';
+    details.appendChild(statusBadge);
+    if (account.statusReason) {
+      const reason = document.createElement('p');
+      reason.className = 'supplier-review-reason';
+      reason.textContent = `Admin message: ${account.statusReason}`;
+      details.appendChild(reason);
+    }
+    if (account.statusUpdatedAt) {
+      const updated = document.createElement('small');
+      updated.className = 'supplier-review-updated';
+      updated.textContent = `Updated ${new Date(account.statusUpdatedAt).toLocaleString()}`;
+      details.appendChild(updated);
+    }
+    const actions = document.createElement('div');
+    actions.className = 'supplier-review-actions';
+    [['approved', 'Approve'], ['rejected', 'Reject'], ['pending', 'Set pending']].forEach(([nextStatus, label]) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = nextStatus === 'approved' ? 'btn-gold' : 'btn-secondary';
+      button.dataset.supplierDecision = nextStatus;
+      button.dataset.supplierEmail = account.email;
+      button.textContent = label;
+      actions.appendChild(button);
+    });
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'btn-danger';
+    deleteButton.dataset.deleteSupplier = account.email;
+    deleteButton.dataset.deleteSupplierName = account.businessName || account.name;
+    deleteButton.textContent = 'Delete account';
+    actions.appendChild(deleteButton);
+    row.append(details, actions);
+    container.appendChild(row);
+  });
+}
 
 function switchAdminTab(tabId) {
   if (!titles[tabId]) return;
@@ -304,6 +368,77 @@ function showToast(msg, icon) {
 /* ---------- 5. INITIALIZATION & LIVE FILTER ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   updateAdminProfileSummary();
+  renderSupplierApplications();
+  const supplierStatusDialog = document.getElementById('supplier-status-dialog');
+  const supplierStatusForm = document.getElementById('supplier-status-form');
+  const supplierStatusField = document.getElementById('supplier-next-status');
+  const supplierReasonField = document.getElementById('supplier-status-reason');
+  const supplierStatusError = document.getElementById('supplier-status-error');
+  const supplierAccountLabel = document.getElementById('supplier-status-account');
+  let activeSupplierEmail = '';
+  document.getElementById('supplier-review-list')?.addEventListener('click', event => {
+    const statusButton = event.target.closest('[data-supplier-decision]');
+    if (!statusButton) return;
+    let accounts = [];
+    try { accounts = JSON.parse(localStorage.getItem('roamlyLocalAccounts') || '[]'); } catch (error) {}
+    const account = accounts.find(item => item.email === statusButton.dataset.supplierEmail && item.role === 'supplier');
+    if (!account || !supplierStatusDialog || !supplierStatusForm) return;
+    activeSupplierEmail = account.email;
+    supplierStatusField.value = statusButton.dataset.supplierDecision;
+    supplierReasonField.value = account.status === statusButton.dataset.supplierDecision ? account.statusReason || '' : '';
+    supplierReasonField.required = supplierStatusField.value !== 'approved';
+    supplierAccountLabel.textContent = `${account.businessName || account.name} · ${account.email}`;
+    supplierStatusError.hidden = true;
+    if (typeof supplierStatusDialog.showModal === 'function') supplierStatusDialog.showModal();
+  });
+  supplierStatusField?.addEventListener('change', () => {
+    supplierReasonField.required = supplierStatusField.value !== 'approved';
+  });
+  supplierStatusForm?.addEventListener('submit', event => {
+    event.preventDefault();
+    const nextStatus = supplierStatusField.value;
+    const reasonText = supplierReasonField.value.trim();
+    if (nextStatus !== 'approved' && !reasonText) {
+      supplierStatusError.textContent = 'Add a message so the supplier knows why this status was set.';
+      supplierStatusError.hidden = false;
+      supplierReasonField.focus();
+      return;
+    }
+    let accounts = [];
+    try { accounts = JSON.parse(localStorage.getItem('roamlyLocalAccounts') || '[]'); } catch (error) {}
+    const account = accounts.find(item => item.email === activeSupplierEmail && item.role === 'supplier');
+    if (!account) return;
+    const now = new Date().toISOString();
+    account.statusHistory = Array.isArray(account.statusHistory) ? account.statusHistory : [];
+    account.statusHistory.push({ from: account.status || 'pending', status: nextStatus, reason: reasonText, updatedAt: now, updatedBy: 'admin' });
+    account.status = nextStatus;
+    account.statusReason = reasonText;
+    account.statusUpdatedAt = now;
+    account.statusUpdatedBy = 'admin';
+    localStorage.setItem('roamlyLocalAccounts', JSON.stringify(accounts));
+    supplierStatusDialog.close();
+    renderSupplierApplications();
+    showToast(`Supplier status updated: ${nextStatus}.`, 'circle-check');
+  });
+  document.querySelector('[data-close-supplier-status]')?.addEventListener('click', () => supplierStatusDialog?.close());
+  document.getElementById('supplier-review-list')?.addEventListener('click', event => {
+    const deleteButton = event.target.closest('[data-delete-supplier]');
+    if (deleteButton) {
+      const email = deleteButton.dataset.deleteSupplier;
+      const displayName = deleteButton.dataset.deleteSupplierName;
+      if (!window.confirm(`Permanently delete supplier account for ${displayName} (${email}) and its supplier data?`)) return;
+      let accounts = [];
+      try { accounts = JSON.parse(localStorage.getItem('roamlyLocalAccounts') || '[]'); } catch (error) {}
+      accounts = accounts.filter(account => account.email !== email);
+      localStorage.setItem('roamlyLocalAccounts', JSON.stringify(accounts));
+      ['roamlySupplierActivities:', 'roamlySupplierRequests:', 'roamlyUserProfile:', 'roamlyUserSettings:', 'roamlyItineraries:', 'roamlyFreePlanUsed:'].forEach(prefix => localStorage.removeItem(prefix + email));
+      if ((localStorage.getItem('roamlySignedInEmail') || '').toLowerCase() === email) localStorage.removeItem('roamlySignedInEmail');
+      if ((sessionStorage.getItem('roamlySignedInEmail') || '').toLowerCase() === email) sessionStorage.removeItem('roamlySignedInEmail');
+      renderSupplierApplications();
+      showToast(`Supplier account ${email} and its saved data were deleted.`, 'trash-can');
+      return;
+    }
+  });
 
   const profileToggle = document.getElementById('profileMenuToggle');
   const profileMenu = document.getElementById('profileMenu');

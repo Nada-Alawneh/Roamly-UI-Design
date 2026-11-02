@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Supplier Dashboard | Roamly</title>
+  <link rel="icon" type="image/png" href="../assets/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="supplier.css">
+</head>
+<body class="supplier-page">
+  <header class="supplier-topbar">
+    <a href="../index.html" aria-label="Roamly home"><img src="../assets/img/logo.png" alt="Roamly" width="132"></a>
+    <div><span class="supplier-topbar__label">SUPPLIER SPACE</span><button class="btn btn--soft" type="button" data-supplier-logout><i class="fa-solid fa-right-from-bracket"></i> Log out</button></div>
+  </header>
+  <main class="supplier-main">
+    <section class="supplier-welcome">
+      <div><p class="supplier-eyebrow"><i class="fa-solid fa-compass"></i> ROAMLY PARTNER NETWORK</p><h1>Bring your experiences <span>to every journey.</span></h1><p id="supplier-business">Manage your activities, prices, and booking requests in one place.</p></div>
+      <div class="supplier-welcome__icon"><i class="fa-solid fa-mountain-sun"></i></div>
+    </section>
+    <section class="supplier-status-panel" id="supplier-status-panel" aria-labelledby="supplier-status-title">
+      <div class="supplier-status-panel__heading"><span class="supplier-status-panel__icon" id="supplier-status-icon"><i class="fa-solid fa-hourglass-half"></i></span><div><p class="supplier-eyebrow">ACCOUNT REVIEW</p><h2 id="supplier-status-title">Application status</h2></div><span class="supplier-status-badge" id="supplier-status-badge">Pending review</span></div>
+      <p class="supplier-status-panel__message" id="supplier-status-message"></p>
+      <p class="supplier-status-panel__updated" id="supplier-status-updated"></p>
+      <div class="supplier-status-history" id="supplier-status-history"></div>
+    </section>
+    <section class="supplier-panel supplier-specialty" aria-labelledby="supplier-specialty-title">
+      <div class="supplier-panel__heading"><div><p class="supplier-eyebrow">ADVENTURE &amp; NATURE</p><h2 id="supplier-specialty-title">Your supplier specialty</h2></div><i class="fa-solid fa-mountain-sun" aria-hidden="true"></i></div>
+      <div id="supplier-specialty-details"></div>
+    </section>
+    <div id="supplier-tools">
+    <div class="supplier-stats" aria-label="Supplier overview">
+      <article><span>Activities</span><strong id="supplier-activity-count">0</strong></article>
+      <article><span>Published</span><strong id="supplier-published-count">0</strong></article>
+      <article><span>Booking requests</span><strong id="supplier-request-count">0</strong></article>
+    </div>
+    <section class="supplier-content-grid">
+      <div class="supplier-panel">
+        <div class="supplier-panel__heading"><div><p class="supplier-eyebrow">YOUR OFFERINGS</p><h2>Add an activity</h2></div><i class="fa-solid fa-circle-plus" aria-hidden="true"></i></div>
+        <form id="supplier-activity-form" class="supplier-form">
+          <label>Activity name<input class="input" name="title" placeholder="e.g. Wadi Rum desert hike" required minlength="2"></label>
+          <label>Activity type<select class="input" name="type"><option>Scuba diving</option><option>Paragliding</option><option>Skydiving</option><option>Zipline</option><option>Rafting</option><option>Guided hiking</option><option>Cave or valley exploration</option><option>Camping equipment rental</option><option>Mountain bike rental</option><option>Climbing equipment rental</option><option>Kayak rental</option><option>Nature reserve ticket</option><option>Wildlife safari</option><option>Eco camp stay</option><option>4x4 desert tour</option><option>Speedboat trip</option><option>Other</option></select></label>
+          <label>Destination<input class="input" name="destination" placeholder="City or region" required></label>
+          <label>Price per person (USD)<input class="input" name="price" type="number" min="0" step="0.01" placeholder="45" required></label>
+          <label class="supplier-form__wide">Travel category<select class="input" name="category"><option>Adventure &amp; Nature</option><option>Culture &amp; History</option><option>Relaxation &amp; Wellness</option><option>Family Friendly</option><option>Culinary &amp; Food</option><option>Romantic &amp; Honeymoon</option><option>Shopping &amp; City Life</option></select></label>
+          <button class="btn btn--primary supplier-form__wide" type="submit"><i class="fa-solid fa-plus"></i> Add activity</button>
+          <p class="supplier-feedback supplier-form__wide" id="supplier-feedback" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+      <div class="supplier-panel">
+        <div class="supplier-panel__heading"><div><p class="supplier-eyebrow">TRAVELER BOOKINGS</p><h2>Request inbox</h2></div><i class="fa-regular fa-calendar-check" aria-hidden="true"></i></div>
+        <div id="supplier-requests" class="supplier-list" aria-live="polite"></div>
+      </div>
+    </section>
+    <section class="supplier-panel supplier-panel--activities">
+      <div class="supplier-panel__heading"><div><p class="supplier-eyebrow">YOUR CATALOG</p><h2>Activities</h2></div></div>
+      <div id="supplier-activities" class="supplier-list" aria-live="polite"></div>
+    </section>
+    </div>
+  </main>
+  <script src="supplier.js" defer></script>
+</body>
+</html>

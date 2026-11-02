@@ -38,6 +38,9 @@
         <a href="#promos" onclick="switchAdminTab('promos')" id="nav-promos" class="admin-nav-link">
           <i class="fa-solid fa-ticket"></i><span>Promo Codes &amp; Offers</span>
         </a>
+        <a href="#suppliers" onclick="switchAdminTab('suppliers')" id="nav-suppliers" class="admin-nav-link">
+          <i class="fa-solid fa-store"></i><span>Supplier approvals</span>
+        </a>
         <a href="#settings" onclick="switchAdminTab('settings')" id="nav-settings" class="admin-nav-link">
           <i class="fa-solid fa-gear"></i><span>System Settings</span>
         </a>
@@ -294,7 +297,23 @@
         </div>
       </div>
 
-      <!-- TAB 5: SYSTEM SETTINGS -->
+      <!-- SUPPLIER REVIEW -->
+      <div id="tab-suppliers" class="admin-tab">
+        <section class="dashboard-hero dashboard-hero--section" aria-labelledby="suppliers-welcome">
+          <div class="dashboard-hero__content">
+            <span class="hero-eyebrow"><span class="hero-eyebrow__spark"></span> PARTNER NETWORK</span>
+            <h1 id="suppliers-welcome">Manage your <span>service providers.</span></h1>
+            <p>Review applications, change account status, and keep provider details available in one place.</p>
+          </div>
+          <div class="hero-orbit" aria-hidden="true"><span class="orbit orbit--one"></span><span class="orbit orbit--two"></span><span class="orbit-core"><i class="fa-solid fa-store"></i></span></div>
+        </section>
+        <div class="card card-padded">
+          <div class="panel-head panel-head-clean"><div><div class="panel-title fs-16">Supplier accounts</div><p class="panel-subtitle">Approved, rejected, and pending accounts remain listed here. Changing status keeps their saved account information.</p></div></div>
+          <div id="supplier-review-list" class="supplier-review-list" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <!-- TAB 6: SYSTEM SETTINGS -->
       <div id="tab-settings" class="admin-tab">
         <section class="dashboard-hero dashboard-hero--section" aria-labelledby="settings-welcome">
           <div class="dashboard-hero__content">
@@ -341,6 +360,26 @@
 
     </main>
   </div>
+
+  <dialog class="supplier-status-dialog" id="supplier-status-dialog" aria-labelledby="supplier-status-title">
+    <form id="supplier-status-form" method="dialog">
+      <h2 id="supplier-status-title">Update supplier status</h2>
+      <p id="supplier-status-account"></p>
+      <label for="supplier-next-status">New status</label>
+      <select id="supplier-next-status" name="status" required>
+        <option value="pending">Pending review</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+      </select>
+      <label for="supplier-status-reason">Message for the supplier</label>
+      <textarea id="supplier-status-reason" name="reason" rows="4" placeholder="Explain what the supplier needs to know. A reason is required for pending or rejected statuses."></textarea>
+      <p class="supplier-status-dialog__error" id="supplier-status-error" role="alert" hidden></p>
+      <div class="supplier-status-dialog__actions">
+        <button class="btn-secondary" type="button" data-close-supplier-status>Cancel</button>
+        <button class="btn-gold" type="submit">Save status</button>
+      </div>
+    </form>
+  </dialog>
 
   <!-- ================= TOAST NOTIFICATION ================= -->
   <div class="toast" id="toast" role="status" aria-live="polite">
