@@ -61,10 +61,6 @@ If you change the nav, change it in all 8 files.
 - Destinations: region chips and search filter the cards.
 - Deals: the flash-sale countdown ticks down.
 - Support: the chat box echoes your message with a canned reply (front-end demo only), and the FAQ uses `<details>`.
-- Supplier demo: users can register as travelers or service providers. Provider applications are reviewed from `adminDashboard/admin.html#suppliers`; approved providers can manage activities in `supplierDashboard/supplier.html`. Supplier files live in `supplierDashboard/`. Published activities can match a traveler's AI plan and receive booking requests.
-
-The supplier and account flows are front-end demos backed by browser `localStorage`. They are limited to the same browser profile and do not provide shared accounts, server-side access control, or durable booking records.
-
 Fonts: Inter (Google Fonts). Icons: Font Awesome 6 Free (jsDelivr).
 
 ## Where this differs from the Figma file
