@@ -1,5 +1,6 @@
 const adminProfileKey = 'roamly-admin-profile';
 let profilePhotoData = '';
+let savedProfilePhotoData = '';
 let profileToastTimer;
 
 function loadProfileData() {
@@ -48,14 +49,6 @@ function paintProfile(profile) {
   document.getElementById('profileTimezone').value = profile.timezone || 'Asia/Amman';
   document.getElementById('prefProductUpdates').checked = profile.productUpdates !== false;
   document.getElementById('prefWeeklySummary').checked = profile.weeklySummary !== false;
-  updateCompletion(fields);
-}
-
-function updateCompletion(fields) {
-  const completed = [fields.profileName, fields.profileRole, fields.profileEmail].filter(Boolean).length;
-  const percent = Math.round((completed / 3) * 100);
-  document.getElementById('profileCompletion').textContent = `${percent}%`;
-  document.getElementById('completionBar').style.width = `${percent}%`;
 }
 
 function saveProfile(event) {
@@ -76,11 +69,13 @@ function saveProfile(event) {
   }
   try {
     localStorage.setItem(adminProfileKey, JSON.stringify(profile));
+    savedProfilePhotoData = profilePhotoData;
+    document.getElementById('photoChangeDialog').close();
     paintProfile(profile);
     document.getElementById('profileSaveStatus').textContent = 'Saved just now';
     showProfileToast('Your profile has been updated.');
   } catch (error) {
-    showProfileToast('Could not save. The selected photo may be too large.', true);
+    showProfileToast('Could not save your profile in this browser.', true);
   }
 }
 
@@ -103,12 +98,8 @@ function savePreferences() {
 
 function previewPhoto(file) {
   if (!file) return;
-  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-    showProfileToast('Choose a JPG, PNG, or WebP image.', true);
-    return;
-  }
-  if (file.size > 512000) {
-    showProfileToast('Choose an image smaller than 500 KB.', true);
+  if (!file.type.startsWith('image/')) {
+    showProfileToast('Choose an image file.', true);
     return;
   }
   const reader = new FileReader();
@@ -118,29 +109,62 @@ function previewPhoto(file) {
     document.getElementById('profileAvatar').textContent = initialsFor(name);
     document.getElementById('profileAvatar').classList.add('has-photo');
     document.getElementById('profileAvatar').style.backgroundImage = `url("${profilePhotoData}")`;
-    showProfileToast('Photo selected. Save your profile to keep it.');
+    document.getElementById('photoChangePreview').src = profilePhotoData;
+    document.getElementById('photoChangeDialog').showModal();
   });
   reader.addEventListener('error', () => showProfileToast('Could not read that image.', true));
   reader.readAsDataURL(file);
 }
 
+function savePhotoChange() {
+  const profile = { ...loadProfileData(), photo: profilePhotoData };
+  try {
+    localStorage.setItem(adminProfileKey, JSON.stringify(profile));
+    savedProfilePhotoData = profilePhotoData;
+    document.getElementById('photoChangeDialog').close();
+    showProfileToast('Profile photo updated.');
+  } catch (error) { showProfileToast('The photo could not be saved in this browser.', true); }
+}
+
+function removeProfilePhoto() {
+  const profile = { ...loadProfileData(), photo: '' };
+  try {
+    localStorage.setItem(adminProfileKey, JSON.stringify(profile));
+    profilePhotoData = '';
+    savedProfilePhotoData = '';
+    document.getElementById('profilePhotoInput').value = '';
+    const avatar = document.getElementById('profileAvatar');
+    avatar.textContent = initialsFor(document.getElementById('profileName').value || 'Nada Alawneh');
+    avatar.classList.remove('has-photo');
+    avatar.style.backgroundImage = '';
+    document.getElementById('photoChangeDialog').close();
+    showProfileToast('Profile photo removed.');
+  } catch (error) { showProfileToast('The photo could not be removed in this browser.', true); }
+}
+
+function cancelPhotoChange() {
+  profilePhotoData = savedProfilePhotoData;
+  document.getElementById('profilePhotoInput').value = '';
+  const avatar = document.getElementById('profileAvatar');
+  avatar.textContent = profilePhotoData ? '' : initialsFor(document.getElementById('profileName').value || 'Nada Alawneh');
+  avatar.classList.toggle('has-photo', Boolean(profilePhotoData));
+  avatar.style.backgroundImage = profilePhotoData ? `url("${profilePhotoData}")` : '';
+  if (document.getElementById('photoChangeDialog').open) document.getElementById('photoChangeDialog').close();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const profile = loadProfileData();
-  profilePhotoData = typeof profile.photo === 'string' && /^data:image\/(png|jpeg|webp);base64,/.test(profile.photo) ? profile.photo : '';
+  profilePhotoData = typeof profile.photo === 'string' && /^data:image\/[^;]+;base64,/.test(profile.photo) ? profile.photo : '';
+  savedProfilePhotoData = profilePhotoData;
   paintProfile(profile);
 
   document.getElementById('profileForm').addEventListener('submit', saveProfile);
   document.getElementById('savePreferences').addEventListener('click', savePreferences);
   document.getElementById('profilePhotoInput').addEventListener('change', event => previewPhoto(event.target.files[0]));
-  document.getElementById('removePhoto').addEventListener('click', () => {
-    profilePhotoData = '';
-    const avatar = document.getElementById('profileAvatar');
-    avatar.classList.remove('has-photo');
-    avatar.style.backgroundImage = '';
-    avatar.textContent = initialsFor(document.getElementById('profileName').value || 'Nada Alawneh');
-    document.getElementById('profilePhotoInput').value = '';
-    showProfileToast('Photo removed. Save your profile to keep the change.');
-  });
+  document.getElementById('savePhotoChange').addEventListener('click', savePhotoChange);
+  document.getElementById('removePhoto').addEventListener('click', removeProfilePhoto);
+  document.getElementById('cancelPhotoChange').addEventListener('click', cancelPhotoChange);
+  document.getElementById('photoChangeDialog').addEventListener('close', cancelPhotoChange);
 
   const sectionLinks = [...document.querySelectorAll('.profile-section-link')];
   const syncSectionLink = () => {

@@ -73,11 +73,8 @@
           <h3 id="portraitName">Nada Alawneh</h3>
           <p id="portraitRole">Lead System Architect</p>
           <label class="upload-photo" for="profilePhotoInput"><i class="fa-solid fa-camera"></i> Change photo</label>
-          <input id="profilePhotoInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
-          <button class="remove-photo" id="removePhoto" type="button">Remove photo</button>
+          <input id="profilePhotoInput" type="file" accept="image/*" hidden>
           <div class="portrait-divider"></div>
-          <div class="profile-completion"><span>Profile details</span><strong id="profileCompletion">0%</strong></div>
-          <div class="completion-track"><span id="completionBar"></span></div>
         </section>
         <nav class="profile-section-nav">
           <a href="#profile" class="profile-section-link is-active"><i class="fa-regular fa-id-card"></i> Personal information</a>
@@ -131,6 +128,8 @@
   </div>
 
   <div class="profile-toast" id="profileToast" role="status" aria-live="polite"><i class="fa-solid fa-circle-check"></i><span id="profileToastMessage"></span></div>
+  <dialog class="photo-change-dialog" id="photoChangeDialog" aria-labelledby="photoChangeTitle"><div class="photo-change-dialog__content"><span class="section-icon section-icon--gold"><i class="fa-solid fa-camera"></i></span><p class="section-kicker">PROFILE PHOTO</p><h2 id="photoChangeTitle">Use this photo?</h2><p>Save it to update your profile photo, cancel to keep the current one, or remove the profile photo.</p><img class="photo-change-preview" id="photoChangePreview" alt="Preview of the selected profile photo"><div class="photo-change-dialog__actions"><button class="photo-action-remove" id="removePhoto" type="button">Remove photo</button><button class="photo-action-cancel" id="cancelPhotoChange" type="button">Cancel</button><button class="photo-action-save" id="savePhotoChange" type="button">Save change</button></div></div></dialog>
   <script src="profile.js"></script>
+  <script src="../sidebar-controls.js" defer></script>
 </body>
 </html>

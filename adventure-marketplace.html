@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Adventure &amp; Nature experiences | Roamly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="supplierDashboard/supplier.css">
+</head>
+<body class="market-page traveler-market-page">
+  <header class="market-header">
+    <a href="index.html" aria-label="Roamly home"><img src="assets/img/logo.png" alt="Roamly" width="150"></a>
+    <a class="btn btn--soft" href="ai-planner.html"><i class="fa-solid fa-arrow-left"></i> Back to planner</a>
+  </header>
+  <main class="market-main">
+    <p class="supplier-eyebrow">YOUR ADVENTURE &amp; NATURE OPTIONS</p>
+    <h1>Choose the experience that fits your trip</h1>
+    <p class="market-intro">Compare published guides, activities, rentals, stays, and transport. Review what is included, then send a booking request directly to the provider company.</p>
+    <section class="traveler-trip-context" id="travelerTripContext" aria-live="polite" hidden>
+      <span class="traveler-trip-context__icon"><i class="fa-solid fa-map-location-dot"></i></span>
+      <div><strong id="travelerTripDestination"></strong><span id="travelerTripMeta"></span></div>
+      <a href="ai-planner.html">Edit trip</a>
+    </section>
+    <p class="market-destination-note" id="marketDestinationNote" hidden></p>
+    <div class="market-toolbar">
+      <label>Provider category <select id="market-filter"><option value="all">All provider categories</option></select></label>
+      <label>Sort by <select id="market-sort"><option value="rating">Top rated</option><option value="price">Price: low to high</option><option value="name">Provider name</option></select></label>
+      <span id="market-count"></span>
+    </div>
+    <section class="market-grid" id="market-list" aria-live="polite"></section>
+    <section class="market-requests">
+      <h2>Your requests &amp; conversations</h2>
+      <p class="market-intro">Your booking requests and the provider company's replies stay together here.</p>
+      <div id="traveler-requests"></div>
+    </section>
+  </main>
+  <dialog class="supplier-dialog" id="booking-dialog">
+    <form method="dialog" id="booking-form">
+      <button class="dialog-close" value="cancel" aria-label="Close">×</button>
+      <p class="supplier-eyebrow">SEND A REQUEST TO THE COMPANY</p>
+      <h2 id="booking-title">Request a booking</h2>
+      <input type="hidden" name="supplierId"><input type="hidden" name="serviceId">
+      <label class="supplier-field">Preferred date<input name="date" type="date" required></label>
+      <label class="supplier-field"><span id="bookingQuantityLabel">Travelers</span><input name="travelers" type="number" min="1" value="1" required></label>
+      <label class="supplier-field">Message to the company<textarea name="message" rows="4" placeholder="Share any questions, preferences, or details the provider should know"></textarea></label>
+      <div class="supplier-dialog-actions"><button class="btn-admin-secondary" value="cancel">Cancel</button><button class="btn-gold" value="send">Send request</button></div>
+    </form>
+  </dialog>
+  <dialog class="supplier-dialog" id="ratingDialog">
+    <form id="ratingForm">
+      <button class="dialog-close" type="button" data-close-rating aria-label="Close">×</button>
+      <p class="supplier-eyebrow">TRAVELER REVIEW</p><h2>Rate this experience</h2>
+      <input type="hidden" name="serviceId"><p class="supplier-dialog-intro">Share a rating after a confirmed booking.</p>
+      <label class="supplier-field">Your rating<select name="rating" required><option value="">Choose a rating</option><option value="5">5 · Excellent</option><option value="4">4 · Very good</option><option value="3">3 · Good</option><option value="2">2 · Fair</option><option value="1">1 · Poor</option></select></label>
+      <div class="supplier-dialog-actions"><button class="btn-admin-secondary" type="button" data-close-rating>Cancel</button><button class="btn-gold" type="submit">Save rating</button></div>
+    </form>
+  </dialog>
+  <script src="supplierDashboard/supplier.js" defer></script>
+  <script src="supplierDashboard/marketplace-service-filter.js" defer></script>
+  <script src="supplierDashboard/adventure-marketplace.js" defer></script>
+  <script src="sidebar-controls.js" defer></script>
+</body>
+</html>

@@ -66,7 +66,8 @@
 .planner-options__eyebrow { margin-bottom: 6px; color: var(--amber-700); font-size: 9px; font-weight: 900; letter-spacing: .16em; }
 .planner-options__head h2 { color: var(--roamly-navy); font-size: 25px; line-height: 32px; font-weight: 900; }
 .planner-options__lead { margin-top: 5px; color: var(--slate-500); font-size: 12px; line-height: 18px; }
-.planner-options__head .close-btn { flex: none; }
+.planner-options__head { position: sticky; top: -32px; z-index: 5; padding: 8px 0; background: linear-gradient(145deg,#fff 0%,#f7f9fc 100%); }
+.planner-options__head .close-btn { flex: none; border: 1px solid #d8b45f; background: #fff8e6; color: #24334d; box-shadow: 0 3px 12px rgba(23,36,60,.14); }
 
 .planner-fields {
   display: grid;

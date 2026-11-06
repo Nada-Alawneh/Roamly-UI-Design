@@ -250,10 +250,17 @@
 }
 
 .modal__close {
-  position: absolute;
-  top: 24px;
-  right: 24px;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  margin: -32px -8px -32px auto;
+  background: #fff8e6;
+  border: 1px solid #d8b45f;
+  box-shadow: 0 3px 12px rgba(23,36,60,.16);
 }
+
+.modal__card { max-height: calc(100vh - 32px); overflow-y: auto; }
 
 .modal__title {
   font-size: 24px;

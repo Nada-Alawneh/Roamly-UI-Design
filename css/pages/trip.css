@@ -122,3 +122,4 @@
 }
 
 @media (prefers-reduced-motion: reduce) { .boarding-pass { animation: none; } }
+.boarding-pass-close{position:sticky;top:0;z-index:5;display:grid;margin:-18px -18px -38px auto;place-items:center;width:38px;height:38px;border:1px solid #d8b45f;border-radius:50%;background:#fff8e6;color:#24334d;box-shadow:0 3px 12px rgba(23,36,60,.16)}

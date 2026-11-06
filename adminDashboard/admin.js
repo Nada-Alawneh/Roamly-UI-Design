@@ -255,7 +255,7 @@ function updateAdminProfileSummary() {
   if (roleEl) roleEl.textContent = role;
   if (avatarEl) {
     avatarEl.textContent = name.trim().split(/\s+/).slice(0, 2).map(part => part.charAt(0)).join('').toUpperCase();
-    if (typeof profile.photo === 'string' && /^data:image\/(png|jpeg|webp);base64,/.test(profile.photo)) {
+    if (typeof profile.photo === 'string' && /^data:image\/[^;]+;base64,/.test(profile.photo)) {
       avatarEl.style.backgroundImage = `url("${profile.photo}")`;
       avatarEl.classList.add('avatar--photo');
     } else {

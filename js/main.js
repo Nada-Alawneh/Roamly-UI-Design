@@ -1047,6 +1047,20 @@ function initPlanner() {
     if (readRoamlySettings(getRoamlyItineraryEmail()).autoSaveItineraries && savePlannerItinerary(form, getTravelersCount()) && saveButton) {
       showItinerarySaved(saveButton);
     }
+    var selectedStyle = String(form.elements.namedItem("style").value || "").trim().toLowerCase();
+    if (selectedStyle === "adventure & nature") {
+      var plannerContext = readPlannerValues();
+      try { sessionStorage.setItem("roamlyAdventureMarketplaceContext", JSON.stringify(plannerContext)); } catch (error) {}
+      window.location.href = "adventure-marketplace.html?" + new URLSearchParams({
+        destination: plannerContext.destination,
+        travelDate: plannerContext.travelDate,
+        travelers: plannerContext.travelers,
+        duration: plannerContext.duration,
+        budget: plannerContext.budget,
+        style: plannerContext.style
+      }).toString();
+      return;
+    }
     plan.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 
@@ -1499,6 +1513,8 @@ function initSignInJourney() {
   var confirmPassword = form.querySelector('[name="confirmPassword"]');
   var fullName = form.querySelector('[name="fullName"]');
   var terms = form.querySelector('[name="terms"]');
+  var accountType = form.querySelector('[name="accountType"]');
+  var supplierCategoryField = document.querySelector('[data-supplier-only]');
   var feedback = form.querySelector("[data-auth-message]");
   var title = document.getElementById("auth-title");
   var intro = document.getElementById("authIntro");
@@ -1527,6 +1543,7 @@ function initSignInJourney() {
     switchButton.textContent = registering ? "Sign in" : "Create an account";
     loginOnly.forEach(function (element) { element.hidden = registering; });
     registerOnly.forEach(function (element) { element.hidden = !registering; });
+    if (supplierCategoryField) supplierCategoryField.hidden = !registering || !accountType || accountType.value !== "supplier";
     fullName.required = registering;
     confirmPassword.required = registering;
     terms.required = registering;
@@ -1535,6 +1552,10 @@ function initSignInJourney() {
     feedback.hidden = true;
     feedback.textContent = "";
   }
+
+  if (accountType) accountType.addEventListener("change", function () {
+    if (supplierCategoryField) supplierCategoryField.hidden = accountType.value !== "supplier";
+  });
 
   function encodePassword(value) {
     if (!window.crypto || !window.crypto.subtle || !window.TextEncoder) {
@@ -1632,7 +1653,13 @@ function initSignInJourney() {
     showMessage(mode === "register" ? "Your Roamly account is ready. Signing you in..." : "Welcome back. Your journey is ready.", false);
     form.querySelector(".auth-submit").disabled = true;
     var nextPage = new URLSearchParams(window.location.search).get("next");
-    var destination = nextPage === "ai-planner.html" && sessionStorage.getItem("roamlyPendingPlanner")
+    var signedAccount = readAccounts().find(function (account) { return account.email === emailValue; });
+      var destination = signedAccount && signedAccount.role === "supplier" ? "supplierDashboard/supplier-dashboard.html"
+      : nextPage === "supplierDashboard/suppliers.html"
+      ? "supplierDashboard/suppliers.html"
+      : nextPage && nextPage.indexOf("adventure-marketplace.html") === 0
+      ? nextPage
+      : nextPage === "ai-planner.html" && sessionStorage.getItem("roamlyPendingPlanner")
       ? "ai-planner.html?resume=1"
       : "index.html";
     playTakeoff(function () { window.location.href = destination; });
@@ -1695,7 +1722,8 @@ function initSignInJourney() {
       encodePassword(passwordValue).then(function (passwordHash) {
         var accounts = readAccounts();
         var createdAt = new Date().toISOString();
-        var newAccount = { name: nameValue, email: emailValue, passwordHash: passwordHash, role: "traveler", createdAt: createdAt };
+      var selectedRole = accountType ? accountType.value : "traveler";
+      var newAccount = { id: "supplier-" + Date.now().toString(36), name: nameValue, email: emailValue, passwordHash: passwordHash, role: selectedRole, supplierCategory: selectedRole === "supplier" ? "adventure-nature" : "", createdAt: createdAt };
         accounts.push(newAccount);
         localStorage.setItem("roamlyLocalAccounts", JSON.stringify(accounts));
         saveAndEnter(emailValue, true);

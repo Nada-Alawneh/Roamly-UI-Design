@@ -146,3 +146,6 @@
 @media (prefers-reduced-motion: reduce) {
   .user-profile-hero__glow,.profile-flight-stamp,.profile-flight-stamp__plane,.profile-flight-stamp__spark,.profile-password-dialog[open] { animation: none; }
 }
+/* Keep modal close controls visible while their content scrolls. */
+.profile-password-dialog__top{position:sticky;top:-28px;z-index:5;padding:8px 0;background:linear-gradient(145deg,#fff 0%,#f8f9fc 100%)}
+.profile-password-dialog__close{flex:none;border-color:#d8b45f;background:#fff8e6;color:#24334d;box-shadow:0 3px 12px rgba(23,36,60,.14)}

@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages/planner.css">
+  <link rel="stylesheet" href="supplierDashboard/supplier.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -107,7 +108,7 @@
           <label class="field">
             <span class="field__label">Leaving from</span>
             <div class="destination-combobox">
-              <input class="input" id="originSearch" name="origin" value="Amman, Jordan" placeholder="City, country, or somewhere new" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="originSuggestions">
+              <input class="input" id="originSearch" name="origin" placeholder="City, country, or anywhere in the world" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="originSuggestions">
               <button class="destination-toggle" id="originToggle" type="button" aria-label="Show departure suggestions" aria-expanded="false" aria-controls="originSuggestions"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
               <div class="destination-suggestions" id="originSuggestions" role="listbox" aria-label="Departure suggestions" hidden></div>
             </div>
@@ -115,7 +116,7 @@
           <label class="field">
             <span class="field__label">Destination</span>
             <div class="destination-combobox">
-              <input class="input" id="destinationSearch" name="destination" value="Istanbul, Turkey" placeholder="City, country, or somewhere new" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="destinationSuggestions" required>
+              <input class="input" id="destinationSearch" name="destination" placeholder="Choose a city or country anywhere in the world" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="destinationSuggestions" required>
               <button class="destination-toggle" id="destinationToggle" type="button" aria-label="Show destination suggestions" aria-expanded="false" aria-controls="destinationSuggestions"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
               <div class="destination-suggestions" id="destinationSuggestions" role="listbox" aria-label="Destination suggestions" hidden></div>
             </div>
@@ -186,6 +187,7 @@
         </div>
 
         <aside class="plan__col plan__col--side">
+          <section class="card supplier-discovery-card"><span class="supplier-discovery-card__icon"><i class="fa-solid fa-mountain-sun" aria-hidden="true"></i></span><div><p class="supplier-discovery-card__eyebrow">MAKE IT HAPPEN</p><h3>Book an outdoor experience</h3><p>Compare published experiences, equipment rentals, stays, and transport, then contact the provider company.</p><a id="exploreOutdoorProviders" href="adventure-marketplace.html">Explore Adventure &amp; Nature <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div></section>
           <section class="map-card" aria-labelledby="map-title">
             <div class="widget-head">
               <h3 class="widget-head__title" id="map-title"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> Area highlights</h3>
@@ -398,5 +400,6 @@
   </footer>
 
   <script src="js/main.js" defer></script>
-</body>
+  <script src="supplierDashboard/marketplace-navigation.js" defer></script>
+<script src="sidebar-controls.js" defer></script></body>
 </html>
