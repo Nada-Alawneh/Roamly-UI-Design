@@ -412,4 +412,5 @@ select.input {
 }
 
 .skip-link:focus { left: 12px; }
-.scroll-plane-rail--floating{position:fixed;z-index:9999;display:block;border-right:3px solid #111d35;pointer-events:none}.scroll-plane-rail--floating[hidden]{display:none}.scroll-plane-rail--floating .scroll-plane{position:absolute;top:0;right:-6px;display:grid;width:24px;height:24px;place-items:center;color:#d6a33b;font-size:20px;filter:drop-shadow(0 0 8px rgba(214,163,59,.62));transition:none}.scroll-plane-rail--floating.is-horizontal{border-right:0;border-top:3px solid #111d35}.scroll-plane-rail--floating.is-horizontal .scroll-plane{top:-11px;right:auto;left:0}
+.scroll-plane-rail--floating{position:fixed;z-index:9999;display:block;border-right:4px solid #e3ad45;pointer-events:auto;cursor:grab;touch-action:none}.scroll-plane-rail--floating[hidden]{display:none}.scroll-plane-rail--floating .scroll-plane{position:absolute;top:0;right:-6px;display:grid;width:24px;height:24px;place-items:center;color:#ffd46a;font-size:22px;pointer-events:none;filter:drop-shadow(0 0 8px rgba(255,196,62,.8));transition:none}.scroll-plane-rail--floating.is-horizontal{border-right:0;border-top:4px solid #e3ad45}.scroll-plane-rail--floating.is-horizontal .scroll-plane{top:-11px;right:auto;left:0}
+dialog{scrollbar-width:none}dialog::-webkit-scrollbar{display:none}

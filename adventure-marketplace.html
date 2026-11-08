@@ -16,24 +16,26 @@
 <body class="market-page traveler-market-page">
   <header class="market-header">
     <a href="index.html" aria-label="Roamly home"><img src="assets/img/logo.png" alt="Roamly" width="150"></a>
-    <a class="btn btn--soft" href="ai-planner.html"><i class="fa-solid fa-arrow-left"></i> Back to planner</a>
+    <a class="btn btn--soft" id="marketHeaderBack" href="ai-planner.html"><i class="fa-solid fa-arrow-left"></i> Back to planner</a>
   </header>
   <main class="market-main">
     <p class="supplier-eyebrow">YOUR ADVENTURE &amp; NATURE OPTIONS</p>
     <h1>Choose the experience that fits your trip</h1>
-    <p class="market-intro">Compare published guides, activities, rentals, stays, and transport. Review what is included, then send a booking request directly to the provider company.</p>
+    <p class="market-intro">Browse supplier-published experiences whenever you like; you do not need to generate an AI plan first. Open the full details, compare teams, and send a booking request directly to the provider.</p>
     <section class="traveler-trip-context" id="travelerTripContext" aria-live="polite" hidden>
       <span class="traveler-trip-context__icon"><i class="fa-solid fa-map-location-dot"></i></span>
       <div><strong id="travelerTripDestination"></strong><span id="travelerTripMeta"></span></div>
-      <a href="ai-planner.html">Edit trip</a>
+      <div class="traveler-trip-context__actions"><a id="returnToGeneratedPlan" href="ai-planner.html" hidden>Return to your plan</a><a id="editPlannerTrip" href="ai-planner.html">Edit trip details</a></div>
     </section>
     <p class="market-destination-note" id="marketDestinationNote" hidden></p>
     <div class="market-toolbar">
+      <label>Search experiences <input id="market-search" type="search" placeholder="Name, activity, or provider"></label>
       <label>Provider category <select id="market-filter"><option value="all">All provider categories</option></select></label>
       <label>Sort by <select id="market-sort"><option value="rating">Top rated</option><option value="price">Price: low to high</option><option value="name">Provider name</option></select></label>
       <span id="market-count"></span>
     </div>
     <section class="market-grid" id="market-list" aria-live="polite"></section>
+    <div class="supplier-empty market-no-results" id="market-search-empty" hidden>No published experiences match these filters. Try another search or category.</div>
     <section class="market-requests">
       <h2>Your requests &amp; conversations</h2>
       <p class="market-intro">Your booking requests and the provider company's replies stay together here.</p>
@@ -43,13 +45,13 @@
   <dialog class="supplier-dialog" id="booking-dialog">
     <form method="dialog" id="booking-form">
       <button class="dialog-close" value="cancel" aria-label="Close">×</button>
-      <p class="supplier-eyebrow">SEND A REQUEST TO THE COMPANY</p>
+      <p class="supplier-eyebrow">START A CONVERSATION</p>
       <h2 id="booking-title">Request a booking</h2>
       <input type="hidden" name="supplierId"><input type="hidden" name="serviceId">
       <label class="supplier-field">Preferred date<input name="date" type="date" required></label>
       <label class="supplier-field"><span id="bookingQuantityLabel">Travelers</span><input name="travelers" type="number" min="1" value="1" required></label>
       <label class="supplier-field">Message to the company<textarea name="message" rows="4" placeholder="Share any questions, preferences, or details the provider should know"></textarea></label>
-      <div class="supplier-dialog-actions"><button class="btn-admin-secondary" value="cancel">Cancel</button><button class="btn-gold" value="send">Send request</button></div>
+      <div class="supplier-dialog-actions"><button class="btn-admin-secondary" value="cancel">Cancel</button><button class="btn-gold" value="send">Start conversation</button></div>
     </form>
   </dialog>
   <dialog class="supplier-dialog" id="ratingDialog">

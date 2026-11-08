@@ -216,6 +216,30 @@ function initDialogs() {
   }
 }
 
+function initExperienceMarketplaceNavigation() {
+  var nav = document.querySelector(".site-nav .nav-pill");
+  if (!nav || nav.querySelector("[data-experiences-link]")) return;
+  var item = document.createElement("li"), link = document.createElement("a");
+  link.className = "nav-pill__link";
+  link.href = "adventure-marketplace.html";
+  link.textContent = "Experiences";
+  link.setAttribute("data-experiences-link", "");
+  item.appendChild(link);
+  var plannerLink = nav.querySelector('a[href="ai-planner.html"]');
+  nav.insertBefore(item, plannerLink && plannerLink.parentElement.nextSibling ? plannerLink.parentElement.nextSibling : null);
+  if (location.pathname.endsWith("ai-planner.html")) {
+    link.addEventListener("click", function (event) {
+      var form = document.querySelector("[data-planner-form]");
+      var destinationField = form && form.elements.namedItem("destination");
+      if (!destinationField || !destinationField.value.trim()) return;
+      event.preventDefault();
+      var keys = ["origin", "destination", "travelDate", "travelers", "duration", "budget", "style", "providerStyle", "supplierId", "experienceType", "tripNotes"], query = new URLSearchParams();
+      keys.forEach(function (key) { var field = form.elements.namedItem(key); if (field && String(field.value || "").trim()) query.set(key === "experienceType" ? "serviceType" : key, String(field.value).trim()); });
+      location.href = "adventure-marketplace.html?" + query.toString();
+    });
+  }
+}
+
 function initWelcomeFilm() {
   var dialog = document.getElementById("welcome-film");
   if (!dialog) { return; }
@@ -285,6 +309,38 @@ function updatePaymentSummary() {
   var splitNote = checkout.querySelector("[data-split-payment-note]");
   var continueButton = checkout.querySelector("[data-payment-continue]");
   if (!amount || !total) { return; }
+  var bookingParams = new URLSearchParams(window.location.search), bookingId = bookingParams.get("bookingId"), confirmedBooking = null;
+  if (bookingId) { try { confirmedBooking = JSON.parse(localStorage.getItem("roamly-market-requests") || "[]").find(function (request) { return request.id === bookingId && request.travelerConfirmedAt; }) || null; } catch (error) {} }
+  if (confirmedBooking) {
+    var agreedAmount = Number(confirmedBooking.agreedPrice) || 0;
+    amount.textContent = "$" + agreedAmount.toFixed(2);
+    if (label) label.textContent = "Agreed provider booking amount";
+    if (detail) detail.textContent = (confirmedBooking.serviceTitle || "Experience") + " · " + (confirmedBooking.supplierName || "Provider");
+    if (splitNote) splitNote.hidden = true;
+    var splitOption = checkout.querySelector('input[name="payment-option"][value="split"]'); if (splitOption) { splitOption.disabled = true; var splitLabel = splitOption.closest("label"); if (splitLabel) splitLabel.hidden = true; }
+    var fullOption = checkout.querySelector('input[name="payment-option"][value="full"]'); if (fullOption) fullOption.checked = true;
+    var fullCopy = fullOption && fullOption.closest("label") && fullOption.closest("label").querySelector(".pay-option__copy"), fullTitle = fullCopy && fullCopy.querySelector(".pay-option__title"), fullText = fullCopy && fullCopy.querySelector(".pay-option__text");
+    if (fullTitle) fullTitle.textContent = "Pay agreed provider price";
+    if (fullText) fullText.textContent = "One confirmed supplier experience booking.";
+    if (continueButton) continueButton.textContent = "Continue to demo confirmation";
+    var cardFields = checkout.querySelector(".checkout__form"); if (cardFields) cardFields.hidden = true;
+    var heading = checkout.querySelector("#checkout-title"), intro = checkout.querySelector(".checkout__head .modal__text");
+    if (heading) heading.textContent = "Review your confirmed experience";
+    if (intro) intro.textContent = "Your agreed supplier price is ready. Review the trip details before continuing.";
+    var row = checkout.querySelector("[data-supplier-booking-summary]");
+    if (!row) { row = document.createElement("div"); row.className = "checkout__summary-row checkout__summary-row--supplier"; row.dataset.supplierBookingSummary = "true"; checkout.querySelector(".checkout__summary").appendChild(row); }
+    row.replaceChildren(); var name = document.createElement("span"), price = document.createElement("strong"); name.textContent = (confirmedBooking.serviceTitle || "Experience") + " · " + (confirmedBooking.supplierName || "Provider"); price.textContent = "$" + agreedAmount.toFixed(2); row.append(name, price);
+    return;
+  }
+  var splitOption = checkout.querySelector('input[name="payment-option"][value="split"]'); if (splitOption) { splitOption.disabled = false; var splitLabel = splitOption.closest("label"); if (splitLabel) splitLabel.hidden = false; }
+  var fullOption = checkout.querySelector('input[name="payment-option"][value="full"]'), fullCopy = fullOption && fullOption.closest("label") && fullOption.closest("label").querySelector(".pay-option__copy"), fullTitle = fullCopy && fullCopy.querySelector(".pay-option__title"), fullText = fullCopy && fullCopy.querySelector(".pay-option__text");
+  if (fullTitle) fullTitle.textContent = "Pay in Full";
+  if (fullText) fullText.textContent = "Pay the full trip total in one payment.";
+  var defaultCardFields = checkout.querySelector(".checkout__form"); if (defaultCardFields) defaultCardFields.hidden = false;
+  var supplierRow = checkout.querySelector("[data-supplier-booking-summary]"); if (supplierRow) supplierRow.remove();
+  var defaultHeading = checkout.querySelector("#checkout-title"), defaultIntro = checkout.querySelector(".checkout__head .modal__text");
+  if (defaultHeading) defaultHeading.textContent = "Choose how you’d like to pay";
+  if (defaultIntro) defaultIntro.textContent = "Review your trip total, included essentials, and payment split.";
   amount.textContent = isSplit && perPerson ? perPerson.textContent.replace(/\s+per person$/i, "") : total.textContent;
   if (label) { label.textContent = isSplit ? "Your share due today" : "Amount due today"; }
   if (detail) { detail.textContent = isSplit ? "Equal share; all travelers have 48 hours to pay" : "One payment for the full trip"; }
@@ -305,13 +361,16 @@ function initPlannerPayment() {
   var continueButton = checkout.querySelector("[data-payment-continue]");
   if (continueButton) {
     continueButton.addEventListener("click", function () {
-      var fields = checkout.querySelectorAll("[name=cardholder], [name=cardnumber], [name=expiry], [name=securityCode]");
-      for (var index = 0; index < fields.length; index++) {
-        if (!fields[index].reportValidity()) return;
+      var bookingIdForCheckout = new URLSearchParams(window.location.search).get("bookingId");
+      if (!bookingIdForCheckout) {
+        var fields = checkout.querySelectorAll("[name=cardholder], [name=cardnumber], [name=expiry], [name=securityCode]");
+        for (var index = 0; index < fields.length; index++) { if (!fields[index].reportValidity()) return; }
       }
       var selected = checkout.querySelector('input[name="payment-option"]:checked');
       prepareTripConfirmation(selected ? selected.value : "full");
-      window.location.href = "trip.html?payment=" + (selected ? selected.value : "full");
+      var paymentParams = new URLSearchParams(); paymentParams.set("payment", selected ? selected.value : "full");
+      var bookingId = new URLSearchParams(window.location.search).get("bookingId"); if (bookingId) paymentParams.set("bookingId", bookingId);
+      window.location.href = "trip.html?" + paymentParams.toString();
     });
     checkout.addEventListener("submit", function (event) {
       event.preventDefault();
@@ -360,6 +419,10 @@ function prepareTripConfirmation(paymentType) {
     payment: paymentType,
     createdAt: new Date().toISOString()
   };
+  var bookingId = new URLSearchParams(window.location.search).get("bookingId");
+  if (bookingId) {
+    try { var supplierBooking = JSON.parse(localStorage.getItem("roamly-market-requests") || "[]").find(function (request) { return request.id === bookingId && request.travelerConfirmedAt; }); if (supplierBooking) trip.supplierBooking = { id: supplierBooking.id, supplierName: supplierBooking.supplierName, serviceTitle: supplierBooking.serviceTitle, agreedPrice: Number(supplierBooking.agreedPrice) || 0, confirmedAt: supplierBooking.travelerConfirmedAt }; } catch (error) {}
+  }
   sessionStorage.setItem("roamlyTripConfirmation", JSON.stringify(trip));
 }
 
@@ -439,6 +502,14 @@ function initTripConfirmation() {
   setText("[data-trip-destination]", destination);
   setText("[data-trip-dates]", dates);
   setText("[data-trip-travelers]", passengers + (passengers === 1 ? " traveler" : " travelers"));
+  if (trip.supplierBooking) {
+    var providerNotice = document.createElement("section"), title = document.createElement("h3"), detail = document.createElement("p"), demo = document.createElement("small");
+    providerNotice.className = "trip-provider-confirmation"; title.textContent = "Confirmed experience booking";
+    detail.textContent = trip.supplierBooking.serviceTitle + " with " + trip.supplierBooking.supplierName + " · agreed price USD " + Number(trip.supplierBooking.agreedPrice).toFixed(2) + ". Reference: " + trip.supplierBooking.id;
+    demo.textContent = "Roamly demo checkout: no card was charged. A payment provider is required to process this booking payment.";
+    providerNotice.append(title, detail, demo); tripCard.appendChild(providerNotice);
+    setText("#trip-title", "Your experience booking is ready");
+  }
 
   var passList = document.querySelector("[data-boarding-pass-list]");
   if (!passList) { return; }
@@ -540,6 +611,12 @@ function prefillPlannerFromQuery(form) {
   var style = params.get("style");
   var duration = params.get("duration");
   var travelDate = params.get("travelDate");
+  var origin = params.get("origin");
+  var experienceType = params.get("serviceType");
+  var providerStyle = params.get("providerStyle");
+  var supplierId = params.get("supplierId");
+  var tripNotes = params.get("tripNotes");
+  var tripPace = params.get("tripPace"), activityLevel = params.get("activityLevel");
   var vibe = params.get("vibe");
   var range = params.get("range");
   var travelDefaults = readRoamlySettings(getRoamlyItineraryEmail());
@@ -549,9 +626,11 @@ function prefillPlannerFromQuery(form) {
     if (!style) style = travelDefaults.style || "";
   }
   var destinationField = form.elements.namedItem("destination");
+  var originField = form.elements.namedItem("origin");
   var travelersField = form.elements.namedItem("travelers");
 
   if (destination && destinationField) destinationField.value = destination;
+  if (origin && originField) originField.value = origin;
   if (travelers && travelersField && Number(travelers) >= 1 && Number(travelers) <= 20) {
     travelersField.value = String(parseInt(travelers, 10));
   }
@@ -562,6 +641,18 @@ function prefillPlannerFromQuery(form) {
   }
   var travelDateField = form.elements.namedItem("travelDate");
   if (travelDate && travelDateField && /^\d{4}-\d{2}-\d{2}$/.test(travelDate)) travelDateField.value = travelDate;
+  var experienceTypeField = form.elements.namedItem("experienceType");
+  if (experienceType && experienceTypeField) {
+    if (Array.from(experienceTypeField.options).some(function (option) { return option.value.toLowerCase() === experienceType.toLowerCase(); })) experienceTypeField.value = experienceType;
+    else form.dataset.requestedExperienceType = experienceType;
+  }
+  var providerStyleField = form.elements.namedItem("providerStyle");
+  if (providerStyle && providerStyleField && Array.from(providerStyleField.options).some(function (option) { return option.value.toLowerCase() === providerStyle.toLowerCase(); })) providerStyleField.value = providerStyle;
+  var supplierIdField = form.elements.namedItem("supplierId");
+  if (supplierId && supplierIdField) supplierIdField.value = supplierId;
+  var tripNotesField = form.elements.namedItem("tripNotes");
+  if (tripNotes && tripNotesField) tripNotesField.value = tripNotes;
+  [ ["tripPace", tripPace], ["activityLevel", activityLevel] ].forEach(function (entry) { var field = form.elements.namedItem(entry[0]); if (entry[1] && field && Array.from(field.options).some(function (option) { return option.value === entry[1]; })) field.value = entry[1]; });
 
   if (!budget && range) {
     if (/under\s*\$?500/i.test(range)) budget = "Budget";
@@ -762,7 +853,13 @@ function initPlanner() {
       duration: form.elements.namedItem("duration").value,
       travelDate: form.elements.namedItem("travelDate").value,
       budget: form.elements.namedItem("budget").value,
-      style: form.elements.namedItem("style").value
+      style: form.elements.namedItem("style").value,
+      providerStyle: form.elements.namedItem("providerStyle").value,
+      supplierId: form.elements.namedItem("supplierId").value,
+      experienceType: form.elements.namedItem("experienceType").value,
+      tripPace: form.elements.namedItem("tripPace").value,
+      activityLevel: form.elements.namedItem("activityLevel").value,
+      tripNotes: form.elements.namedItem("tripNotes").value.trim()
     };
   }
 
@@ -775,9 +872,12 @@ function initPlanner() {
     sessionStorage.removeItem("roamlyPendingPlanner");
     if (!pending) return false;
 
-    ["origin", "destination", "travelers", "duration", "travelDate", "budget", "style"].forEach(function (name) {
+    ["origin", "destination", "travelers", "duration", "travelDate", "budget", "style", "providerStyle", "supplierId", "experienceType", "tripPace", "activityLevel", "tripNotes"].forEach(function (name) {
       var field = form.elements.namedItem(name);
-      if (field && pending[name] !== undefined) field.value = pending[name];
+      if (field && pending[name] !== undefined) {
+        if (name === "experienceType" && !Array.from(field.options).some(function (option) { return option.value === pending[name]; })) form.dataset.requestedExperienceType = pending[name];
+        else field.value = pending[name];
+      }
     });
     return true;
   }
@@ -795,6 +895,146 @@ function initPlanner() {
   if (dateField) dateField.min = toLocalIsoDate(new Date());
 
   var shouldResumeGeneration = restorePendingPlanner();
+  var plannerStepPanels = Array.from(form.querySelectorAll("[data-planner-step-panel]"));
+  var plannerStepButtons = Array.from(form.querySelectorAll("[data-planner-step-target]"));
+  var providerStyleField = form.elements.namedItem("providerStyle"), providerActivityField = form.elements.namedItem("experienceType"), selectedSupplierField = form.elements.namedItem("supplierId");
+  var providerGrid = document.getElementById("planner-provider-grid"), providerEmpty = document.getElementById("planner-provider-empty"), providerCount = document.querySelector("[data-planner-provider-count]");
+  var adventureBridge = plan.querySelector("[data-adventure-bridge]"), adventureBridgeSummary = plan.querySelector("[data-adventure-bridge-summary]"), adventureMarketplaceLink = plan.querySelector("[data-open-adventure-marketplace]");
+  var adventureRecommendedOffer = plan.querySelector("[data-adventure-recommended-offer]");
+  var currentPlannerStep = "trip", marketplaceServices = [], marketplaceAccounts = [];
+  function readPlannerMarketplaceData() {
+    try { marketplaceServices = JSON.parse(localStorage.getItem("roamly-market-services") || "[]"); } catch (error) { marketplaceServices = []; }
+    try { marketplaceAccounts = JSON.parse(localStorage.getItem("roamlyLocalAccounts") || "[]"); } catch (error) { marketplaceAccounts = []; }
+    marketplaceServices = marketplaceServices.filter(function (service) { return service && service.published !== false && (service.category === "equipment" || (service.team || []).length > 0); });
+  }
+  function servicesForProviderStyle() {
+    if (!providerStyleField || providerStyleField.value !== "Adventure & Nature") return [];
+    return marketplaceServices;
+  }
+  function syncPublishedAdventureTypes() {
+    if (!providerActivityField) return;
+    var savedSelection = providerActivityField.value, requested = new URLSearchParams(location.search).get("serviceType") || form.dataset.requestedExperienceType || "";
+    var publishedTypes = servicesForProviderStyle().map(function (service) { return String(service.serviceType || "").trim(); }).filter(function (type, index, all) { return type && all.indexOf(type) === index; }).sort();
+    providerActivityField.replaceChildren(new Option("All published experiences", ""));
+    publishedTypes.forEach(function (type) { providerActivityField.add(new Option(type, type)); });
+    var preferred = publishedTypes.indexOf(savedSelection) >= 0 ? savedSelection : requested;
+    if (publishedTypes.indexOf(preferred) >= 0) providerActivityField.value = preferred;
+    delete form.dataset.requestedExperienceType;
+  }
+  function renderPlannerProviders() {
+    if (!providerGrid) return;
+    var services = servicesForProviderStyle(), activity = providerActivityField ? providerActivityField.value : "", groups = [];
+    services.filter(function (service) { return !activity || service.serviceType === activity; }).forEach(function (service) {
+      var group = groups.find(function (item) { return item.id === service.supplierId; });
+      if (!group) {
+        var account = marketplaceAccounts.find(function (item) { return item.id === service.supplierId && item.role === "supplier"; });
+        group = { id: service.supplierId, name: service.supplierName || (account && account.businessName) || "Adventure provider", account: account, image: service.coverImage || "", services: [] }; groups.push(group);
+      }
+      if (!group.image && service.coverImage) group.image = service.coverImage;
+      group.services.push(service);
+    });
+    groups.sort(function (left, right) { return left.name.localeCompare(right.name); });
+    var selectedId = selectedSupplierField ? selectedSupplierField.value : "";
+    if (selectedId && !groups.some(function (group) { return String(group.id) === String(selectedId); })) { selectedId = ""; if (selectedSupplierField) selectedSupplierField.value = ""; }
+    providerGrid.replaceChildren();
+    if (providerCount) providerCount.textContent = groups.length + (groups.length === 1 ? " live provider" : " live providers");
+    if (providerEmpty) providerEmpty.hidden = groups.length > 0;
+    if (!groups.length) return;
+    var allCard = document.createElement("label"); allCard.className = "planner-provider-choice" + (!selectedId ? " is-selected" : "");
+    var allRadio = document.createElement("input"); allRadio.type = "radio"; allRadio.name = "plannerSupplierChoice"; allRadio.value = ""; allRadio.checked = !selectedId;
+    var allCopy = document.createElement("span"); allCopy.className = "planner-provider-choice__copy"; allCopy.innerHTML = '<strong>Show me all providers</strong><small>Compare every live Adventure &amp; Nature supplier</small>';
+    var allMark = document.createElement("i"); allMark.className = "fa-solid fa-layer-group"; allMark.setAttribute("aria-hidden", "true"); allCard.append(allRadio, allCopy, allMark); providerGrid.appendChild(allCard);
+    groups.forEach(function (group) {
+      var card = document.createElement("label"); card.className = "planner-provider-choice" + (String(group.id) === String(selectedId) ? " is-selected" : "");
+      var radio = document.createElement("input"); radio.type = "radio"; radio.name = "plannerSupplierChoice"; radio.value = group.id; radio.checked = String(group.id) === String(selectedId); radio.setAttribute("aria-label", "Choose " + group.name);
+      var photo = document.createElement("span"); photo.className = "planner-provider-choice__photo";
+      if (group.image && (/^https?:\/\//i.test(group.image) || /^data:image\//i.test(group.image))) { var image = document.createElement("img"); image.src = group.image; image.alt = ""; image.loading = "lazy"; photo.appendChild(image); }
+      else { var icon = document.createElement("i"); icon.className = "fa-solid fa-mountain-sun"; icon.setAttribute("aria-hidden", "true"); photo.appendChild(icon); }
+      var copy = document.createElement("span"); copy.className = "planner-provider-choice__copy";
+      var heading = document.createElement("strong"); heading.textContent = group.name;
+      var description = document.createElement("small"); description.textContent = group.account && group.account.businessDescription || "Adventure & Nature experiences from a Roamly supplier.";
+      var tags = document.createElement("span"); tags.className = "planner-provider-choice__tags";
+      group.services.slice(0, 4).forEach(function (service) { var tag = document.createElement("em"); tag.textContent = service.serviceType; tags.appendChild(tag); });
+      var count = document.createElement("small"); count.className = "planner-provider-choice__count"; count.textContent = group.services.length + (group.services.length === 1 ? " published experience" : " published experiences");
+      copy.append(heading, description, tags, count);
+      var mark = document.createElement("i"); mark.className = "fa-solid fa-circle-check"; mark.setAttribute("aria-hidden", "true"); card.append(radio, photo, copy, mark); providerGrid.appendChild(card);
+    });
+    providerGrid.querySelectorAll('input[name="plannerSupplierChoice"]').forEach(function (radio) { radio.addEventListener("change", function () { if (selectedSupplierField) selectedSupplierField.value = radio.value; renderPlannerProviders(); }); });
+  }
+  function syncProviderStyleOptions() {
+    if (!providerStyleField) return;
+    readPlannerMarketplaceData();
+    var active = marketplaceServices.length > 0;
+    var styleField = form.elements.namedItem("style");
+    if (styleField) Array.from(styleField.options).forEach(function (option) { option.disabled = option.value !== "Adventure & Nature" || !active; });
+    if (styleField && styleField.options.length && styleField.options[styleField.selectedIndex].disabled && active) styleField.value = "Adventure & Nature";
+    providerStyleField.value = styleField ? styleField.value : "Adventure & Nature";
+    syncPublishedAdventureTypes(); renderPlannerProviders(); syncAdventurePlannerUI();
+  }
+  function setPlannerStep(step) {
+    if (step === "providers") {
+      if (!form.reportValidity()) return false;
+      syncProviderStyleOptions();
+    }
+    currentPlannerStep = step;
+    plannerStepPanels.forEach(function (panel) { panel.hidden = panel.dataset.plannerStepPanel !== step; });
+    plannerStepButtons.forEach(function (button) {
+      var active = button.dataset.plannerStepTarget === step, item = button.closest("li");
+      if (item) item.classList.toggle("is-active", active);
+      if (active) button.setAttribute("aria-current", "step"); else button.removeAttribute("aria-current");
+    });
+    var dialogCard = form.querySelector(".planner-options-dialog"); if (dialogCard) dialogCard.scrollTop = 0;
+    return true;
+  }
+  form.querySelectorAll("[data-planner-step-target]").forEach(function (button) { button.addEventListener("click", function () { setPlannerStep(button.dataset.plannerStepTarget); }); });
+  var nextStepButton = form.querySelector("[data-planner-step-next]"), backStepButton = form.querySelector("[data-planner-step-back]");
+  if (nextStepButton) nextStepButton.addEventListener("click", function () { setPlannerStep("providers"); });
+  if (backStepButton) backStepButton.addEventListener("click", function () { setPlannerStep("trip"); });
+  var plannerStyleField = form.elements.namedItem("style");
+  if (plannerStyleField) plannerStyleField.addEventListener("change", function () { providerStyleField.value = plannerStyleField.value; if (selectedSupplierField) selectedSupplierField.value = ""; syncPublishedAdventureTypes(); renderPlannerProviders(); syncAdventurePlannerUI(); });
+  if (providerStyleField) providerStyleField.addEventListener("change", function () { if (plannerStyleField) plannerStyleField.value = providerStyleField.value; if (selectedSupplierField) selectedSupplierField.value = ""; syncPublishedAdventureTypes(); renderPlannerProviders(); syncAdventurePlannerUI(); });
+  if (providerActivityField) providerActivityField.addEventListener("change", renderPlannerProviders);
+  window.addEventListener("storage", function (event) { if (event.key === "roamly-market-services" || event.key === "roamlyLocalAccounts") syncProviderStyleOptions(); });
+  function selectedProviderName() {
+    var id = selectedSupplierField && selectedSupplierField.value;
+    if (!id) return "All live providers";
+    var service = marketplaceServices.find(function (item) { return String(item.supplierId) === String(id); });
+    var account = marketplaceAccounts.find(function (item) { return String(item.id) === String(id); });
+    return account && account.businessName || service && service.supplierName || "Selected provider";
+  }
+  function syncAdventurePlannerUI() {
+    var values = readPlannerValues(), eligible = marketplaceServices.filter(function (service) { return (!values.experienceType || service.serviceType === values.experienceType) && (!values.supplierId || String(service.supplierId) === String(values.supplierId)); });
+    var recommendation = eligible[0] || null, isAdventureProvider = values.providerStyle === "Adventure & Nature" && marketplaceServices.length > 0;
+    if (adventureBridge) adventureBridge.hidden = !isAdventureProvider || plan.hidden;
+    if (adventureRecommendedOffer) {
+      adventureRecommendedOffer.hidden = !recommendation;
+      if (recommendation) {
+        var offerProvider = adventureRecommendedOffer.querySelector("[data-adventure-offer-provider]"), offerTitle = adventureRecommendedOffer.querySelector("[data-adventure-offer-title]"), offerDescription = adventureRecommendedOffer.querySelector("[data-adventure-offer-description]"), offerPrice = adventureRecommendedOffer.querySelector("[data-adventure-offer-price]");
+        if (offerProvider) offerProvider.textContent = recommendation.supplierName || selectedProviderName();
+        if (offerTitle) offerTitle.textContent = recommendation.title || recommendation.serviceType;
+        if (offerDescription) offerDescription.textContent = recommendation.description || "Published by a Roamly Adventure & Nature provider.";
+        if (offerPrice) offerPrice.textContent = recommendation.price ? "$" + recommendation.price + " / " + (recommendation.category === "equipment" ? "item per day" : recommendation.category === "transport" ? "vehicle" : recommendation.category === "reserves" ? "guest per night" : "traveler") : "Price confirmed with provider";
+      }
+    }
+    if (adventureBridgeSummary) {
+      adventureBridgeSummary.replaceChildren();
+      [["Destination", values.destination], ["Dates", values.travelDate], ["Travelers", values.travelers], ["Style", values.style], ["Activity", values.experienceType || "All published experiences"], ["Pace", values.tripPace], ["Level", values.activityLevel], ["Provider", recommendation ? recommendation.supplierName || selectedProviderName() : selectedProviderName()]].forEach(function (item) {
+        if (!item[1]) return;
+        var chip = document.createElement("span"); chip.innerHTML = '<small>' + item[0] + '</small><strong></strong>'; chip.querySelector("strong").textContent = item[1]; adventureBridgeSummary.appendChild(chip);
+      });
+    }
+  }
+  syncProviderStyleOptions();
+  if (adventureMarketplaceLink) adventureMarketplaceLink.addEventListener("click", function (event) {
+    var values = readPlannerValues();
+    if (values.providerStyle !== "Adventure & Nature") return;
+    event.preventDefault();
+    var context = Object.assign({}, values, { itinerary: Array.from(plan.querySelectorAll(".day-card")).map(function (day) { return { title: (day.querySelector(".day-card__title") || {}).textContent || "", date: (day.querySelector(".day-card__date") || {}).textContent || "", activities: Array.from(day.querySelectorAll(".timeline__title > span")).map(function (activity) { return activity.textContent.trim(); }) }; }) });
+    try { sessionStorage.setItem("roamlyAdventurePlannerContext", JSON.stringify(context)); } catch (error) {}
+    var query = new URLSearchParams();
+    ["origin", "destination", "travelers", "duration", "travelDate", "budget", "style", "providerStyle", "supplierId", "experienceType", "tripPace", "activityLevel", "tripNotes"].forEach(function (key) { if (values[key]) query.set(key === "experienceType" ? "serviceType" : key, values[key]); });
+    window.location.href = "adventure-marketplace.html?" + query.toString();
+  });
 
   function getTravelersCount() {
     var inputField = form.elements.namedItem("travelers");
@@ -812,6 +1052,7 @@ function initPlanner() {
     var count = getTravelersCount();
     renderQuote(count);
     renderPlannerDays();
+    syncAdventurePlannerUI();
     setWeatherMode(false, true);
   }
 
@@ -1022,6 +1263,7 @@ function initPlanner() {
 
   form.addEventListener("submit", function (event) {
     event.preventDefault();
+    if (currentPlannerStep !== "providers") { setPlannerStep("providers"); return; }
 
     var email = readPlannerUser();
     if (!email) {
@@ -1047,22 +1289,37 @@ function initPlanner() {
     if (readRoamlySettings(getRoamlyItineraryEmail()).autoSaveItineraries && savePlannerItinerary(form, getTravelersCount()) && saveButton) {
       showItinerarySaved(saveButton);
     }
-    var selectedStyle = String(form.elements.namedItem("style").value || "").trim().toLowerCase();
-    if (selectedStyle === "adventure & nature") {
-      var plannerContext = readPlannerValues();
-      try { sessionStorage.setItem("roamlyAdventureMarketplaceContext", JSON.stringify(plannerContext)); } catch (error) {}
-      window.location.href = "adventure-marketplace.html?" + new URLSearchParams({
-        destination: plannerContext.destination,
-        travelDate: plannerContext.travelDate,
-        travelers: plannerContext.travelers,
-        duration: plannerContext.duration,
-        budget: plannerContext.budget,
-        style: plannerContext.style
-      }).toString();
-      return;
-    }
     plan.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (adventureMarketplaceLink && readPlannerValues().providerStyle === "Adventure & Nature") adventureMarketplaceLink.click();
   });
+
+  var resumePlanRequested = new URLSearchParams(window.location.search).get("resumePlan") === "1";
+  if (resumePlanRequested) {
+    var savedAdventureContext = null;
+    try { savedAdventureContext = JSON.parse(sessionStorage.getItem("roamlyAdventurePlannerContext") || "null"); } catch (error) {}
+    if (savedAdventureContext) {
+      ["origin", "destination", "travelers", "duration", "travelDate", "budget", "style", "providerStyle", "supplierId", "experienceType", "tripPace", "activityLevel", "tripNotes"].forEach(function (name) {
+        var field = form.elements.namedItem(name);
+        if (field && savedAdventureContext[name] !== undefined) field.value = savedAdventureContext[name];
+      });
+      syncProviderStyleOptions(); setPlannerStep("trip"); showPlan();
+      var restoredDays = Array.from(plan.querySelectorAll(".day-card"));
+      (savedAdventureContext.itinerary || []).forEach(function (savedDay, dayIndex) {
+        var day = restoredDays[dayIndex]; if (!day) return;
+        var title = day.querySelector(".day-card__title"); if (title && savedDay.title) title.textContent = savedDay.title;
+        var activityTitles = Array.from(day.querySelectorAll(".timeline__title > span"));
+        (savedDay.activities || []).forEach(function (activity, activityIndex) { if (activityTitles[activityIndex]) activityTitles[activityIndex].textContent = activity; });
+        day.querySelectorAll("[data-plan-change]").forEach(function (button) { button.dataset.dayTitle = (title && title.textContent) || savedDay.title || ""; var item = button.closest(".timeline__item"), activity = item && item.querySelector(".timeline__title > span"); if (activity) button.dataset.activityTitle = activity.textContent; });
+      });
+      syncAdventurePlannerUI();
+      if (optionsDialog && optionsDialog.open) optionsDialog.close();
+      window.setTimeout(function () { plan.scrollIntoView({ behavior: "smooth", block: "start" }); }, 80);
+      if (new URLSearchParams(window.location.search).get("continueCheckout") === "1") window.setTimeout(function () { updatePaymentSummary(); var checkout = document.getElementById("checkout"); if (checkout && typeof checkout.showModal === "function") checkout.showModal(); }, 120);
+    } else {
+      setPlannerStep("trip");
+      if (optionsDialog && !optionsDialog.open && typeof optionsDialog.showModal === "function") optionsDialog.showModal();
+    }
+  }
 
   if (shouldResumeGeneration) {
     window.setTimeout(function () {
@@ -2185,6 +2442,7 @@ function initTermsNavigation() {
 
 initAboutStory();
 initTermsNavigation();
+initExperienceMarketplaceNavigation();
 initMenu();
 initDialogs();
 initWelcomeFilm();

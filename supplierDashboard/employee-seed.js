@@ -10,7 +10,21 @@
   var employees = read("roamly-supplier-employees", []);
   employees = employees.filter(function (person) { return !(person.supplierId === account.id && person.testData === true); });
   employees.forEach(function (person) { if (person.supplierId === account.id) { delete person.testData; delete person.testLabel; } });
-  write("roamly-supplier-employees", employees);
+  var hikingTypes = ["Local tourist guides", "Organizing mountain hiking routes", "Cave and valley exploration tours"];
+  var demoStaffKey = "roamlyHikingDemoStaffV1:" + account.id;
+  var demoStaff = [
+    { id: "employee-" + account.id + "-mountain-guide-maya", name: "Maya Haddad", role: "Mountain hiking guide", experience: "5 years", languages: "Arabic, English", qualifications: "First aid, mountain navigation", bio: "Leads safe and scenic mountain routes.", serviceTypes: [hikingTypes[1]] },
+    { id: "employee-" + account.id + "-mountain-guide-sami", name: "Sami Khalil", role: "Trail assistant guide", experience: "4 years", languages: "Arabic, English", qualifications: "Trail safety, group support", bio: "Supports small groups on mountain trails.", serviceTypes: [hikingTypes[1]] },
+    { id: "employee-" + account.id + "-cave-guide-leen", name: "Leen Nasser", role: "Cave exploration guide", experience: "6 years", languages: "Arabic, English", qualifications: "Cave safety, first aid", bio: "Guides responsible cave and valley experiences.", serviceTypes: [hikingTypes[2]] },
+    { id: "employee-" + account.id + "-cave-guide-rami", name: "Rami Odeh", role: "Outdoor safety guide", experience: "5 years", languages: "Arabic, English", qualifications: "Canyon safety, rescue basics", bio: "Helps guests explore valleys with confidence.", serviceTypes: [hikingTypes[2]] }
+  ];
+  if (localStorage.getItem(demoStaffKey) !== "1") {
+    demoStaff.forEach(function (person) {
+      if (employees.some(function (existing) { return existing.id === person.id; })) return;
+      employees.push(Object.assign({ supplierId: account.id, serviceCategories: ["hiking"], active: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }, person));
+    });
+    localStorage.setItem(demoStaffKey, "1");
+  }
 
   var services = read("roamly-market-services", []);
   var removedIds = services.filter(function (service) { return service.supplierId === account.id && service.testData === true; }).map(function (service) { return service.id; });
@@ -27,14 +41,13 @@
     write("roamly-market-requests", requests.filter(function (request) { return removedIds.indexOf(request.serviceId) < 0; }));
   }
 
-  var hikingTypes = ["Local tourist guides", "Organizing mountain hiking routes", "Cave and valley exploration tours"];
-  var activeEmployees = employees.filter(function (person) { return person.supplierId === account.id && person.active !== false && ((person.serviceCategories || []).indexOf("hiking") >= 0 || (person.serviceTypes || []).some(function (type) { return hikingTypes.indexOf(type) >= 0; })); });
+  var activeEmployees = employees.filter(function (person) { var types = Array.isArray(person.serviceTypes) ? person.serviceTypes : String(person.serviceTypes || "").split(/[|,;]/); var categories = Array.isArray(person.serviceCategories) ? person.serviceCategories : [person.serviceCategories || person.category || ""]; return person.supplierId === account.id && person.active !== false && (categories.indexOf("hiking") >= 0 || types.some(function (type) { return hikingTypes.indexOf(String(type).trim()) >= 0; })); });
   if (activeEmployees.length < 1) { write("roamly-market-services", services); write("roamly-supplier-employees", employees); return; }
   function publicMember(person) { return { employeeId: person.id, name: person.name, role: person.role, experience: person.experience || "", languages: person.languages || "", qualifications: person.qualifications || "", bio: person.bio || "" }; }
   function teamFor(typeIndex, offerIndex) {
-    var count = Math.min(2, activeEmployees.length), start = (typeIndex * 2 + offerIndex) % activeEmployees.length, selected = [];
-    for (var i = 0; i < count; i++) selected.push(activeEmployees[(start + i) % activeEmployees.length]);
-    return selected;
+    var type = hikingTypes[typeIndex], isDemo = function (person) { return demoStaff.some(function (demo) { return demo.id === person.id; }); };
+    var selected = typeIndex === 0 ? activeEmployees.filter(function (person) { return !isDemo(person); }).slice(0, 2) : activeEmployees.filter(function (person) { return (Array.isArray(person.serviceTypes) ? person.serviceTypes : String(person.serviceTypes || "").split(/[|,;]/)).some(function (specialty) { return String(specialty).trim() === type; }); }).slice(0, 2);
+    return selected.length ? selected : activeEmployees.slice(0, Math.min(2, activeEmployees.length));
   }
   var offers = [
     { type: "Local tourist guides", id: "guided-nature-walk", title: "Guided nature and wildlife walk", price: "32", duration: "4 hours", difficulty: "Easy to moderate · suitable for families", capacity: "8", meetingPoint: "Agreed with the provider after confirmation", description: "Explore local landscapes, wildlife and natural heritage with a knowledgeable guide. The route is tailored to the selected destination.", included: "Local guide, route briefing and drinking water", requirements: "Comfortable walking shoes, sun protection and a refillable water bottle", safety: "Small groups; route and pace are adjusted to weather and participant needs.", availability: "Available by arrangement · reserve 24 hours ahead" },
@@ -52,6 +65,21 @@
     var selected = teamFor(typeNames.indexOf(offer.type), offerIndex), currentId = current.id, wasPublished = current.published !== false, createdAt = current.createdAt;
     Object.assign(current, offer, { id: currentId, supplierId: account.id, supplierName: account.businessName || account.name, category: "hiking", serviceType: offer.type, teamMemberIds: selected.map(function (person) { return person.id; }), team: selected.map(publicMember), published: wasPublished, createdAt: createdAt || new Date().toISOString(), updatedAt: new Date().toISOString() });
   });
+  services.forEach(function (service) {
+    if (service.supplierId !== account.id || service.category !== "hiking") return;
+    var typeIndex = hikingTypes.indexOf(service.serviceType);
+    if (typeIndex < 0) return;
+    var assigned = teamFor(typeIndex, 0);
+    service.teamMemberIds = assigned.map(function (person) { return person.id; });
+    service.team = assigned.map(publicMember);
+  });
+  var requests = read("roamly-market-requests", []), demoHistoryPrefix = "history-" + account.id + "-hiking-";
+  requests.forEach(function (request) {
+    if (String(request.id || "").indexOf(demoHistoryPrefix) !== 0) return;
+    var service = services.find(function (item) { return item.id === request.serviceId && item.supplierId === account.id; });
+    if (service && service.category === "hiking") request.teamSnapshot = (service.team || []).map(function (member) { return Object.assign({}, member); });
+  });
+  write("roamly-market-requests", requests);
   var catalogKey = "roamlySupplierHikingCatalogV2Initialized:" + account.id, catalogInitialized = localStorage.getItem(catalogKey) === "1";
   typeNames.forEach(function (type, typeIndex) {
     if (catalogInitialized) return;

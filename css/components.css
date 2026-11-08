@@ -615,11 +615,6 @@
   background: #f8fafc;
   border-top: 1px solid #f1f5f9;
   overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.roamly-ai-chips::-webkit-scrollbar {
-  display: none;
 }
 
 .roamly-ai-chip {

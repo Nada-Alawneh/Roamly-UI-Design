@@ -100,11 +100,17 @@
               <div>
                 <p class="planner-options__eyebrow">PLAN YOUR ESCAPE</p>
                 <h2 id="planner-options-title">Make this trip yours</h2>
-                <p class="planner-options__lead">Set the details that will shape your day-by-day plan.</p>
+                <p class="planner-options__lead">Share the trip details and the kind of experience you want. We’ll use them to shape your itinerary and find matching Adventure &amp; Nature providers.</p>
               </div>
               <button class="close-btn" type="button" data-dialog-close aria-label="Close trip preferences"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             </header>
-            <div class="planner-fields">
+            <ol class="planner-options__steps" aria-label="Trip planning steps">
+              <li class="is-active"><button type="button" data-planner-step-target="trip" aria-current="step"><span>01</span><div><strong>Your trip</strong><small>Route, dates, group, and budget</small></div></button></li>
+              <li><button type="button" data-planner-step-target="providers"><span>02</span><div><strong>Your experience style</strong><small>Choose a style, pace, and activity</small></div></button></li>
+            </ol>
+            <section class="planner-step-panel" data-planner-step-panel="trip" aria-labelledby="planner-trip-step-title">
+              <div class="planner-step-heading"><span class="planner-step-heading__icon"><i class="fa-solid fa-route" aria-hidden="true"></i></span><div><h3 id="planner-trip-step-title">Tell us about your trip</h3><p>These details shape your itinerary and help providers understand what you need.</p></div></div>
+              <div class="planner-fields">
           <label class="field">
             <span class="field__label">Leaving from</span>
             <div class="destination-combobox">
@@ -145,23 +151,26 @@
               <option>Luxury</option>
             </select>
           </label>
-          <label class="field">
-            <span class="field__label">Primary Style</span>
-            <select class="input" name="style">
-              <option selected>Adventure &amp; Nature</option>
-              <option>Culture &amp; History</option>
-              <option>Relaxation &amp; Wellness</option>
-              <option>Family Friendly</option>
-              <option>Culinary &amp; Food</option>
-              <option>Romantic &amp; Honeymoon</option>
-              <option>Shopping &amp; City Life</option>
-            </select>
-          </label>
             </div>
-            <div class="planner-panel__actions">
-              <button class="btn btn--soft" type="button" data-dialog-close>Cancel</button>
-              <button class="btn btn--primary btn--lg" type="submit"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Generate your free plan</button>
-            </div>
+              <div class="planner-wizard-actions"><p><i class="fa-solid fa-lock" aria-hidden="true"></i> Your details stay private until you choose to contact a provider.</p><button class="btn btn--primary btn--lg" type="button" data-planner-step-next>Continue to providers <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button></div>
+            </section>
+            <section class="planner-step-panel" data-planner-step-panel="providers" aria-labelledby="planner-provider-step-title" hidden>
+              <div class="planner-step-heading"><span class="planner-step-heading__icon"><i class="fa-solid fa-handshake-angle" aria-hidden="true"></i></span><div><h3 id="planner-provider-step-title">Choose who can bring your trip to life</h3><p>Only supplier categories with published offers are selectable. You can browse all details after your plan is ready.</p></div></div>
+              <div class="planner-fields planner-fields--providers">
+                <label class="field"><span class="field__label">What style of trip are you dreaming of?</span><select class="input" name="style"><option value="Adventure &amp; Nature">Adventure &amp; Nature · available now</option><option value="Culture &amp; History" disabled>Culture &amp; History · coming soon</option><option value="Relaxation &amp; Wellness" disabled>Relaxation &amp; Wellness · coming soon</option><option value="Family Friendly" disabled>Family Friendly · coming soon</option><option value="Culinary &amp; Food" disabled>Culinary &amp; Food · coming soon</option><option value="Romantic &amp; Honeymoon" disabled>Romantic &amp; Honeymoon · coming soon</option><option value="Shopping &amp; City Life" disabled>Shopping &amp; City Life · coming soon</option></select></label>
+                <label class="field"><span class="field__label">Which experience interests you most?</span><select class="input" name="experienceType"><option value="">Show all available experiences</option></select></label>
+                <label class="field"><span class="field__label">Your preferred pace</span><select class="input" name="tripPace"><option value="Balanced pace">Balanced pace</option><option value="Relaxed and unhurried">Relaxed and unhurried</option><option value="Active and full days">Active and full days</option><option value="Flexible, with free time">Flexible, with free time</option></select></label>
+                <label class="field"><span class="field__label">Experience level</span><select class="input" name="activityLevel"><option value="Open to all levels">Open to all levels</option><option value="Beginner friendly">Beginner friendly</option><option value="Some experience">Some experience</option><option value="Experienced adventurer">Experienced adventurer</option></select></label>
+                <input type="hidden" name="providerStyle" value="Adventure &amp; Nature"><input type="hidden" name="supplierId" value="">
+              </div>
+              <label class="field planner-notes-field"><span class="field__label">What would make this experience perfect for you? <span class="field__hint">Optional</span></span><textarea class="input" name="tripNotes" rows="2" maxlength="500" placeholder="Interests, must-see places, accessibility needs, dietary or safety notes"></textarea></label>
+              <p class="planner-provider-guidance" id="planner-provider-guidance"><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span>Adventure &amp; Nature is currently the only supplier style with published offers. Other styles will become available as providers join Roamly.</span></p>
+              <div class="planner-provider-results-head"><div><span class="planner-options__eyebrow">LIVE ON ROAMLY</span><h4>Adventure &amp; Nature providers</h4></div><span class="planner-provider-count" data-planner-provider-count>Loading providers…</span></div>
+              <div class="planner-provider-grid" id="planner-provider-grid" aria-live="polite"></div>
+              <p class="planner-provider-empty" id="planner-provider-empty" hidden>There are no published providers for this style yet. You can still generate your itinerary and come back to explore later.</p>
+              <div class="planner-wizard-actions planner-wizard-actions--split"><button class="btn btn--soft" type="button" data-planner-step-back><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to trip details</button><div><p>Choose an activity and provider, or keep all providers selected. We’ll build your plan and show matching offers next.</p><button class="btn btn--primary btn--lg" type="submit"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Show my plan and matching offers</button></div></div>
+            </section>
+            <div class="planner-panel__actions planner-panel__actions--cancel"><button class="btn btn--soft" type="button" data-dialog-close>Cancel</button></div>
           </section>
         </dialog>
       </form>
@@ -184,10 +193,24 @@
 
           <div class="planner-edit-note"><i class="fa-regular fa-compass" aria-hidden="true"></i><span>Tailor any stop to your pace and preferences with the edit wand.</span></div>
           <div class="day-list" data-day-list aria-label="Day-by-day itinerary"></div>
+          <section class="adventure-plan-bridge card" data-adventure-bridge hidden aria-labelledby="adventure-bridge-title">
+            <div class="adventure-plan-bridge__icon"><i class="fa-solid fa-mountain-sun" aria-hidden="true"></i></div>
+            <div class="adventure-plan-bridge__content">
+              <p class="planner-options__eyebrow">YOUR NEXT STEP · ADVENTURE &amp; NATURE</p>
+              <h3 id="adventure-bridge-title">Make this plan bookable with local providers</h3>
+              <p>We’ll show published experiences from the suppliers in Roamly that match your activity choice. Review the provider, team, price, and terms, then send a booking request for availability confirmation.</p>
+              <article class="adventure-plan-bridge__offer" data-adventure-recommended-offer hidden>
+                <span class="adventure-plan-bridge__offer-icon"><i class="fa-solid fa-person-hiking" aria-hidden="true"></i></span>
+                <div><small data-adventure-offer-provider></small><strong data-adventure-offer-title></strong><p data-adventure-offer-description></p><span data-adventure-offer-price></span></div>
+              </article>
+              <div class="adventure-plan-bridge__summary" data-adventure-bridge-summary></div>
+              <a class="btn btn--gold" data-open-adventure-marketplace href="adventure-marketplace.html"><i class="fa-solid fa-compass" aria-hidden="true"></i> Explore matching experiences</a>
+              <small>Sending a request does not confirm a booking or charge a payment. The supplier confirms availability and final price.</small>
+            </div>
+          </section>
         </div>
 
         <aside class="plan__col plan__col--side">
-          <section class="card supplier-discovery-card"><span class="supplier-discovery-card__icon"><i class="fa-solid fa-mountain-sun" aria-hidden="true"></i></span><div><p class="supplier-discovery-card__eyebrow">MAKE IT HAPPEN</p><h3>Book an outdoor experience</h3><p>Compare published experiences, equipment rentals, stays, and transport, then contact the provider company.</p><a id="exploreOutdoorProviders" href="adventure-marketplace.html">Explore Adventure &amp; Nature <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div></section>
           <section class="map-card" aria-labelledby="map-title">
             <div class="widget-head">
               <h3 class="widget-head__title" id="map-title"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> Area highlights</h3>
@@ -288,6 +311,7 @@
           <li><i class="fa-solid fa-check" aria-hidden="true"></i> Local transfers and listed activities</li>
         </ul>
       </div>
+      <p class="checkout__demo-note"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Demo checkout only: this screen does not charge a card. A payment provider must be connected before real payments can be accepted.</p>
       <p class="checkout__inclusions">Meals, shopping, and personal spending are not included. You can choose and pay for them locally during your trip. Final rates depend on availability and confirmation.</p>
 
       <fieldset class="pay-methods">
@@ -400,6 +424,5 @@
   </footer>
 
   <script src="js/main.js" defer></script>
-  <script src="supplierDashboard/marketplace-navigation.js" defer></script>
 <script src="sidebar-controls.js" defer></script></body>
 </html>

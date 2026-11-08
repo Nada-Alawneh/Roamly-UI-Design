@@ -1,7 +1,106 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Build a service team | Roamly</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link rel="stylesheet" href="../adminDashboard/admin.css"><link rel="stylesheet" href="supplier.css"></head>
-<body class="supplier-app supplier-workflow-page supplier-workflow-layout"><header class="workflow-header"><a href="supplier-dashboard.html#hiking"><img src="../assets/img/logo.png" alt="Roamly" width="142"></a><a class="btn-admin-secondary" id="backToTeams" href="supplier-dashboard.html#hiking"><i class="fa-solid fa-arrow-left"></i> Back to service types</a></header><main class="workflow-main"><p class="supplier-eyebrow">SUPPLIER STUDIO - TEAM BUILDER</p><h1 id="editorHeading">Create a team offer</h1><p class="workflow-intro">Set up a clear traveler-facing offer, then assign the members who will deliver it.</p><form id="teamEditorForm" class="workflow-form" novalidate>
-<section class="workflow-section experience-summary-card"><div class="workflow-section__head"><span>01</span><div><h2>Service details</h2><p id="experienceSummaryText">Add the service information travelers need before they book.</p></div><button class="btn-gold" id="openExperienceDetails" type="button"><i class="fa-solid fa-pen"></i> Add trip details</button></div><div class="experience-summary-pills" id="experienceSummaryPills"><span class="supplier-tag" id="experienceTypePill">Service type</span><span class="supplier-tag">Price, capacity and meeting point</span><span class="supplier-tag">What's included and safety</span></div></section>
-<section class="workflow-section" id="memberAssignmentSection"><div class="workflow-section__head"><span>02</span><div><h2>Assign members</h2><p id="selectedEmployeeCount">0 selected</p></div><div class="employee-picker-actions"><a class="btn-admin-secondary" id="manageMembersLink" href="employees.html" target="_blank" rel="noopener"><i class="fa-solid fa-users-gear"></i> Manage members</a><button class="btn-admin-secondary" id="refreshMembers" type="button"><i class="fa-solid fa-rotate"></i> Refresh roster</button><button class="btn-admin-secondary" id="toggleRoster" type="button" aria-expanded="true"><i class="fa-solid fa-eye-slash"></i> Hide members</button></div></div><div class="employee-filter-row"><input id="employeeSearch" type="search" placeholder="Search name, role or language"><select id="employeeCategoryFilter"><option value="all">All service categories</option><option value="hiking">Hiking &amp; Trail Companies</option><option value="equipment">Outdoor Equipment Rentals</option><option value="sports">Water &amp; Adventure Sports</option><option value="reserves">Nature Reserves &amp; Campsites</option><option value="transport">Specialized Transport</option></select><select id="employeeTypeFilter"><option value="all">All specialties</option></select></div><div class="employee-table-wrap" id="employeeTableWrap"><table class="employee-assignment-table"><thead><tr><th>Member</th><th>Experience</th><th>Languages &amp; qualifications</th><th>Team assignment</th><th>More</th></tr></thead><tbody id="employeeTableBody"></tbody></table><div class="supplier-empty" id="noMembersMessage" hidden>No members yet. Add member records from Manage members, then refresh this list.</div></div></section></form></main>
-<dialog class="supplier-dialog workflow-dialog experience-dialog" id="experienceDialog"><div><button class="dialog-close" id="closeExperienceDetails" type="button" aria-label="Close">×</button><p class="supplier-eyebrow">TRAVELER-FACING OFFER</p><h2>Service details</h2><p class="supplier-dialog-intro">Add the offer, preparation, access, and safety details travelers need. Their chosen destination is attached to each request.</p><div class="supplier-dialog-fields-grid"><label class="supplier-field">Service type<input id="serviceType" readonly></label><label class="supplier-field">Public offer name<input form="teamEditorForm" name="title" required maxlength="100" placeholder="Name this experience"></label><label class="supplier-field">Price per traveler<input form="teamEditorForm" name="price" type="number" min="0" step="0.01" required placeholder="Set a clear starting price"></label><label class="supplier-field">Duration<input form="teamEditorForm" name="duration" required maxlength="60" placeholder="e.g. 5 hours"></label><label class="supplier-field">Difficulty and suitability<input form="teamEditorForm" name="difficulty" required maxlength="100" placeholder="Moderate · suitable for active beginners"></label><label class="supplier-field">Maximum travelers<input form="teamEditorForm" name="capacity" type="number" min="1" required placeholder="e.g. 8"></label><label class="supplier-field">Meeting point (optional)<input form="teamEditorForm" name="meetingPoint" maxlength="140" placeholder="Can be agreed after booking"></label></div><label class="supplier-field">Experience description<textarea form="teamEditorForm" name="description" required rows="4" maxlength="1200" placeholder="What will travelers do? What makes this experience special?"></textarea></label><div class="supplier-dialog-fields-grid"><label class="supplier-field">What's included<textarea form="teamEditorForm" name="included" rows="3" maxlength="500" placeholder="Guide, equipment, water, permits..."></textarea></label><label class="supplier-field">What travelers should bring<textarea form="teamEditorForm" name="requirements" rows="3" maxlength="500" placeholder="Clothing, footwear, documents or other preparation"></textarea></label></div><div class="supplier-dialog-fields-grid" id="categorySpecificFields"></div><label class="supplier-field">Safety, accessibility and cancellation notes<textarea form="teamEditorForm" name="safety" rows="3" maxlength="700" placeholder="Safety measures, accessibility limits, weather policy or cancellation terms"></textarea></label><label class="supplier-field">Availability and advance notice<input form="teamEditorForm" name="availability" maxlength="180" placeholder="Operating days, seasons or advance notice"></label><div class="workflow-dialog__actions"><button class="btn-admin-secondary" type="button" id="cancelExperienceDetails">Cancel</button><button class="btn-gold" type="button" id="reviewPublishFromDetails">Review and publish</button></div></div></dialog>
-<dialog class="supplier-dialog workflow-dialog" id="publishDialog"><form method="dialog"><button class="dialog-close" value="cancel" aria-label="Close">×</button><p class="supplier-eyebrow">READY FOR TRAVELERS?</p><h2>Publish this team offer</h2><p class="supplier-dialog-intro" id="publishSummary">Review the service details before making them visible in Adventure &amp; Nature.</p><div class="workflow-dialog__actions"><button class="btn-admin-secondary" value="cancel">Keep editing</button><button class="btn-gold" value="publish">Publish offer</button></div></form></dialog><script src="employee-seed.js" defer></script><script src="category-catalog-seed.js" defer></script><script src="team-editor.js" defer></script><script src="workflow-shell.js" defer></script><script src="../sidebar-controls.js" defer></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create an experience | Roamly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../adminDashboard/admin.css">
+  <link rel="stylesheet" href="supplier.css">
+</head>
+<body class="supplier-app supplier-workflow-page supplier-workflow-layout">
+  <header class="workflow-header">
+    <a href="supplier-dashboard.html#hiking"><img src="../assets/img/logo.png" alt="Roamly" width="142"></a>
+    <a class="btn-admin-secondary" id="backToTeams" href="supplier-dashboard.html#hiking"><i class="fa-solid fa-arrow-left"></i> Back to services</a>
+  </header>
+  <main class="workflow-main team-editor-main">
+    <p class="supplier-eyebrow">SUPPLIER STUDIO · EXPERIENCE BUILDER</p>
+    <h1 id="editorHeading">Create a new experience</h1>
+    <p class="workflow-intro">Add the experience details first. Then choose the employees who will deliver it.</p>
+
+    <form id="teamEditorForm" class="workflow-form" novalidate>
+      <section class="workflow-section experience-form-section" id="experienceDetailsSection">
+        <div class="workflow-section__head">
+          <span>01</span>
+          <div><h2 id="detailsStepTitle">Experience details</h2><p>Travelers will see this information before they send a booking request.</p></div>
+          <span class="supplier-tag" id="experienceTypePill">Service type</span>
+        </div>
+        <div class="experience-collapsed-summary" id="experienceCollapsedSummary" hidden><i class="fa-solid fa-circle-check"></i><span id="experienceCollapsedText">No details saved yet.</span></div>
+        <button class="btn-admin-secondary experience-form-toggle" id="experienceFormToggle" type="button" aria-expanded="false" aria-controls="experienceFormPanel"><i class="fa-solid fa-plus"></i> Add experience details</button>
+        <div id="experienceFormPanel" hidden>
+        <div class="experience-fields-grid">
+          <label class="supplier-field experience-field-wide">Experience name<input name="title" required maxlength="100" placeholder="For example: Guided mountain trail"></label>
+          <label class="supplier-field">Price (USD)<input name="price" type="number" min="0" step="0.01" required placeholder="Starting price"></label>
+          <label class="supplier-field">Duration<input name="duration" required maxlength="60" placeholder="For example: 5 hours"></label>
+          <label class="supplier-field" id="difficultyField">Difficulty and suitability<input name="difficulty" required maxlength="100" placeholder="For example: Moderate · suitable for active beginners"></label>
+          <label class="supplier-field"><span id="capacityLabel">Maximum travelers</span><input name="capacity" type="number" min="1" required placeholder="For example: 8"></label>
+          <label class="supplier-field">Meeting point <span class="field-optional">(optional)</span><input name="meetingPoint" maxlength="140" placeholder="Can be agreed after booking"></label>
+          <label class="supplier-field experience-field-wide">Experience description<textarea name="description" required rows="4" maxlength="1200" placeholder="Describe what travelers will do and what makes this experience special."></textarea></label>
+          <label class="supplier-field">What's included<textarea name="included" rows="3" maxlength="500" placeholder="Guide, equipment, water, permits..."></textarea></label>
+          <label class="supplier-field">What travelers should bring<textarea name="requirements" rows="3" maxlength="500" placeholder="Clothing, footwear, documents, or preparation"></textarea></label>
+          <div class="supplier-dialog-fields-grid experience-field-wide" id="categorySpecificFields"></div>
+          <label class="supplier-field experience-field-wide">Safety, accessibility, and cancellation<textarea name="safety" rows="3" maxlength="700" placeholder="Safety measures, accessibility, weather policy, or cancellation terms"></textarea></label>
+          <label class="supplier-field">Availability<input name="availability" maxlength="180" placeholder="Operating days, seasons, or advance notice"></label>
+          <label class="supplier-field">Cover image URL <span class="field-optional">(optional)</span><input name="coverImage" type="url" maxlength="500" placeholder="https://example.com/experience.jpg"></label>
+        </div>
+        <div class="experience-save-row">
+          <p id="experienceSaveStatus"><i class="fa-solid fa-circle-info"></i> Save these details to continue to employee selection.</p>
+          <button class="btn-gold" id="saveExperienceDetails" type="button"><i class="fa-solid fa-floppy-disk"></i> Save experience and continue</button>
+        </div>
+        </div>
+      </section>
+
+      <section class="workflow-section assignment-locked" id="assignmentLockedSection">
+        <span class="assignment-locked__icon"><i class="fa-solid fa-lock" aria-hidden="true"></i></span>
+        <div><h2>Next: choose your team</h2><p>Save the experience details above first. Then select one or more active employees.</p></div>
+      </section>
+
+      <section class="workflow-section employee-assignment-section" id="memberAssignmentSection" hidden>
+        <div class="workflow-section__head">
+          <span>02</span>
+          <div><h2>Choose employees</h2><p id="selectedEmployeeCount">No employees selected</p></div>
+          <div class="employee-picker-actions">
+            <a class="btn-admin-secondary" id="manageMembersLink" href="employees.html" target="_blank" rel="noopener"><i class="fa-solid fa-users-gear"></i> Manage employees</a>
+            <button class="btn-admin-secondary" id="refreshMembers" type="button"><i class="fa-solid fa-rotate"></i> Refresh list</button>
+          </div>
+        </div>
+        <p class="assignment-guidance">Choose employees who belong to this service category or have this specialty. Employees can be assigned to more than one experience.</p>
+        <div class="employee-select-area">
+          <div class="employee-select-control">
+            <button class="employee-select-toggle" id="employeeSelectToggle" type="button" aria-expanded="false" aria-controls="employeeSelectMenu"><span id="employeeSelectLabel">Select employees</span><i class="fa-solid fa-chevron-down"></i></button>
+            <div class="employee-select-menu" id="employeeSelectMenu" hidden>
+              <label class="employee-select-all"><input id="selectAllEmployees" type="checkbox"><span><strong>Select all available employees</strong><small>Or choose employees individually below.</small></span></label>
+              <input id="employeeSearch" type="search" placeholder="Search employees by name or role">
+              <div id="employeeOptions" class="employee-select-options"></div>
+            </div>
+          </div>
+          <div id="selectedEmployeeList" class="selected-employee-list" aria-live="polite"></div>
+          <p class="supplier-empty employee-select-empty" id="noMembersMessage" hidden>No active employees match this experience. Add employees in Manage employees, then refresh this list.</p>
+        </div>
+        <div class="assignment-publish-bar">
+          <p id="assignmentPublishHint">Select at least one active employee to publish this experience.</p>
+          <button class="btn-gold" id="publishServiceButton" type="button"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Review and publish experience</button>
+        </div>
+      </section>
+    </form>
+  </main>
+
+  <dialog class="supplier-dialog workflow-dialog" id="publishDialog">
+    <form method="dialog">
+      <button class="dialog-close" value="cancel" aria-label="Close">×</button>
+      <p class="supplier-eyebrow">READY FOR TRAVELERS?</p>
+      <h2>Publish this experience?</h2>
+      <p class="supplier-dialog-intro" id="publishSummary">Review your experience before making it visible to travelers.</p>
+      <div class="workflow-dialog__actions"><button class="btn-admin-secondary" value="cancel">Keep editing</button><button class="btn-gold" value="publish">Publish experience</button></div>
+    </form>
+  </dialog>
+  <script src="employee-seed.js" defer></script>
+  <script src="category-catalog-seed.js" defer></script>
+  <script src="team-editor.js" defer></script>
+  <script src="workflow-shell.js" defer></script>
+  <script src="../sidebar-controls.js" defer></script>
+</body>
+</html>

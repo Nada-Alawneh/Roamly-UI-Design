@@ -3,8 +3,8 @@
     var targets = new Set();
     var planeSize = 24;
     function isCandidate(element) {
-      if (!element) return false;
-      if (element === document.scrollingElement || element.matches("dialog, .main-area, .employee-table-wrap")) return true;
+      if (!element || element === document.scrollingElement || element.matches(".main-area")) return false;
+      if (element.matches("dialog, .employee-table-wrap")) return true;
       var style = window.getComputedStyle(element);
       return /^(auto|scroll)$/.test(style.overflowY) || /^(auto|scroll)$/.test(style.overflowX);
     }
@@ -19,11 +19,12 @@
       rail.className = "scroll-plane-rail scroll-plane-rail--floating"; rail.setAttribute("aria-hidden", "true");
       plane.className = "fa-solid fa-plane scroll-plane"; rail.appendChild(plane);
       (target.tagName === "DIALOG" ? target : document.body).appendChild(rail);
-      var frame = 0;
+      var frame = 0, activeAxis = "", dragging = false;
       function update() {
         var overflowY = target.scrollHeight > target.clientHeight + 2, overflowX = target.scrollWidth > target.clientWidth + 2;
         var isRoot = target === document.scrollingElement, style = window.getComputedStyle(target);
         var axis = overflowY && (isRoot || /^(auto|scroll)$/.test(style.overflowY)) ? "y" : overflowX && (isRoot || /^(auto|scroll)$/.test(style.overflowX)) ? "x" : "";
+        activeAxis = axis;
         if (!axis || target.tagName === "DIALOG" && !target.open) { rail.hidden = true; return; }
         var rect = isRoot ? { left: 0, right: window.innerWidth, top: 0, bottom: window.innerHeight, width: window.innerWidth, height: window.innerHeight } : target.getBoundingClientRect();
         if (rect.width < 40 || rect.height < 40 || rect.bottom < 0 || rect.top > window.innerHeight) { rail.hidden = true; return; }
@@ -44,6 +45,23 @@
         }
       }
       function scheduleUpdate() { if (frame) return; frame = requestAnimationFrame(function () { frame = 0; update(); }); }
+      function scrollToPointer(event) {
+        var rect = rail.getBoundingClientRect(), ratio;
+        if (activeAxis === "y") {
+          var travel = Math.max(1, rect.height - planeSize - 4);
+          ratio = Math.max(0, Math.min(1, (event.clientY - rect.top - planeSize / 2) / travel));
+          target.scrollTop = ratio * (target.scrollHeight - target.clientHeight);
+        } else if (activeAxis === "x") {
+          var travelX = Math.max(1, rect.width - planeSize - 4);
+          ratio = Math.max(0, Math.min(1, (event.clientX - rect.left - planeSize / 2) / travelX));
+          target.scrollLeft = ratio * (target.scrollWidth - target.clientWidth);
+        }
+      }
+      rail.addEventListener("pointerdown", function (event) { if (!activeAxis || rail.hidden) return; event.preventDefault(); dragging = true; rail.setPointerCapture(event.pointerId); scrollToPointer(event); });
+      rail.addEventListener("pointermove", function (event) { if (dragging) scrollToPointer(event); });
+      function stopDragging() { dragging = false; }
+      rail.addEventListener("pointerup", stopDragging);
+      rail.addEventListener("pointercancel", stopDragging);
       target.addEventListener("scroll", scheduleUpdate, { passive: true });
       window.addEventListener("scroll", scheduleUpdate, { passive: true });
       window.addEventListener("resize", scheduleUpdate);
@@ -84,6 +102,7 @@
     rail.appendChild(plane);
     if (sidebarTop) sidebarTop.appendChild(rail);
 
+    var draggingSidebar = false;
     function updatePlane() {
       if (!nav || !sidebarTop || window.innerWidth <= 820 || nav.scrollHeight <= nav.clientHeight + 2) {
         rail.hidden = true;
@@ -99,6 +118,18 @@
       var ratio = maxScroll ? nav.scrollTop / maxScroll : 0;
       plane.style.transform = "translateY(" + (ratio * travel) + "px) rotate(90deg)";
     }
+    function scrollSidebarTo(clientY) {
+      if (!nav) return;
+      var rect = rail.getBoundingClientRect(), travel = Math.max(1, rect.height - 30);
+      var ratio = Math.max(0, Math.min(1, (clientY - rect.top - 15) / travel));
+      nav.scrollTop = ratio * (nav.scrollHeight - nav.clientHeight);
+    }
+    rail.addEventListener("pointerdown", function (event) { if (rail.hidden) return; event.preventDefault(); draggingSidebar = true; rail.setPointerCapture(event.pointerId); scrollSidebarTo(event.clientY); });
+    rail.addEventListener("pointermove", function (event) { if (draggingSidebar) scrollSidebarTo(event.clientY); });
+    function stopSidebarDrag() { draggingSidebar = false; }
+    rail.addEventListener("pointerup", stopSidebarDrag);
+    rail.addEventListener("pointercancel", stopSidebarDrag);
+
     toggle.addEventListener("click", function () {
       collapsed = !document.body.classList.contains("sidebar-collapsed");
       document.body.classList.toggle("sidebar-collapsed", collapsed);

@@ -16,7 +16,9 @@
   function seedCompletedHistory() {
     var seedKey = "roamlyCompletedHistory:" + account.id + ":" + category + ":" + type;
     if (localStorage.getItem(seedKey)) return;
-    var offers = services.filter(function (service) { return service.supplierId === account.id && service.category === category && service.serviceType === type && service.published !== false && (category === "equipment" || (service.team || []).length); });
+    // Completed-history demo bookings are useful for exercising the history/search UI
+    // even before an offer has been published or assigned a team.
+    var offers = services.filter(function (service) { return service.supplierId === account.id && service.category === category && service.serviceType === type; });
     if (!offers.length) return;
     var existingCount = requests.filter(function (request) { return request.supplierId === account.id && request.status === "Completed" && request.serviceType === type; }).length;
     var travelers = [
