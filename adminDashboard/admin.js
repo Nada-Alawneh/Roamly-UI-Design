@@ -3,41 +3,29 @@
  */
 
 /* ---------- 1. DATA SOURCES ---------- */
-const bookings = [
-  {
-    name: 'Nada Alawneh',
-    dest: 'Istanbul, Turkey',
-    ref: '#RMLY-9824X',
-    pay: 'Paid in Full ($4.99)',
-    payBg: 'var(--sky-bg)',
-    payFg: 'var(--sky)',
-    status: 'Confirmed',
-    statBg: 'var(--emerald-bg)',
-    statFg: 'var(--emerald)'
-  },
-  {
-    name: 'Ahmad Omar',
-    dest: 'Paris, France',
-    ref: '#RMLY-4412B',
-    pay: 'Split Bill ($3.50/ea)',
-    payBg: 'var(--amber-bg)',
-    payFg: 'var(--gold-600)',
-    status: 'Pending Party',
-    statBg: 'var(--amber-bg)',
-    statFg: 'var(--gold-600)'
-  },
-  {
-    name: 'Sara Khalid',
-    dest: 'Bali, Indonesia',
-    ref: '#RMLY-7731C',
-    pay: 'Wallet Credit ($28.00)',
-    payBg: 'var(--purple-bg)',
-    payFg: 'var(--purple)',
-    status: 'Confirmed',
-    statBg: 'var(--emerald-bg)',
-    statFg: 'var(--emerald)'
+const bookings = [];
+function syncSupplierBookings(){
+  const records=window.RoamlyPlatform?RoamlyPlatform.ledger():[];
+  const paymentLabels = { "Paid (demo)": "Payment recorded", "Awaiting group payment (demo)": "Awaiting group shares" };
+  const format = (cents) => new Intl.NumberFormat(undefined, { style: "currency", currency: "USD" }).format(cents / 100);
+  const tripPayments = new Map(records.filter(r => r.packagePayment).map(r => {
+    const shares = r.packagePayment.sharesCents;
+    const recorded = r.payment?.mode === "split" && shares
+      ? (r.payment.paidShares || []).reduce((sum, index) => sum + (shares[index] || 0), 0)
+      : r.packagePayment.totalCents;
+    return [r.bookingGroupId, recorded];
+  }));
+  const summary = document.querySelector("[data-trip-payment-ledger]");
+  if (summary) {
+    const collected = [...tripPayments.values()].reduce((sum, cents) => sum + cents, 0);
+    const payable = records.filter(r => r.packagePayment && r.settled).reduce((sum, r) => sum + r.financials.netCents, 0);
+    summary.textContent = "Unified trip payments (demo): " + format(collected) + " · Confirmed supplier payables: " + format(payable);
   }
-];
+  bookings.splice(0,bookings.length,...records.map(r=>({name:r.travelerName,dest:r.tripContext?.destination||r.destinationCountry||"",ref:r.packagePayment ? r.packagePayment.receiptId : r.id,pay:r.packagePayment ? (r.supplierName || "Supplier") + " · " + format(r.financials.netCents) + " · " + (r.settled ? "Payable" : "Pending confirmation") : (r.payment?.mode==="split"?"Split Bill":"Pay in Full")+" · "+(paymentLabels[r.payment?.status]||r.payment?.status||"Unpaid"),payBg:"var(--sky-bg)",payFg:"var(--sky)",status:r.status,statBg:"var(--emerald-bg)",statFg:"var(--emerald)"})));
+}
+syncSupplierBookings();
+window.addEventListener('storage',function(event){if(event.key==='roamly-market-requests'){syncSupplierBookings();renderBookings(bookings);}});
+
 
 const prompts = [
   {

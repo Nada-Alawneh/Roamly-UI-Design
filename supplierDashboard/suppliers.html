@@ -1,3 +1,65 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Adventure &amp; Nature Providers | Roamly</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link rel="stylesheet" href="../css/base.css"><link rel="stylesheet" href="../css/layout.css"><link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="supplier.css"></head>
-<body class="market-page"><header class="market-header"><a href="../index.html"><img src="../assets/img/logo.png" alt="Roamly" width="150"></a><a class="btn btn--soft" href="../ai-planner.html">Back to planner</a></header><main class="market-main"><p class="supplier-eyebrow">FIND YOUR OUTDOOR EXPERIENCE</p><h1>Adventure &amp; Nature</h1><p class="market-intro">Compare Adventure &amp; Nature services available to travelers worldwide. Choose a team and send a booking request to its company.</p><p class="market-destination-note" id="marketDestinationNote" hidden></p><div class="market-toolbar"><label>Service type <select id="market-filter"><option value="all">All provider categories</option></select></label><label>Sort by <select id="market-sort"><option value="rating">Top rated</option><option value="price">Price: low to high</option><option value="name">Provider name</option></select></label><span id="market-count"></span></div><section class="market-grid" id="market-list" aria-live="polite"></section><section class="market-requests"><h2>Your requests &amp; conversations</h2><div id="traveler-requests"></div></section></main><dialog class="supplier-dialog" id="booking-dialog"><form method="dialog" id="booking-form"><button class="dialog-close" value="cancel" aria-label="Close">×</button><p class="supplier-eyebrow">CONTACT PROVIDER</p><h2 id="booking-title">Request a booking</h2><input type="hidden" name="supplierId"><input type="hidden" name="serviceId"><label class="supplier-field">Preferred date<input name="date" type="date" required></label><label class="supplier-field">Travelers<input name="travelers" type="number" min="1" value="1" required></label><label class="supplier-field">Message<textarea name="message" rows="3" placeholder="Tell the provider what you need"></textarea></label><div class="supplier-dialog-actions"><button class="btn-admin-secondary" value="cancel">Cancel</button><button class="btn-gold" value="send">Send request</button></div></form></dialog><dialog class="supplier-dialog" id="ratingDialog"><form id="ratingForm"><button class="dialog-close" type="button" data-close-rating aria-label="Close">×</button><p class="supplier-eyebrow">TRAVELER REVIEW</p><h2>Rate this experience</h2><input type="hidden" name="serviceId"><p class="supplier-dialog-intro">Share a rating after a confirmed booking.</p><label class="supplier-field">Your rating<select name="rating" required><option value="">Choose a rating</option><option value="5">5 · Excellent</option><option value="4">4 · Very good</option><option value="3">3 · Good</option><option value="2">2 · Fair</option><option value="1">1 · Poor</option></select></label><div class="supplier-dialog-actions"><button class="btn-admin-secondary" type="button" data-close-rating>Cancel</button><button class="btn-gold" type="submit">Save rating</button></div></form></dialog><script src="supplier.js" defer></script><script src="marketplace-service-filter.js" defer></script><script src="../sidebar-controls.js" defer></script></body></html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Adventure &amp; Nature Providers | Roamly</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link rel="stylesheet" href="../shared/css/base.css"><link rel="stylesheet" href="../shared/css/layout.css"><link rel="stylesheet" href="../shared/css/components.css"><link rel="stylesheet" href="supplier.css">  <link rel="stylesheet" href="../shared/css/features.css">
+<script src="../shared/js/platform.js" defer></script></head>
+<body class="market-page"><header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="../user/index.html" aria-label="Roamly home">
+       <span class="brand__mark"><img src="../shared/assets/img/logo.png" alt="" width="180" height="70"></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+        <i class="fa-solid fa-bars" aria-hidden="true"></i><span class="sr-only">Menu</span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul class="nav-pill">
+          <li><a class="nav-pill__link" href="../user/index.html">Home</a></li>
+          <li>
+            <details class="rx-tourism">
+              <summary class="nav-pill__link" data-i18n="tourism">Explore with AI ▾</summary>
+              <div class="rx-tourism-menu">
+                <a href="../user/jordan-narrative.html" data-i18n="jordan">The Jordanian Narrative</a>
+                <a href="../user/ai-planner.html" data-i18n="global">Global AI Planner</a>
+              </div>
+            </details>
+          </li>
+          <li><a class="nav-pill__link" href="../user/adventure-marketplace.html" data-experiences-link>Experiences</a></li>
+          <li><a class="nav-pill__link" href="../user/destinations.html">Destinations</a></li>
+          <li><a class="nav-pill__link" href="../user/pricing.html">Pricing</a></li>
+          <li><a class="nav-pill__link" href="../user/about.html">About Us</a></li>
+          <li><a class="nav-pill__link" href="../user/Contact-Us.html">Contact Us</a></li>
+          <li><a class="nav-pill__link" href="../user/community.html" data-i18n="community">Community</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <div id="guestActions" class="nav-auth-group">
+          <a href="../user/sign-in.html" class="btn btn--dark btn--md">
+            <i class="fa-regular fa-circle-user" aria-hidden="true"></i> Sign In
+          </a>
+        </div>
+
+        <div class="user-menu-wrap" id="loggedActions" style="display: none;">
+          <button type="button" class="user-menu-trigger" id="userMenuToggle" aria-expanded="false">
+            <span class="user-avatar">N</span>
+            <span class="user-name">Nada Alawneh</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="user-dropdown" id="userDropdownMenu">
+            <div class="user-dropdown__header">
+              <p class="user-dropdown__title">Signed in as</p>
+              <p class="user-dropdown__email">nada@roamly.com</p>
+            </div>
+            <ul class="user-dropdown__list">
+              <li><a href="../user/profile.html"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li>
+              <li><a href="../user/itineraries.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li>
+              <li><button type="button" class="currency-switch-btn"><i class="fa-solid fa-globe" aria-hidden="true"></i> Currency: <strong>USD ($)</strong></button></li>
+              <li><a href="../user/settings.html"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li>
+              <li class="user-dropdown__divider"></li>
+              <li><button type="button" id="logoutBtn" class="logout-link"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log Out</button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header><main class="market-main"><p class="traveler-page-links"><a class="btn btn--soft" href="../user/ai-planner.html">Back to planner</a></p><p class="supplier-eyebrow">FIND YOUR OUTDOOR EXPERIENCE</p><h1>Adventure &amp; Nature</h1><p class="market-intro">Compare Adventure &amp; Nature services available to travelers worldwide. Choose a team and send a booking request to its company.</p><p class="market-destination-note" id="marketDestinationNote" hidden></p><div class="market-toolbar"><label>Service type <select id="market-filter"><option value="all">All provider categories</option></select></label><label>Sort by <select id="market-sort"><option value="rating">Top rated</option><option value="price">Price: low to high</option><option value="name">Provider name</option></select></label><span id="market-count"></span></div><section class="market-grid" id="market-list" aria-live="polite"></section><section class="market-requests"><h2>Your requests &amp; conversations</h2><div id="traveler-requests"></div></section></main><dialog class="supplier-dialog" id="booking-dialog"><form method="dialog" id="booking-form"><button class="dialog-close" value="cancel" aria-label="Close">×</button><p class="supplier-eyebrow">CONTACT PROVIDER</p><h2 id="booking-title">Request a booking</h2><input type="hidden" name="supplierId"><input type="hidden" name="serviceId"><label class="supplier-field">Preferred date<input name="date" type="date" required></label><label class="supplier-field">Travelers<input name="travelers" type="number" min="1" value="1" required></label><label class="supplier-field">Message<textarea name="message" rows="3" placeholder="Tell the provider what you need"></textarea></label><div class="supplier-dialog-actions"><button class="btn-admin-secondary" value="cancel">Cancel</button><button class="btn-gold" value="send">Send request</button></div></form></dialog><dialog class="supplier-dialog" id="ratingDialog"><form id="ratingForm"><button class="dialog-close" type="button" data-close-rating aria-label="Close">×</button><p class="supplier-eyebrow">TRAVELER REVIEW</p><h2>Rate this experience</h2><input type="hidden" name="serviceId"><p class="supplier-dialog-intro">Share a rating after a confirmed booking.</p><label class="supplier-field">Your rating<select name="rating" required><option value="">Choose a rating</option><option value="5">5 · Excellent</option><option value="4">4 · Very good</option><option value="3">3 · Good</option><option value="2">2 · Fair</option><option value="1">1 · Poor</option></select></label><div class="supplier-dialog-actions"><button class="btn-admin-secondary" type="button" data-close-rating>Cancel</button><button class="btn-gold" type="submit">Save rating</button></div></form></dialog><script src="../shared/js/supplier-services.js" defer></script><script src="supplier.js" defer></script><script src="../user/js/marketplace-service-filter.js" defer></script><script src="../shared/js/sidebar-controls.js" defer></script><script src="../shared/js/main.js" defer></script>
+<script src="../shared/js/translations-ar.js" defer></script><script src="../shared/js/i18n.js" defer></script>
+<script src="../shared/js/roamly-features.js" defer></script>
+<script src="../shared/js/integration.js" defer></script></body></html>

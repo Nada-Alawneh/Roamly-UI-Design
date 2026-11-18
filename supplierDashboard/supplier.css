@@ -1,13 +1,6 @@
 ﻿/* Shared supplier portal and traveler marketplace */
 .supplier-workflow-page { color:#0f172a; background:#f5f4f0; }
-.scroll-plane-rail--floating { position:fixed; z-index:9999; display:block; border-right:4px solid #e3ad45; pointer-events:auto; cursor:grab; touch-action:none; }
-.scroll-plane-rail--floating[hidden] { display:none; }
-.scroll-plane-rail--floating .scroll-plane { position:absolute; top:0; right:-6px; display:grid; width:24px; height:24px; place-items:center; color:#ffd46a; font-size:22px; pointer-events:none; filter:drop-shadow(0 0 8px rgba(255,196,62,.8)); transition:none; }
-.scroll-plane-rail--floating.is-horizontal { border-right:0; border-top:4px solid #e3ad45; }
-.scroll-plane-rail--floating.is-horizontal .scroll-plane { top:-11px; right:auto; left:0; }
-.supplier-dialog { overflow-y:auto; scrollbar-width:none; }
-.supplier-dialog::-webkit-scrollbar { display:none; }
-.supplier-workflow-layout .main-area { height:100vh; min-width:0; overflow-y:auto; }
+.supplier-dialog { overflow-y:auto; }.supplier-workflow-layout .main-area { height:100vh; min-width:0; overflow-y:auto; }
 .workflow-header { position:static; z-index:auto; display:flex; align-items:center; justify-content:flex-end; min-height:54px; padding:8px clamp(20px,3vw,44px); border-bottom:1px solid #e7e2d8; background:rgba(255,255,255,.72); }
 .workflow-header>a:first-child { display:none; }
 .supplier-workflow-layout .workflow-main { width:min(1120px,calc(100% - 40px)); margin:30px auto 65px; }
@@ -327,6 +320,16 @@
 .market-booking-count { margin:11px 0 0; color:#718096; font-size:9px; }
 .market-booking-count i { margin-right:5px; color:#a36d21; }
 .market-card[hidden] { display:none; }
+[data-market-catalog][hidden], [data-market-hero][hidden], [data-market-inbox][hidden], #market-more[hidden] { display: none; }
+.market-more { display: flex; justify-content: center; margin-top: 24px; }
+html:has([data-market-inbox]:not([hidden])):not(:has(dialog:modal)) {
+  overflow-y: auto;
+}
+[data-market-inbox] .market-requests { max-width: 920px; padding-block-end: 24px; }
+.market-chat { background: #fff; border: 1px solid #dce4ed; border-radius: 16px; }
+.market-chat > summary { cursor: pointer; padding: 16px 20px; color: #17243c; overflow-wrap: anywhere; }
+.market-chat > summary span { display: block; margin-inline-start: 1.25em; color: #53627a; font-size: .875rem; }
+.market-chat > .request-card { border: 0; border-top: 1px solid #dce4ed; border-radius: 0 0 16px 16px; }
 .market-toolbar select,.market-toolbar input { max-width:260px; }
 .request-reply { display:flex; gap:8px; margin-top:10px; }
 .request-reply input { flex:1; min-width:0; padding:9px 11px; border:1px solid #dce2ea; border-radius:9px; font:500 11px Inter,sans-serif; }
@@ -377,4 +380,163 @@
 .market-company-contact{display:flex;align-items:center;gap:10px;width:max-content;max-width:100%;padding:10px 12px;border:1px solid #eadfc9;border-radius:10px;background:#fffaf0;color:#79591e;text-decoration:none}.market-company-contact>i{display:grid;width:30px;height:30px;place-items:center;border-radius:9px;background:#f6e8c7}.market-company-contact span{display:grid;gap:3px}.market-company-contact small{color:#8a795a;font-size:9px}.market-company-contact strong{overflow-wrap:anywhere;font-size:11px}.request-itinerary-preview{margin:10px 0;padding:10px;border:1px solid #e7eaf0;border-radius:10px;background:#f9fafb}.request-itinerary-preview>summary{color:#33445d;font-size:10px;font-weight:800;cursor:pointer}.request-itinerary-preview__body{display:grid;gap:8px;max-height:230px;overflow:auto;margin-top:9px}.request-itinerary-preview__body article{padding:8px 10px;border-radius:8px;background:#fff}.request-itinerary-preview__body strong{color:#33445d;font-size:9px}.request-itinerary-preview__body ul{display:grid;gap:3px;margin:5px 0 0;padding-left:15px;color:#718096;font-size:9px}
 .traveler-payment-next-step{margin:12px 0;padding:11px 13px;border:1px solid #eadfca;border-radius:10px;color:#725b32;background:#fffaf0;font-size:10px;line-height:1.55}
 .market-details-dialog{width:min(820px,calc(100% - 24px));max-height:calc(100vh - 24px);padding:0;border:0;background:transparent;box-shadow:none;overflow:visible}.market-details-dialog::backdrop{background:rgba(6,11,24,.66);backdrop-filter:blur(4px)}.checkout__form[hidden]{display:none!important}
-.market-grid{align-items:stretch}.market-card{display:flex;height:100%;min-height:100%;flex-direction:column}.market-card__meta{margin-top:auto}.market-card__more,.market-card__contact{width:100%;min-height:43px;justify-content:center;margin-top:9px}.market-card__more{display:flex;align-items:center}.market-card__full-details{display:none!important}.market-details-dialog__card{position:relative;width:min(100%,760px);max-height:calc(100vh - 40px);overflow:auto;padding:28px;border:1px solid #eadfc9;border-radius:20px;background:#fff;box-shadow:0 24px 70px rgba(9,18,35,.2)}.market-details-dialog__card h2{max-width:calc(100% - 42px);margin:0 0 14px;color:#15233d;font-size:24px;line-height:1.25}.market-details-dialog__content{display:grid;gap:15px}.market-details-dialog__image{width:100%;max-height:270px;object-fit:cover;border-radius:14px}.market-details-dialog__description,.market-details-dialog__section>p{margin:0;color:#63738a;font-size:12px;line-height:1.7;white-space:pre-wrap}.market-details-dialog__section{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:14px;border:1px solid #edf0f3;border-radius:13px;background:#fafbfc}.market-details-dialog__section h3{grid-column:1/-1;margin:0 0 2px;color:#253550;font-size:12px}.market-details-row{display:grid;gap:4px;min-width:0;padding:8px;border-radius:9px;background:#fff}.market-details-row>span{color:#8490a0;font-size:9px;font-weight:700}.market-details-row>strong{color:#33445d;font-size:10px;line-height:1.5;overflow-wrap:anywhere;white-space:pre-wrap}.market-details-dialog__team article{display:grid;grid-column:1/-1;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:10px;border:1px solid #edf0f3;border-radius:10px;background:#fff}.market-details-dialog__team article>strong{grid-column:1/-1;color:#253550;font-size:11px}.market-details-dialog__team article>p{grid-column:1/-1;margin:0;color:#64748b;font-size:10px;line-height:1.5;white-space:pre-wrap}.traveler-confirm-booking{flex:none;margin:8px 0}.traveler-confirmed-note{margin:12px 0;padding:11px 13px;border:1px solid #cae4d5;border-radius:10px;color:#216b4b;background:#f1faf5;font-size:11px;line-height:1.55}.supplier-confirm-consent{display:flex;align-items:flex-start;gap:9px;margin:12px 0;color:#56657a;font-size:10px;line-height:1.5}.supplier-confirm-consent input{flex:none;margin-top:2px;accent-color:#bd852e}.market-details-dialog__card .supplier-dialog-actions{margin-top:17px}@media(max-width:600px){.market-details-dialog__card{padding:22px 16px}.market-details-dialog__section,.market-details-dialog__team article{grid-template-columns:1fr}.market-details-dialog__section h3,.market-details-dialog__team article>strong,.market-details-dialog__team article>p{grid-column:1}}
+.market-grid{align-items:stretch}.market-card{display:flex;height:100%;min-height:100%;flex-direction:column}.market-card__meta{margin-top:auto}.market-card__more,.market-card__contact{width:100%;min-height:43px;justify-content:center;margin-top:9px}.market-card__more{display:flex;align-items:center}.market-card__full-details{display:none!important}.market-details-dialog__card{position:relative;width:min(100%,760px);max-height:calc(100dvh - 40px);overflow:auto;padding:28px;border:1px solid #eadfc9;border-radius:20px;background:#fff;box-shadow:0 24px 70px rgba(9,18,35,.2)}.market-details-dialog__card h2{max-width:calc(100% - 42px);margin:0 0 14px;color:#15233d;font-size:24px;line-height:1.25}.market-details-dialog__content{display:grid;gap:15px}.market-details-dialog__image{width:100%;max-height:270px;object-fit:cover;border-radius:14px}.market-details-dialog__description,.market-details-dialog__section>p{margin:0;color:#63738a;font-size:12px;line-height:1.7;white-space:pre-wrap}.market-details-dialog__section{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:14px;border:1px solid #edf0f3;border-radius:13px;background:#fafbfc}.market-details-dialog__section h3{grid-column:1/-1;margin:0 0 2px;color:#253550;font-size:12px}.market-details-row{display:grid;gap:4px;min-width:0;padding:8px;border-radius:9px;background:#fff}.market-details-row>span{color:#8490a0;font-size:9px;font-weight:700}.market-details-row>strong{color:#33445d;font-size:10px;line-height:1.5;overflow-wrap:anywhere;white-space:pre-wrap}.market-details-dialog__team article{display:grid;grid-column:1/-1;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:10px;border:1px solid #edf0f3;border-radius:10px;background:#fff}.market-details-dialog__team article>strong{grid-column:1/-1;color:#253550;font-size:11px}.market-details-dialog__team article>p{grid-column:1/-1;margin:0;color:#64748b;font-size:10px;line-height:1.5;white-space:pre-wrap}.traveler-confirm-booking{flex:none;margin:8px 0}.traveler-confirmed-note{margin:12px 0;padding:11px 13px;border:1px solid #cae4d5;border-radius:10px;color:#216b4b;background:#f1faf5;font-size:11px;line-height:1.55}.supplier-confirm-consent{display:flex;align-items:flex-start;gap:9px;margin:12px 0;color:#56657a;font-size:10px;line-height:1.5}.supplier-confirm-consent input{flex:none;margin-top:2px;accent-color:#bd852e}.market-details-dialog__card .supplier-dialog-actions{margin-top:17px}@media(max-width:600px){.market-details-dialog__card{padding:22px 16px}.market-details-dialog__section,.market-details-dialog__team article{grid-template-columns:1fr}.market-details-dialog__section h3,.market-details-dialog__team article>strong,.market-details-dialog__team article>p{grid-column:1}}
+
+/* Give every traveler result the same row size, including across grid rows. */
+#market-list.market-grid {
+  grid-auto-rows: 1fr;
+}
+
+#market-list > .market-card {
+  box-sizing: border-box;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+#market-list .market-card__image {
+  flex: 0 0 auto;
+  position: relative;
+  aspect-ratio: 16 / 9;
+  margin-block-end: 12px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+#market-list .market-card__image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#market-list .market-card:has(.market-card__more) h2,
+#market-list .market-card:has(.market-card__more) .market-card__description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+#market-list .market-card:has(.market-card__more) h2 {
+  -webkit-line-clamp: 2;
+}
+
+#market-list .market-card:has(.market-card__more) .market-card__description {
+  -webkit-line-clamp: 3;
+}
+
+#market-list .market-card__image-label {
+  position: absolute;
+  inset-block-end: 8px;
+  inset-inline-start: 8px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: #fff;
+  color: #14213b;
+  font-size: 11px;
+}
+.market-details-dialog {
+  margin: auto;
+}
+
+.market-details-dialog__card {
+  margin-inline: auto;
+}
+
+.market-details-dialog__description,
+.market-details-dialog__section > p {
+  grid-column: 1 / -1;
+  font-size: .9rem;
+}
+
+.market-details-row > span {
+  color: #475569;
+  font-size: .77rem;
+}
+
+.market-details-row > strong,
+.market-details-dialog__team article > strong {
+  font-size: .875rem;
+}
+
+.market-details-dialog__section h3 {
+  font-size: 1rem;
+}
+
+.market-details-dialog__card .supplier-dialog-actions > :is(button, a) {
+  min-height: 44px;
+}
+
+.market-details-dialog__card [data-contact-from-details][hidden] {
+  display: none;
+}
+
+.market-details-dialog__card .supplier-dialog-actions > [hidden] {
+  display: none;
+}
+
+.supplier-photo-caption {
+  margin-block-end: .45rem;
+  color: #526079;
+  font-size: .88rem;
+}
+
+.supplier-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .45rem;
+}
+
+.supplier-photo-grid:has(img:only-child) {
+  grid-template-columns: 1fr;
+}
+
+.supplier-photo-grid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: .6rem;
+}
+
+.supplier-photo-grid img:only-child {
+  aspect-ratio: 2.35;
+}
+
+.supplier-detail-disclosure {
+  padding: .65rem .8rem;
+  border: 1px solid #e4eaf2;
+  border-radius: .65rem;
+}
+
+.supplier-detail-disclosure summary {
+  cursor: pointer;
+  color: #203658;
+  font-weight: 750;
+}
+
+.supplier-detail-disclosure > section {
+  margin-block-start: .55rem;
+}
+
+.supplier-action-status {
+  flex-basis: 100%;
+}
+
+.supplier-action-status:empty {
+  display: none;
+}
+
+.market-details-dialog__card {
+  overscroll-behavior: contain;
+}
+
+.traveler-request-card.is-linked-request {
+  outline: 2px solid #a26b22;
+  outline-offset: 3px;
+}
+
+@media (max-width: 540px) {
+  .market-details-dialog__card .supplier-dialog-actions > :is(button, a) {
+    width: 100%;
+  }
+}

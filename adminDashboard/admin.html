@@ -14,15 +14,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- Admin dashboard styles -->
-  <link rel="stylesheet" href="admin.css">
-</head>
+  <link rel="stylesheet" href="../shared/css/dashboard.css">
+  <link rel="stylesheet" href="../shared/css/features.css">
+<script src="../shared/js/platform.js" defer></script></head>
 <body>
 
   <!-- ================= SIDEBAR ================= -->
   <aside>
     <div class="sidebar-top">
       <div class="logo-row">
-        <img class="sidebar-logo" src="../assets/img/logo.png" alt="Roamly Command Hub">
+        <img class="sidebar-logo" src="../shared/assets/img/logo.png" alt="Roamly Command Hub">
         <span class="sidebar-brand-caption">Command Hub</span>
       </div>
       <nav class="sidebar-nav" aria-label="Admin sections">
@@ -44,10 +45,10 @@
       </nav>
     </div>
     <div class="sidebar-bottom">
-      <a href="../sign-in.html" class="logout-link">
+      <a href="../user/sign-in.html" class="logout-link">
         <i class="fa-solid fa-right-from-bracket"></i><span>Log Out</span>
       </a>
-      <a href="../index.html" class="back-link">
+      <a href="../user/index.html" class="back-link">
         <i class="fa-solid fa-arrow-right-from-bracket"></i><span>Back to Main Site</span>
       </a>
     </div>
@@ -79,7 +80,7 @@
               <i class="fa-solid fa-sliders"></i><span><strong>Preferences</strong><small>Language &amp; notifications</small></span>
             </a>
             <div class="profile-dropdown__divider"></div>
-            <a href="../sign-in.html" class="profile-dropdown__logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+            <a href="../user/sign-in.html" class="profile-dropdown__logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
           </div>
         </div>
       </div>
@@ -219,6 +220,7 @@
             <div>
               <div class="panel-title fs-16">Bookings &amp; Split Bills Ledger</div>
               <p class="panel-subtitle">Monitor payment modes, references, and split shares.</p>
+              <p class="panel-subtitle" data-trip-payment-ledger></p>
             </div>
             <input type="search" class="filter-input" id="bookings-filter" placeholder="Search bookings…" aria-label="Search bookings">
           </div>
@@ -350,6 +352,8 @@
 
   <!-- Admin dashboard interactions -->
   <script src="admin.js"></script>
-  <script src="../sidebar-controls.js" defer></script>
-</body>
+  <script src="../shared/js/sidebar-controls.js" defer></script>
+<script src="../shared/js/translations-ar.js" defer></script><script src="../shared/js/i18n.js" defer></script>
+<script src="../shared/js/roamly-features.js" defer></script>
+<script src="../shared/js/integration.js" defer></script></body>
 </html>

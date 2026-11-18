@@ -4,7 +4,7 @@
   var email = (sessionStorage.getItem("roamlySignedInEmail") || localStorage.getItem("roamlySignedInEmail") || "").toLowerCase();
   var accounts = read(accountsKey, []);
   var account = accounts.find(function (item) { return item.email === email; });
-  if (!account || account.role !== "supplier") { window.location.href = "../sign-in.html"; return; }
+  if (!account || account.role !== "supplier") { window.location.href = "../user/sign-in.html"; return; }
 
   var profileKey = "roamlyUserProfile:" + email;
   var profile = read(profileKey, {});

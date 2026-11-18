@@ -1,0 +1,731 @@
+/* ==========================================================================
+   Roamly — components used on more than one page
+   Destination card, deal card, modal dialog, toggle switch,ai chat
+   ========================================================================== */
+
+/* ---------- Card grids ---------- */
+.grid-3,
+.grid-4 {
+  display: grid;
+  gap: 24px;
+}
+
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+@media (max-width: 1100px) {
+  .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 900px) {
+  .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 600px) {
+  .grid-3,
+  .grid-4 { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Shared photo frame: image fills and crops to the box like the design */
+.media {
+  position: relative;
+  overflow: hidden;
+  background: var(--slate-200);
+}
+
+.media > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+/* ---------- Destination card ---------- */
+.dest-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--white);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+}
+
+.dest-card:hover .media > img,
+.deal-card:hover .media > img { transform: scale(1.04); }
+
+.dest-card__media { height: 192px; }
+
+.dest-card__rating {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 900;
+  color: var(--slate-900);
+}
+
+.dest-card__tag {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-size: 10px;
+  line-height: 15px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.dest-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+}
+
+.dest-card__row,
+.dest-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dest-card__title {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 900;
+  color: var(--slate-900);
+}
+
+.dest-card__meta {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  color: var(--slate-500);
+  white-space: nowrap;
+}
+
+.dest-card__footer {
+  padding-top: 8px;
+  border-top: 1px solid var(--slate-100);
+}
+
+/* ---------- Deal card ---------- */
+.deal-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  background: var(--white);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+}
+
+.deal-card__media { height: 176px; }
+
+.deal-card__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  background: var(--rose-500);
+  box-shadow: var(--shadow-md);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.deal-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+}
+
+.deal-card__title {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 900;
+  color: var(--slate-900);
+}
+
+.deal-card__meta {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: var(--slate-500);
+}
+
+.deal-card__footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 0 20px 20px;
+  border-top: 1px solid var(--slate-100);
+}
+
+.deal-card__price {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-top: 5px;
+}
+
+.deal-card__price s {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--slate-400);
+}
+
+.deal-card__price strong {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 900;
+  color: var(--rose-600);
+}
+
+.deal-card__footer .btn { font-weight: 700; }
+
+/* ---------- Modal dialog ----------
+   <dialog class="modal"> fills the viewport so a click on the dim area
+   (the dialog itself, outside .modal__card) can close it. */
+.modal {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  padding: 16px;
+  border: 0;
+  background: transparent;
+  overflow-y: auto;
+}
+
+.modal[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal::backdrop {
+  background: rgba(8, 13, 26, 0.8);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.modal--dense::backdrop { background: rgba(8, 13, 26, 0.9); }
+
+.modal[open] .modal__card { animation: modal-in 0.2s ease-out; }
+
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+.modal__card {
+  position: relative;
+  width: 100%;
+  max-width: 448px;
+  margin: auto;
+  padding: 56px 32px 32px;
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+}
+
+.modal__close {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  margin: -32px -8px -32px auto;
+  background: #fff8e6;
+  border: 1px solid #d8b45f;
+  box-shadow: 0 3px 12px rgba(23,36,60,.16);
+}
+
+.modal__card {
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.modal__title {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 900;
+  color: var(--slate-900);
+}
+
+.modal__text {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--slate-500);
+}
+
+@media (max-width: 480px) {
+  .modal__card { padding: 56px 20px 24px; }
+}
+
+/* ---------- Toggle switch ---------- */
+.switch {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  cursor: pointer;
+}
+
+.switch input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.switch__track {
+  width: 44px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: var(--slate-300);
+  transition: background-color 0.2s ease;
+}
+
+.switch__track::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--white);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.15);
+  transition: transform 0.2s ease;
+}
+
+.switch input:checked + .switch__track { background: var(--brand); }
+.switch input:checked + .switch__track::after { transform: translateX(20px); }
+.switch input:focus-visible + .switch__track { outline: 2px solid var(--amber-500); outline-offset: 2px; }
+
+
+
+
+/* ==========================================================================
+   Roamly Floating Draggable AI Captain Bot (Global Pop-up Concierge)
+   ========================================================================== */
+.roamly-ai-widget {
+  position: fixed;
+  left: 28px;
+  bottom: 28px;
+  z-index: 9999;
+  user-select: none;
+  touch-action: none;
+  font-family: "Inter", sans-serif;
+}
+
+/* زر المجسم الصغير (AI Pilot Mascot) */
+.roamly-ai-Launcher {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  border: 2px solid rgba(245, 158, 11, 0.75);
+  background: radial-gradient(circle at 30% 25%, var(--roamly-navy-mid) 0%, var(--roamly-navy) 75%);
+  box-shadow:
+    0 14px 30px -6px rgba(15, 23, 42, 0.65),
+    0 0 20px rgba(245, 158, 11, 0.35),
+    inset 0 2px 6px rgba(255, 255, 255, 0.2);
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  animation: roamlyBotFloat 3.4s ease-in-out infinite;
+}
+
+.roamly-ai-widget.is-dragging .roamly-ai-Launcher {
+  cursor: grabbing;
+  animation: none;
+  transform: scale(1.08);
+  box-shadow:
+    0 20px 38px -6px rgba(15, 23, 42, 0.8),
+    0 0 28px rgba(245, 158, 11, 0.6);
+}
+
+.roamly-ai-Launcher:hover {
+  transform: scale(1.07);
+  border-color: #fbbf24;
+  box-shadow:
+    0 18px 34px -6px rgba(15, 23, 42, 0.75),
+    0 0 25px rgba(245, 158, 11, 0.55);
+}
+
+@keyframes roamlyBotFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.roamly-ai-Launcher svg {
+  width: 44px;
+  height: 44px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* حركة رمش العيون للبوت */
+.roamly-bot-eye {
+  transform-origin: center;
+  animation: roamlyBotBlink 4.5s infinite;
+}
+
+@keyframes roamlyBotBlink {
+  0%, 92%, 96%, 100% { transform: scaleY(1); }
+  94% { transform: scaleY(0.1); }
+}
+
+/* النقطة الخضراء (Online Status) */
+.roamly-ai-status-dot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #10b981;
+  border: 2.5px solid #0f172a;
+  box-shadow: 0 0 10px #10b981;
+}
+
+/* شارة الترحيب الصغيرة بجانب المجسم */
+.roamly-ai-tooltip {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(10px);
+  color: #f8fafc;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.45);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.roamly-ai-tooltip span {
+  color: #fbbf24;
+}
+
+.roamly-ai-widget.align-right .roamly-ai-tooltip {
+  left: auto;
+  right: calc(100% + 12px);
+}
+
+.roamly-ai-widget.is-open .roamly-ai-tooltip,
+.roamly-ai-widget.is-dragging .roamly-ai-tooltip {
+  opacity: 0;
+  transform: translateY(-50%) scale(0.9);
+}
+
+/* نافذة الشات المنبثقة (Pop-up Window) */
+.roamly-ai-popup {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 16px);
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  height: 480px;
+  max-height: calc(100vh - 120px);
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 22px;
+  box-shadow:
+    0 25px 50px -12px rgba(15, 23, 42, 0.38),
+    0 0 0 1px rgba(15, 23, 42, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(16px) scale(0.94);
+  transform-origin: bottom left;
+  transition:
+    opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.28s;
+}
+
+/* تبديل اتجاه فتح النافذة تلقائياً حسب مكان سحب المجسم على الشاشة */
+.roamly-ai-widget.align-right .roamly-ai-popup {
+  left: auto;
+  right: 0;
+  transform-origin: bottom right;
+}
+
+.roamly-ai-widget.open-down .roamly-ai-popup {
+  bottom: auto;
+  top: calc(100% + 16px);
+  transform-origin: top left;
+}
+
+.roamly-ai-widget.align-right.open-down .roamly-ai-popup {
+  transform-origin: top right;
+}
+
+.roamly-ai-widget.is-open .roamly-ai-popup {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+/* هيدر نافذة الشات */
+.roamly-ai-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  background: linear-gradient(135deg, var(--roamly-navy) 0%, var(--roamly-navy-mid) 100%);
+  color: #ffffff;
+  border-bottom: 1px solid rgba(245, 158, 11, 0.25);
+  cursor: move;
+}
+
+.roamly-ai-header__info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.roamly-ai-header__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.16);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.roamly-ai-header__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #fbbf24;
+}
+
+.roamly-ai-header__eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+}
+
+.roamly-ai-header__title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-top: 2px;
+}
+
+.roamly-ai-close {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.roamly-ai-close:hover {
+  background: rgba(245, 158, 11, 0.25);
+  color: #ffffff;
+}
+
+/* منطقة الرسائل */
+.roamly-ai-messages {
+  flex: 1;
+  padding: 16px;
+  background: #f8fafc;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.roamly-ai-bubble {
+  max-width: 85%;
+  padding: 11px 14px;
+  border-radius: 16px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  background: #ffffff;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+}
+
+.roamly-ai-bubble--me {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--roamly-navy) 0%, var(--roamly-navy-mid) 100%);
+  color: #ffffff;
+  border-color: #0f172a;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 4px;
+}
+
+/* أزرار الأسئلة السريعة */
+.roamly-ai-chips {
+  display: flex;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+  overflow-x: auto;
+}
+
+.roamly-ai-chip {
+  flex: none;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(217, 119, 6, 0.3);
+  background: rgba(245, 158, 11, 0.1);
+  color: #b45309;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.roamly-ai-chip:hover {
+  background: #f59e0b;
+  color: #ffffff;
+}
+
+/* فورم الإرسال */
+.roamly-ai-form {
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+
+.roamly-ai-input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #0f172a;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.roamly-ai-input:focus {
+  background: #ffffff;
+  border-color: #f59e0b;
+}
+
+.roamly-ai-send {
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.roamly-ai-send:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+/* إخفاء شريط Roamly AI وإظهاره فقط عند تمرير الماوس على المجسم */
+.roamly-ai-tooltip {
+  opacity: 0;
+  transform: translateY(-50%) translateX(-6px);
+}
+
+.roamly-ai-Launcher:hover ~ .roamly-ai-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Searchable global currency picker */
+dialog.currency-dialog { position: fixed; top: 50%; right: auto; bottom: auto; left: 50%; width: min(100% - 32px, 500px); max-width: 500px; max-height: min(calc(100dvh - 24px), 720px); margin: 0; padding: 26px; overflow-y: auto; border: 1px solid #e4eaf2; border-radius: 22px; background: #fff; color: #17243b; box-shadow: 0 28px 90px rgba(11,25,46,.24); transform: translate(-50%,-50%); }
+dialog.currency-dialog[open] { animation: currency-dialog-in .2s ease-out both; }
+@keyframes currency-dialog-in { from { opacity: 0; transform: translate(-50%,-48%) scale(.985); } to { opacity: 1; transform: translate(-50%,-50%) scale(1); } }
+dialog.currency-dialog::backdrop { background: rgba(12,24,42,.48); backdrop-filter: blur(5px); }
+.currency-dialog__top { display: flex; align-items: center; justify-content: space-between; }
+.currency-dialog__icon { display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid #eadfc9; border-radius: 13px; background: #fbf6e9; color: #a8803d; font-size: 17px; }
+.currency-dialog__close { display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid #e8edf3; border-radius: 11px; background: #fff; color: #748197; cursor: pointer; transition: .2s ease; }
+.currency-dialog__close:hover { border-color: #d6deea; background: #f6f8fb; color: #17243b; }
+.currency-dialog__eyebrow { margin-top: 18px; color: #ae8744; font-size: 9px; font-weight: 800; letter-spacing: .15em; }
+.currency-dialog h2 { margin-top: 4px; color: #17243b; font-size: 23px; line-height: 29px; font-weight: 800; letter-spacing: -.03em; }
+.currency-dialog__lead { margin-top: 6px; color: #8491a4; font-size: 11px; line-height: 17px; }
+.currency-dialog__search { display: flex; height: 44px; align-items: center; gap: 10px; margin-top: 17px; padding: 0 13px; border: 1px solid #dfe5ed; border-radius: 12px; background: #fafbfd; color: #98a3b3; }
+.currency-dialog__search:focus-within { border-color: #c7a45e; background: #fff; box-shadow: 0 0 0 3px rgba(199,164,94,.12); }
+.currency-dialog__search input { width: 100%; border: 0; outline: 0; background: transparent; color: #24334b; font: inherit; font-size: 11px; }
+.currency-dialog__search input::placeholder { color: #9aa4b2; }
+.currency-dialog__status { min-height: 16px; margin: 9px 1px 5px; color: #929dae; font-size: 9px; }
+.currency-dialog__list { display: grid; max-height: min(42vh, 370px); gap: 4px; overflow: auto; padding-right: 3px; overscroll-behavior: contain; }
+.currency-option { display: flex; min-height: 48px; align-items: center; gap: 12px; padding: 7px 10px; border: 1px solid transparent; border-radius: 11px; background: #fff; color: #263650; text-align: left; cursor: pointer; transition: .16s ease; }
+.currency-option:hover { border-color: #e7ebf1; background: #f8fafc; }
+.currency-option.is-selected { border-color: #e9ddc3; background: #fcf8ef; }
+.currency-option__details { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: 2px; }
+.currency-option__details strong { overflow: hidden; color: #34435a; font-size: 11px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.currency-option__details small { color: #98a2b0; font-size: 9px; }
+.currency-option__symbol { min-width: 34px; color: #6e7c91; font-size: 11px; font-weight: 700; text-align: right; }
+.currency-option > i { width: 16px; color: #ac843e; font-size: 11px; text-align: center; }
+.currency-option > i[hidden] { display: none; }
+.currency-option:disabled { cursor: not-allowed; opacity: .48; }
+.currency-dialog__no-results { padding: 22px 10px; color: #8793a5; font-size: 11px; line-height: 18px; text-align: center; }
+.currency-dialog__attribution { margin-top: 12px; color: #a0a9b6; font-size: 9px; text-align: right; }
+.currency-dialog__attribution a { color: #96743d; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+@media (max-width: 520px) { dialog.currency-dialog { padding: 21px 17px; border-radius: 19px; } .currency-dialog__list { max-height: 42vh; } }
+
+/* Shared newsletter envelope icon */
+.site-footer .newsletter__title i { display: inline-block; margin-right: 7px; color: #ecd495; font-size: .8em; vertical-align: .06em; }

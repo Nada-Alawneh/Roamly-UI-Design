@@ -5,19 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1120">
   <title>Supplier Profile - Roamly</title>
-  <link rel="icon" type="image/png" href="../assets/img/logo.png">
+  <link rel="icon" type="image/png" href="../shared/assets/img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="../adminDashboard/admin.css">
+  <link rel="stylesheet" href="../shared/css/dashboard.css">
   <link rel="stylesheet" href="profile.css">
-</head>
+  <link rel="stylesheet" href="../shared/css/features.css">
+<script src="../shared/js/platform.js" defer></script></head>
 <body class="profile-page supplier-profile-page">
   <aside>
     <div class="sidebar-top">
       <div class="logo-row">
-        <img class="sidebar-logo" src="../assets/img/logo.png" alt="Roamly Command Hub">
+        <img class="sidebar-logo" src="../shared/assets/img/logo.png" alt="Roamly Command Hub">
         <span class="sidebar-brand-caption">Supplier Studio</span>
       </div>
       <nav class="sidebar-nav" aria-label="Supplier sections">
@@ -32,8 +33,8 @@
       </nav>
     </div>
     <div class="sidebar-bottom">
-      <a href="../sign-in.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i><span>Log Out</span></a>
-      <a href="../index.html" class="back-link"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Back to Main Site</span></a>
+      <a href="../user/sign-in.html" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i><span>Log Out</span></a>
+      <a href="../user/index.html" class="back-link"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Back to Main Site</span></a>
     </div>
   </aside>
 
@@ -133,6 +134,8 @@
   <div class="profile-toast" id="profileToast" role="status" aria-live="polite"><i class="fa-solid fa-circle-check"></i><span id="profileToastMessage"></span></div>
   <dialog class="photo-change-dialog" id="photoChangeDialog" aria-labelledby="photoChangeTitle"><div class="photo-change-dialog__content"><span class="section-icon section-icon--gold"><i class="fa-solid fa-camera"></i></span><p class="section-kicker">PROFILE PHOTO</p><h2 id="photoChangeTitle">Use this photo?</h2><p>Save it to update your profile photo, cancel to keep the current one, or remove the profile photo.</p><img class="photo-change-preview" id="photoChangePreview" alt="Preview of the selected profile photo"><div class="photo-change-dialog__actions"><button class="photo-action-remove" id="removePhoto" type="button">Remove photo</button><button class="photo-action-cancel" id="cancelPhotoChange" type="button">Cancel</button><button class="photo-action-save" id="savePhotoChange" type="button">Save change</button></div></div></dialog>
   <script src="supplier-profile.js" defer></script>
-  <script src="../sidebar-controls.js" defer></script>
-</body>
+  <script src="../shared/js/sidebar-controls.js" defer></script>
+<script src="../shared/js/translations-ar.js" defer></script><script src="../shared/js/i18n.js" defer></script>
+<script src="../shared/js/roamly-features.js" defer></script>
+<script src="../shared/js/integration.js" defer></script></body>
 </html>

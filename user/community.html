@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Community · Roamly</title>
+    <link rel="stylesheet" href="../shared/css/base.css" />
+    <link rel="stylesheet" href="../shared/css/layout.css" />
+    <link rel="stylesheet" href="../shared/css/components.css" />
+    <link rel="stylesheet" href="../shared/css/features.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css"
+    />
+  <script src="../shared/js/platform.js" defer></script><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&amp;display=swap">
+</head>
+  <body>
+    <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="index.html" aria-label="Roamly home">
+       <span class="brand__mark"><img src="../shared/assets/img/logo.png" alt="" width="180" height="70"></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+        <i class="fa-solid fa-bars" aria-hidden="true"></i><span class="sr-only">Menu</span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul class="nav-pill">
+          <li><a class="nav-pill__link" href="index.html">Home</a></li>
+          <li>
+            <details class="rx-tourism">
+              <summary class="nav-pill__link" data-i18n="tourism">Explore with AI ▾</summary>
+              <div class="rx-tourism-menu">
+                <a href="jordan-narrative.html" data-i18n="jordan">The Jordanian Narrative</a>
+                <a href="ai-planner.html" data-i18n="global">Global AI Planner</a>
+              </div>
+            </details>
+          </li>
+          <li><a class="nav-pill__link" href="adventure-marketplace.html" data-experiences-link>Experiences</a></li>
+          <li><a class="nav-pill__link" href="destinations.html">Destinations</a></li>
+          <li><a class="nav-pill__link" href="pricing.html">Pricing</a></li>
+          <li><a class="nav-pill__link" href="about.html">About Us</a></li>
+          <li><a class="nav-pill__link" href="Contact-Us.html">Contact Us</a></li>
+          <li><a class="nav-pill__link" href="community.html" data-i18n="community" aria-current="page">Community</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <div id="guestActions" class="nav-auth-group">
+          <a href="sign-in.html" class="btn btn--dark btn--md">
+            <i class="fa-regular fa-circle-user" aria-hidden="true"></i> Sign In
+          </a>
+        </div>
+
+        <div class="user-menu-wrap" id="loggedActions" style="display: none;">
+          <button type="button" class="user-menu-trigger" id="userMenuToggle" aria-expanded="false">
+            <span class="user-avatar">N</span>
+            <span class="user-name">Nada Alawneh</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="user-dropdown" id="userDropdownMenu">
+            <div class="user-dropdown__header">
+              <p class="user-dropdown__title">Signed in as</p>
+              <p class="user-dropdown__email">nada@roamly.com</p>
+            </div>
+            <ul class="user-dropdown__list">
+              <li><a href="profile.html"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li>
+              <li><a href="itineraries.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li>
+              <li><button type="button" class="currency-switch-btn"><i class="fa-solid fa-globe" aria-hidden="true"></i> Currency: <strong>USD ($)</strong></button></li>
+              <li><a href="settings.html"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li>
+              <li class="user-dropdown__divider"></li>
+              <li><button type="button" id="logoutBtn" class="logout-link"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log Out</button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+    <main id="main" class="roam-experience">
+      <section class="page-hero" aria-labelledby="community-title">
+        <div class="container page-hero__inner">
+  
+          <p class="eyebrow" data-i18n="community">COMMUNITY</p>
+          <h1 id="community-title" class="page-hero__title" data-i18n="communityTitle">Good journeys deserve to be shared.</h1>
+          <p class="page-hero__lead" data-i18n="communityLead">
+            Routes worth copying. Advice from people who have been there.
+          </p>
+        </div>
+      </section>
+      <section class="container rx-community">
+        <div class="community-toolbar">
+          <div role="group" aria-label="Community feed">
+            <button type="button" class="btn btn--soft" data-community-view="all" aria-pressed="true">All posts</button>
+            <button type="button" class="btn btn--soft" data-community-view="reels" aria-pressed="false">Reels</button>
+          </div>
+          <button type="button" class="rx-button" id="community-add" aria-expanded="false" aria-controls="community-compose">Add post or review</button>
+        </div>
+        <form id="community-compose" class="rx-panel" hidden>
+          <h2 data-i18n="shareStory">Share a little inspiration</h2>
+          <label for="post-kind" data-i18n="postType">Post type</label>
+          <select id="post-kind" class="input">
+            <option value="review" data-i18n="review">Review</option>
+            <option value="tip" data-i18n="tip">Travel tip</option>
+            <option value="itinerary" data-i18n="itinerary">Itinerary</option>
+          </select>
+          <label for="post-booking" id="post-booking-label" hidden>Add a completed supplier experience</label>
+          <select class="input" id="post-booking" hidden>
+            <option value="">Choose a booking (optional)</option>
+          </select>
+          <label for="post-place">Where did you go?</label>
+          <input class="input" id="post-place" maxlength="70" />
+          <label for="post-rating">Trip rating</label>
+          <select class="input" id="post-rating">
+            <option value="">Choose a rating</option>
+            <option value="5">5 / 5</option>
+            <option value="4">4 / 5</option>
+            <option value="3">3 / 5</option>
+            <option value="2">2 / 5</option>
+            <option value="1">1 / 5</option>
+          </select>
+          <label for="post-photos">Trip photos</label>
+          <input class="input community-photo-input" id="post-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple aria-describedby="post-photo-hint" />
+          <p id="post-photo-hint">Add up to three JPG, PNG or WebP photos.</p>
+          <div id="post-photo-preview" hidden></div>
+          <label for="post-video">Short video</label>
+          <input class="input community-photo-input" id="post-video" type="file" accept="video/mp4,video/webm" aria-describedby="post-video-hint" />
+          <p id="post-video-hint">Optional. MP4 or WebM, up to 30 MB.</p>
+          <label for="post-text" data-i18n="yourStory">Your story</label>
+          <textarea class="input" id="post-text" required maxlength="1200" rows="4"></textarea>
+          <p data-i18n="shareHint">Itinerary posts include your most recently generated plan.</p>
+          <div class="community-compose-actions">
+            <button class="rx-button" type="submit" data-i18n="publish">Share with community</button>
+            <button class="btn btn--soft" type="button" id="community-close">Close</button>
+          </div>
+          <p role="status" id="post-status"></p>
+        </form>
+        <p id="community-feedback" role="status"></p>
+        <div id="community-feed"></div>
+      </section>
+    </main>
+    <dialog id="community-media-viewer" class="community-media-viewer" aria-labelledby="community-media-title">
+      <header>
+        <h2 id="community-media-title">Trip media</h2>
+        <form method="dialog">
+          <button type="submit" class="btn btn--soft">Close</button>
+        </form>
+      </header>
+      <div data-community-media-content></div>
+    </dialog>
+    <footer class="site-footer">
+      <div class="container container--narrow site-footer__inner">
+        <section class="newsletter" aria-labelledby="newsletter-title">
+          <div>
+            <h2 class="newsletter__title" id="newsletter-title">
+              <i class="fa-regular fa-envelope" aria-hidden="true"></i> Subscribe to our newsletter
+            </h2>
+            <p class="newsletter__text">
+              Get exclusive deals, AI travel tips, and destination inspiration straight to your
+              inbox.
+            </p>
+          </div>
+          <form class="newsletter__form" action="#" method="post">
+            <label class="sr-only" for="newsletter-email">Email address</label>
+            <input
+              class="newsletter__input"
+              id="newsletter-email"
+              type="email"
+              name="email"
+              placeholder="Enter your email..."
+              autocomplete="email"
+              required
+            />
+            <button class="btn btn--primary" type="submit">Subscribe</button>
+          </form>
+        </section>
+
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="brand" href="index.html" aria-label="Roamly home">
+              <span class="brand__mark"
+                ><img src="../shared/assets/img/logo.png" alt="" width="32" height="28"
+              /></span> </a
+            ><br />
+            <p class="footer-brand__text" style="color: var(--slate-400)">
+              Roamly is your travel companion
+            </p>
+            <br />
+            <div class="socials">
+              <a href="#" aria-label="Facebook"
+                ><i class="fa-brands fa-facebook" aria-hidden="true"></i
+              ></a>
+              <a href="#" aria-label="Instagram"
+                ><i class="fa-brands fa-instagram" aria-hidden="true"></i
+              ></a>
+              <a href="#" aria-label="Twitter"
+                ><i class="fa-brands fa-twitter" aria-hidden="true"></i
+              ></a>
+              <a href="#" aria-label="YouTube"
+                ><i class="fa-brands fa-youtube" aria-hidden="true"></i
+              ></a>
+            </div>
+          </div>
+          <nav class="footer-col" aria-labelledby="footer-quick">
+            <h3 class="footer-col__title" id="footer-quick">Quick Links</h3>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="ai-planner.html">AI Planner </a></li>
+              <li><a href="destinations.html">Destinations</a></li>
+              <li><a href="deals.html">Packages &amp; Deals</a></li>
+              <li><a href="pricing.html">Pricing</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-labelledby="footer-top">
+            <h3 class="footer-col__title" id="footer-top">Top Destinations</h3>
+            <ul>
+              <li>
+                <a href="ai-planner.html?destination=Istanbul%2C%20Turkey">Istanbul, Turkey</a>
+              </li>
+              <li><a href="ai-planner.html?destination=Bali%2C%20Indonesia">Bali, Indonesia</a></li>
+              <li><a href="ai-planner.html?destination=Maldives">Maldives Resort</a></li>
+              <li>
+                <a href="ai-planner.html?destination=Santorini%2C%20Greece">Santorini, Greece</a>
+              </li>
+              <li><a href="ai-planner.html?destination=Dubai%2C%20UAE">Dubai, UAE</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-labelledby="footer-support">
+            <h3 class="footer-col__title" id="footer-support">Support</h3>
+            <ul>
+              <li><a href="Contact-Us.html">Contact Us</a></li>
+              <li><a href="Contact-Us.html#faq">FAQs</a></li>
+              <li><a href="booking-guide.html">Booking Guide</a></li>
+              <li><a href="terms.html">Terms &amp; Conditions</a></li>
+              <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <p class="copyright">© Roamly AI Travel Planner. All Rights Reserved.</p>
+      </div>
+    </footer>
+    <script src="../shared/js/main.js" defer></script>
+    <script src="../shared/js/translations-ar.js" defer></script><script src="../shared/js/i18n.js" defer></script>
+    <script src="../shared/js/roamly-features.js" defer></script>
+  <script src="../shared/js/integration.js" defer></script></body>
+</html>

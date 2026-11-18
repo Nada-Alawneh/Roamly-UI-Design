@@ -26,38 +26,32 @@ Open `index.html` in a browser. Nothing to install or build.
 | Figma frame | Open |
 |---|---|
 | Home Page | `index.html` |
-| AI Planner 1 | `ai-planner.html` |
-| AI Planner 2 | `ai-planner.html#plan` (or press **Re-Generate AI Plan**) |
-| Book Trip | `ai-planner.html#checkout` (or **Book Trip ➔** on the plan) |
-| Unlock Unlimited AI | `ai-planner.html#paywall` (or generate a second time) |
-| Pay in Full | `trip.html` |
-| Split Pill | `trip.html?payment=split` (or pick **Split Bill** in checkout) |
-| Destinations | `destinations.html` |
-| Packages&Deals | `deals.html` |
-| Prices | `pricing.html` |
-| Support | `support.html` |
-| Sign In | `sign-in.html` |
+| AI Planner 1 | `user/ai-planner.html` |
+| AI Planner 2 | `user/ai-planner.html#plan` (or press **Re-Generate AI Plan**) |
+| Book Trip | `user/ai-planner.html#checkout` (or **Book Trip ➔** on the plan) |
+| Unlock Unlimited AI | `user/ai-planner.html#paywall` (or generate a second time) |
+| Pay in Full | `user/trip.html` |
+| Split Pill | `user/trip.html?payment=split` (or pick **Split Bill** in checkout) |
+| Destinations | `user/destinations.html` |
+| Packages&Deals | `user/deals.html` |
+| Prices | `user/pricing.html` |
+| Support | `user/Contact-Us.html` |
+| Sign In | `user/sign-in.html` |
 
 ## Files
 
-```
-css/base.css          design tokens (colours, shadows, radii), reset, buttons, fields, pills, cards
-css/layout.css        header, footer, dark page-hero band, section headings
-css/components.css    destination card, deal card, modal dialog, toggle switch, card grids
-css/pages/*.css       one file per page
-js/main.js            small behaviours, each tied to a data-attribute (see below)
-assets/img/           images exported from Figma
-```
+- `user/` contains the traveler and public pages, their page-specific CSS and scripts, and the planner fixtures.
+- `adminDashboard/` contains the admin pages and scripts.
+- `supplierDashboard/` contains the supplier dashboard, profile, team and booking tools.
+- `shared/` contains the shared styles, platform and language scripts, and assets.
+- `tests/` contains project-wide checks.
 
-The header and footer are repeated in every HTML file (plain static HTML has no includes).
-If you change the nav, change it in all 8 files.
-
-## Behaviour (`js/main.js`)
+## Behaviour (`shared/js/main.js`)
 
 - Mobile menu toggle (below 1100px).
 - Pop-ups use native `<dialog>`: open from buttons, close with ✕, Esc or a click outside, and open from the URL hash.
 - AI planner: the first generate shows the plan (the free one), and the next one opens the paywall. The travellers count re-prices the plan at $620 per person, which matches the $1,240 and $3,100 totals in the frames.
-- Checkout submits only the payment choice to `trip.html`. Card fields have no `name`, so they are never sent or put in a URL.
+- Checkout submits only the payment choice to `user/trip.html`. Card fields have no `name`, so they are never sent or put in a URL.
 - Destinations: region chips and search filter the cards.
 - Deals: the flash-sale countdown ticks down.
 - Support: the chat box echoes your message with a canned reply (front-end demo only), and the FAQ uses `<details>`.
@@ -77,3 +71,22 @@ Fonts: Inter (Google Fonts). Icons: Font Awesome 6 Free (jsDelivr).
 ## Before going live
 
 The images are the PNGs exactly as Figma exported them (about 6.5 MB in total). Converting the photos to WebP or JPEG would cut that by roughly 80%.
+
+## Planner sample data
+
+Open the Global AI Planner and select **Load sample trip**. The seed adds one
+fictional Istanbul supplier and examples for all 18 Adventure & Nature services.
+It fills the route, two travelers, a future date, and a USD 200 experience budget
+per traveler. Re-running it preserves records with existing IDs.
+
+- Compare all activities or select a single activity to see its matching offer.
+- Set the group to one traveler to include the solo-only example.
+- Raise the per-traveler experience budget to USD 350 to include the premium example.
+- Change the destination to Bali to see the alternate destination fixture. An
+  unpublished example stays out of results.
+- Select offers and dates, build the itinerary, and record one simulated payment
+  to create an actual demo receipt and the related pending supplier requests.
+  Itinerary generation follows the regular sign-in and plan-access rules.
+
+The fixture file is `user/data/planner-seed.js`. It does not create login credentials,
+payment history, or confirmed reservations. Data lives in the current browser.

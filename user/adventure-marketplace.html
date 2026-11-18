@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Adventure &amp; Nature experiences | Roamly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../shared/css/base.css">
+  <link rel="stylesheet" href="../shared/css/layout.css">
+  <link rel="stylesheet" href="../shared/css/components.css">
+  <link rel="stylesheet" href="../supplierDashboard/supplier.css">
+  <link rel="stylesheet" href="../shared/css/features.css">
+<script src="../shared/js/platform.js" defer></script></head>
+<body class="market-page traveler-market-page">
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="index.html" aria-label="Roamly home">
+       <span class="brand__mark"><img src="../shared/assets/img/logo.png" alt="" width="180" height="70"></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+        <i class="fa-solid fa-bars" aria-hidden="true"></i><span class="sr-only">Menu</span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul class="nav-pill">
+          <li><a class="nav-pill__link" href="index.html">Home</a></li>
+          <li>
+            <details class="rx-tourism">
+              <summary class="nav-pill__link" data-i18n="tourism">Explore with AI ▾</summary>
+              <div class="rx-tourism-menu">
+                <a href="jordan-narrative.html" data-i18n="jordan">The Jordanian Narrative</a>
+                <a href="ai-planner.html" data-i18n="global">Global AI Planner</a>
+              </div>
+            </details>
+          </li>
+          <li><a class="nav-pill__link" href="adventure-marketplace.html" aria-current="page" data-experiences-link>Experiences</a></li>
+          <li><a class="nav-pill__link" href="destinations.html">Destinations</a></li>
+          <li><a class="nav-pill__link" href="pricing.html">Pricing</a></li>
+          <li><a class="nav-pill__link" href="about.html">About Us</a></li>
+          <li><a class="nav-pill__link" href="Contact-Us.html">Contact Us</a></li>
+          <li><a class="nav-pill__link" href="community.html" data-i18n="community">Community</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <div id="guestActions" class="nav-auth-group">
+          <a href="sign-in.html" class="btn btn--dark btn--md">
+            <i class="fa-regular fa-circle-user" aria-hidden="true"></i> Sign In
+          </a>
+        </div>
+
+        <div class="user-menu-wrap" id="loggedActions" style="display: none;">
+          <button type="button" class="user-menu-trigger" id="userMenuToggle" aria-expanded="false">
+            <span class="user-avatar">N</span>
+            <span class="user-name">Nada Alawneh</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="user-dropdown" id="userDropdownMenu">
+            <div class="user-dropdown__header">
+              <p class="user-dropdown__title">Signed in as</p>
+              <p class="user-dropdown__email">nada@roamly.com</p>
+            </div>
+            <ul class="user-dropdown__list">
+              <li><a href="profile.html"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li>
+              <li><a href="itineraries.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li>
+              <li><button type="button" class="currency-switch-btn"><i class="fa-solid fa-globe" aria-hidden="true"></i> Currency: <strong>USD ($)</strong></button></li>
+              <li><a href="settings.html"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li>
+              <li class="user-dropdown__divider"></li>
+              <li><button type="button" id="logoutBtn" class="logout-link"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log Out</button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main id="main">
+    <section class="page-hero" aria-labelledby="experiences-title" data-market-hero>
+      <div class="container page-hero__inner">
+        <p class="eyebrow">YOUR ADVENTURE &amp; NATURE OPTIONS</p>
+        <h1 id="experiences-title" class="page-hero__title">Choose the experience that fits your trip</h1>
+        <p class="page-hero__lead">Browse supplier-published experiences whenever you like; you do not need to generate an AI plan first. Open the full details, compare teams, and send a booking request directly to the provider.</p>
+      </div>
+    </section>
+    <div class="market-main" data-market-catalog>
+      <p class="traveler-page-links"><a class="btn btn--soft" id="marketHeaderBack" href="ai-planner.html"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to planner</a></p>
+      <section class="traveler-trip-context" id="travelerTripContext" aria-live="polite" hidden>
+        <span class="traveler-trip-context__icon"><i class="fa-solid fa-map-location-dot"></i></span>
+        <div><strong id="travelerTripDestination"></strong><span id="travelerTripMeta"></span></div>
+        <div class="traveler-trip-context__actions"><a id="returnToGeneratedPlan" href="ai-planner.html" hidden>Return to your plan</a><a id="editPlannerTrip" href="ai-planner.html">Edit trip details</a></div>
+      </section>
+      <p class="market-destination-note" id="marketDestinationNote" hidden></p>
+      <div class="market-toolbar">
+        <label>Search experiences <input id="market-search" type="search" placeholder="Name, activity, or provider"></label>
+        <label>Provider category <select id="market-filter"><option value="all">All provider categories</option></select></label>
+        <label>Sort by <select id="market-sort"><option value="rating">Top rated</option><option value="price">Price: low to high</option><option value="name">Provider name</option></select></label>
+        <span id="market-count"></span>
+      </div>
+      <section class="market-grid" id="market-list" aria-live="polite"></section>
+      <div class="supplier-empty market-no-results" id="market-search-empty" hidden>No published experiences match these filters. Try another search or category.</div>
+      <div class="market-more"><button class="btn btn--soft" id="market-more" type="button" aria-controls="market-list" hidden>Show more experiences</button></div>
+    </div>
+    <div data-market-inbox hidden>
+      <section class="page-hero" aria-labelledby="market-chats-title">
+        <div class="container page-hero__inner">
+          <h1 id="market-chats-title" class="page-hero__title">My chats</h1>
+          <p class="page-hero__lead">Your booking requests and the provider company's replies stay together here.</p>
+        </div>
+      </section>
+      <section class="market-main market-requests" id="booking-requests" aria-labelledby="market-chats-title">
+        <div id="traveler-requests"></div>
+      </section>
+    </div>
+  </main>
+  <dialog class="supplier-dialog" id="booking-dialog">
+    <form method="dialog" id="booking-form">
+      <button class="dialog-close" value="cancel" aria-label="Close">×</button>
+      <p class="supplier-eyebrow">START A CONVERSATION</p>
+      <h2 id="booking-title">Request a booking</h2>
+      <input type="hidden" name="supplierId"><input type="hidden" name="serviceId">
+      <label class="supplier-field">Preferred date<input name="date" type="date" required></label>
+      <label class="supplier-field"><span id="bookingQuantityLabel">Travelers</span><input name="travelers" type="number" min="1" value="1" required></label>
+      <label class="supplier-field">Message to the company<textarea name="message" rows="4" placeholder="Share any questions, preferences, or details the provider should know"></textarea></label>
+      <div class="supplier-dialog-actions"><button class="btn-admin-secondary" value="cancel">Cancel</button><button class="btn-gold" value="send">Start conversation</button></div>
+    </form>
+  </dialog>
+  <dialog class="supplier-dialog" id="ratingDialog">
+    <form id="ratingForm">
+      <button class="dialog-close" type="button" data-close-rating aria-label="Close">×</button>
+      <p class="supplier-eyebrow">TRAVELER REVIEW</p><h2>Rate this experience</h2>
+      <input type="hidden" name="serviceId"><p class="supplier-dialog-intro">Share a rating after a confirmed booking.</p>
+      <label class="supplier-field">Your rating<select name="rating" required><option value="">Choose a rating</option><option value="5">5 · Excellent</option><option value="4">4 · Very good</option><option value="3">3 · Good</option><option value="2">2 · Fair</option><option value="1">1 · Poor</option></select></label>
+      <div class="supplier-dialog-actions"><button class="btn-admin-secondary" type="button" data-close-rating>Cancel</button><button class="btn-gold" type="submit">Save rating</button></div>
+    </form>
+  </dialog>
+  <script src="../shared/js/supplier-services.js" defer></script><script src="../supplierDashboard/supplier.js" defer></script>
+  <script src="js/marketplace-service-filter.js" defer></script>
+  <script src="../shared/js/supplier-details.js" defer></script><script src="js/adventure-marketplace.js" defer></script>
+  <script src="../shared/js/sidebar-controls.js" defer></script>
+<script src="../shared/js/main.js" defer></script>
+<script src="../shared/js/translations-ar.js" defer></script><script src="../shared/js/i18n.js" defer></script>
+<script src="../shared/js/roamly-features.js" defer></script>
+<script src="../shared/js/integration.js" defer></script></body>
+</html>

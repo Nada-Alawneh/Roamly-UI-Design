@@ -8,12 +8,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="../adminDashboard/admin.css">
+  <link rel="stylesheet" href="../shared/css/dashboard.css">
   <link rel="stylesheet" href="supplier.css">
-</head>
+  <link rel="stylesheet" href="../shared/css/features.css">
+<script src="../shared/js/platform.js" defer></script></head>
 <body class="supplier-app supplier-workflow-page supplier-workflow-layout">
   <header class="workflow-header">
-    <a href="supplier-dashboard.html#hiking"><img src="../assets/img/logo.png" alt="Roamly" width="142"></a>
+    <a href="supplier-dashboard.html#hiking"><img src="../shared/assets/img/logo.png" alt="Roamly" width="142"></a>
     <a class="btn-admin-secondary" id="backToTeams" href="supplier-dashboard.html#hiking"><i class="fa-solid fa-arrow-left"></i> Back to services</a>
   </header>
   <main class="workflow-main team-editor-main">
@@ -37,6 +38,7 @@
           <label class="supplier-field">Duration<input name="duration" required maxlength="60" placeholder="For example: 5 hours"></label>
           <label class="supplier-field" id="difficultyField">Difficulty and suitability<input name="difficulty" required maxlength="100" placeholder="For example: Moderate · suitable for active beginners"></label>
           <label class="supplier-field"><span id="capacityLabel">Maximum travelers</span><input name="capacity" type="number" min="1" required placeholder="For example: 8"></label>
+          <label class="supplier-field">Service destination<input name="serviceArea" maxlength="120" placeholder="City, Country"><small>Used to match your offer to a traveler’s destination.</small></label>
           <label class="supplier-field">Meeting point <span class="field-optional">(optional)</span><input name="meetingPoint" maxlength="140" placeholder="Can be agreed after booking"></label>
           <label class="supplier-field experience-field-wide">Experience description<textarea name="description" required rows="4" maxlength="1200" placeholder="Describe what travelers will do and what makes this experience special."></textarea></label>
           <label class="supplier-field">What's included<textarea name="included" rows="3" maxlength="500" placeholder="Guide, equipment, water, permits..."></textarea></label>
@@ -45,6 +47,7 @@
           <label class="supplier-field experience-field-wide">Safety, accessibility, and cancellation<textarea name="safety" rows="3" maxlength="700" placeholder="Safety measures, accessibility, weather policy, or cancellation terms"></textarea></label>
           <label class="supplier-field">Availability<input name="availability" maxlength="180" placeholder="Operating days, seasons, or advance notice"></label>
           <label class="supplier-field">Cover image URL <span class="field-optional">(optional)</span><input name="coverImage" type="url" maxlength="500" placeholder="https://example.com/experience.jpg"></label>
+          <label class="supplier-field experience-field-wide">Additional photo URLs <span class="field-optional">(optional)</span><textarea name="galleryImages" rows="3" maxlength="1500" placeholder="One image URL per line"></textarea></label>
         </div>
         <div class="experience-save-row">
           <p id="experienceSaveStatus"><i class="fa-solid fa-circle-info"></i> Save these details to continue to employee selection.</p>
@@ -101,6 +104,8 @@
   <script src="category-catalog-seed.js" defer></script>
   <script src="team-editor.js" defer></script>
   <script src="workflow-shell.js" defer></script>
-  <script src="../sidebar-controls.js" defer></script>
-</body>
+  <script src="../shared/js/sidebar-controls.js" defer></script>
+<script src="../shared/js/translations-ar.js" defer></script><script src="../shared/js/i18n.js" defer></script>
+<script src="../shared/js/roamly-features.js" defer></script>
+<script src="../shared/js/integration.js" defer></script></body>
 </html>

@@ -6,7 +6,7 @@
   function date(value) { if (!value) return "Not recorded"; var parsed = new Date(value + (String(value).length === 10 ? "T12:00:00" : "")); return isNaN(parsed.getTime()) ? String(value) : new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(parsed); }
   var email = (sessionStorage.getItem("roamlySignedInEmail") || localStorage.getItem("roamlySignedInEmail") || "").toLowerCase();
   var accounts = read(ACCOUNTS, []), account = accounts.find(function (item) { return item.email === email; });
-  if (!account || account.role !== "supplier") { location.href = "../sign-in.html"; return; }
+  if (!account || account.role !== "supplier") { location.href = "../user/sign-in.html"; return; }
   if (!account.id) { account.id = "supplier-" + btoa(account.email).replace(/[^a-z0-9]/gi, "").slice(0, 16); }
   var params = new URLSearchParams(location.search), category = params.get("category") || "hiking", type = params.get("type") || "";
   var services = read(SERVICES, []), requests = read(REQUESTS, []), detailsDialog = document.getElementById("teamDetailsDialog");

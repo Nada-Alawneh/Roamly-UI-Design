@@ -9,7 +9,7 @@
 
   var email = (sessionStorage.getItem("roamlySignedInEmail") || localStorage.getItem("roamlySignedInEmail") || "").toLowerCase();
   var accounts = read(ACCOUNTS, []), account = accounts.find(function (item) { return item.email === email; });
-  if (!account || account.role !== "supplier") { location.href = "../sign-in.html"; return; }
+  if (!account || account.role !== "supplier") { location.href = "../user/sign-in.html"; return; }
   if (!account.id) { account.id = "supplier-" + btoa(account.email).replace(/[^a-z0-9]/gi, "").slice(0, 16); var accountIndex = accounts.findIndex(function (item) { return item.email === email; }); if (accountIndex >= 0) { accounts[accountIndex] = account; write(ACCOUNTS, accounts); } }
 
   var params = new URLSearchParams(location.search), category = params.get("category") || "hiking", type = params.get("type") || "", id = params.get("id");
@@ -71,7 +71,8 @@
     document.querySelector("#publishDialog h2").textContent = "Publish this rental listing?";
   } else if (existing) document.getElementById("editorHeading").textContent = "Edit experience";
 
-  if (existing) ["title", "price", "duration", "difficulty", "capacity", "meetingPoint", "description", "coverImage", "included", "requirements", "safety", "availability"].forEach(function (key) { if (form.elements[key]) form.elements[key].value = existing[key] || ""; });
+  if (existing) ["title", "price", "duration", "difficulty", "capacity", "serviceArea", "meetingPoint", "description", "coverImage", "included", "requirements", "safety", "availability"].forEach(function (key) { if (form.elements[key]) form.elements[key].value = existing[key] || ""; });
+  if (Array.isArray(existing?.galleryImages)) form.elements.galleryImages.value = existing.galleryImages.join("\n");
 
   function hasRequiredDetails(service) { return Boolean(service && service.title && service.price !== "" && service.duration && service.capacity && service.description && (!form.elements.difficulty.required || service.difficulty)); }
   detailsReady = hasRequiredDetails(existing);
@@ -120,10 +121,15 @@
     var assigned = inventoryOnly ? [] : selectedEmployees();
     return Object.assign({}, existing || { id: "service-" + Date.now().toString(36), createdAt: now }, {
       supplierId: account.id, supplierName: account.businessName || account.name, category: category, serviceType: type,
+      providerStyle: account.supplierCategory || "adventure-nature",
       title: String(data.get("title") || "").trim(), description: String(data.get("description") || "").trim(), price: String(data.get("price") || ""),
       duration: String(data.get("duration") || "").trim(), difficulty: String(data.get("difficulty") || "").trim(), capacity: String(data.get("capacity") || "").trim(),
-      meetingPoint: String(data.get("meetingPoint") || "").trim(), included: String(data.get("included") || "").trim(), requirements: String(data.get("requirements") || "").trim(),
+      serviceArea: String(data.get("serviceArea") || "").trim(), meetingPoint: String(data.get("meetingPoint") || "").trim(), included: String(data.get("included") || "").trim(), requirements: String(data.get("requirements") || "").trim(),
       safety: String(data.get("safety") || "").trim(), availability: String(data.get("availability") || "").trim(), coverImage: String(data.get("coverImage") || "").trim(),
+      galleryImages: [...new Set(String(data.get("galleryImages") || "").split(/\r?\n/).map(function (line) {
+        try { var url = new URL(line.trim()); return ["http:", "https:"].includes(url.protocol) ? url.href : ""; }
+        catch { return ""; }
+      }).filter(Boolean))].slice(0, 5),
       categoryDetails: categoryDetails, teamMemberIds: assigned.map(function (person) { return person.id; }), team: assigned.map(publicRecord), published: Boolean(published), updatedAt: now
     });
   }

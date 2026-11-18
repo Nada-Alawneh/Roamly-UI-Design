@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>The Jordanian Narrative · Roamly</title>
+    <link rel="stylesheet" href="../shared/css/base.css" />
+    <link rel="stylesheet" href="../shared/css/layout.css" />
+    <link rel="stylesheet" href="../shared/css/components.css" />
+    <link rel="stylesheet" href="../shared/css/features.css" />
+    <link rel="stylesheet" href="css/jordan-narrative.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css"
+    />
+    <script src="../shared/js/platform.js" defer></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&amp;display=swap">
+</head>
+  <body>
+    <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="index.html" aria-label="Roamly home">
+       <span class="brand__mark"><img src="../shared/assets/img/logo.png" alt="" width="180" height="70"></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+        <i class="fa-solid fa-bars" aria-hidden="true"></i><span class="sr-only">Menu</span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul class="nav-pill">
+          <li><a class="nav-pill__link" href="index.html">Home</a></li>
+          <li>
+            <details class="rx-tourism">
+              <summary class="nav-pill__link" data-i18n="tourism">Explore with AI ▾</summary>
+              <div class="rx-tourism-menu">
+                <a href="jordan-narrative.html" data-i18n="jordan">The Jordanian Narrative</a>
+                <a href="ai-planner.html" data-i18n="global">Global AI Planner</a>
+              </div>
+            </details>
+          </li>
+          <li><a class="nav-pill__link" href="adventure-marketplace.html" data-experiences-link>Experiences</a></li>
+          <li><a class="nav-pill__link" href="destinations.html">Destinations</a></li>
+          <li><a class="nav-pill__link" href="pricing.html">Pricing</a></li>
+          <li><a class="nav-pill__link" href="about.html">About Us</a></li>
+          <li><a class="nav-pill__link" href="Contact-Us.html">Contact Us</a></li>
+          <li><a class="nav-pill__link" href="community.html" data-i18n="community">Community</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <div id="guestActions" class="nav-auth-group">
+          <a href="sign-in.html" class="btn btn--dark btn--md">
+            <i class="fa-regular fa-circle-user" aria-hidden="true"></i> Sign In
+          </a>
+        </div>
+
+        <div class="user-menu-wrap" id="loggedActions" style="display: none;">
+          <button type="button" class="user-menu-trigger" id="userMenuToggle" aria-expanded="false">
+            <span class="user-avatar">N</span>
+            <span class="user-name">Nada Alawneh</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="user-dropdown" id="userDropdownMenu">
+            <div class="user-dropdown__header">
+              <p class="user-dropdown__title">Signed in as</p>
+              <p class="user-dropdown__email">nada@roamly.com</p>
+            </div>
+            <ul class="user-dropdown__list">
+              <li><a href="profile.html"><i class="fa-solid fa-user" aria-hidden="true"></i> My Profile</a></li>
+              <li><a href="itineraries.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> My Itineraries</a></li>
+              <li><button type="button" class="currency-switch-btn"><i class="fa-solid fa-globe" aria-hidden="true"></i> Currency: <strong>USD ($)</strong></button></li>
+              <li><a href="settings.html"><i class="fa-solid fa-gear" aria-hidden="true"></i> Account Settings</a></li>
+              <li class="user-dropdown__divider"></li>
+              <li><button type="button" id="logoutBtn" class="logout-link"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log Out</button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+    <main id="main" class="roam-experience jordan-narrative">
+      <section class="rx-jordan jordan-film">
+        <div class="container jordan-film-layout">
+          <div class="jordan-film-copy">
+            <p class="eyebrow" data-i18n="jordanKicker">THE JORDANIAN NARRATIVE</p>
+            <h1 data-i18n="jordanTitle">Some places stay with you.</h1>
+            <p data-i18n="jordanLead">
+              Walk through rose-red history. Follow the silence of the desert. Find a seat at a table that
+              feels like home.
+            </p>
+            <a class="rx-button" href="#jordan-chapters-title" data-i18n="explore">Find your Jordan story</a>
+          </div>
+          <figure class="jordan-film-frame">
+            <video id="jordan-film" muted loop playsinline preload="none" poster="../shared/assets/img/jordan/petra-camel.jpg" aria-hidden="true">
+              <source src="../shared/assets/img/jordan/jordan.mp4" type="video/mp4" />
+            </video>
+            <button type="button" id="jordan-film-toggle" hidden>Play Jordan video</button>
+          </figure>
+        </div>
+      </section>
+      <nav class="container jordan-index" aria-labelledby="jordan-chapters-title">
+        <h2 id="jordan-chapters-title">Twelve places, one Jordanian story</h2>
+        <p>Follow the story from the hills of Amman to the Red Sea, or choose a place to start.</p>
+        <ul>
+            <li><a href="#amman">Amman</a></li>
+            <li><a href="#salt">As-Salt</a></li>
+            <li><a href="#jerash">Jerash</a></li>
+            <li><a href="#ajloun">Ajloun</a></li>
+            <li><a href="#umm-qais">Umm Qais</a></li>
+            <li><a href="#madaba">Madaba and Mount Nebo</a></li>
+            <li><a href="#dead-sea">The Dead Sea</a></li>
+            <li><a href="#karak">Karak</a></li>
+            <li><a href="#dana">Dana</a></li>
+            <li><a href="#petra">Petra</a></li>
+            <li><a href="#wadi-rum">Wadi Rum</a></li>
+            <li><a href="#aqaba">Aqaba</a></li>
+        </ul>
+      </nav>
+      <section class="container jordan-chapters" aria-labelledby="jordan-chapters-title">
+        <article class="jordan-chapter" id="amman">
+          <header class="jordan-arrival">
+            <p class="jordan-arrival-location sr-only">Amman Governorate</p>
+            <h2 data-place-name="Amman">Amman</h2>
+            <p class="jordan-arrival-line">Our story begins on hills that wake to the sound of Al-Balad.</p>
+          </header>
+          <figure class="jordan-photo" data-video="../shared/assets/img/jordan/chapters/amman.mp4">
+            <img src="../shared/assets/img/jordan/chapters/amman.jpg" alt="The Amman Citadel and the hills of the city" loading="lazy" decoding="async" />
+            <figcaption>Amman</figcaption>
+          </figure>
+          <div class="jordan-chapter-copy">
+            <h3>The city opens on its hills</h3>
+            <div class="jordan-story">
+              <p>Start at the Citadel, where the view gathers the hills of Amman into one frame. Then head down to the Roman Theatre and the streets of downtown. On foot, the distance between the old city and the everyday city feels shorter.</p>
+              <p>Leave time for coffee, a plate of hummus, and a wander through the market. The capital is a good place to begin the journey because its history is right there among the shops, stairs and conversations.</p>
+            </div>
+            <p class="jordan-transition">We leave Amman’s busy stairs for another city of hills, where the stone turns honey-yellow.</p>
+            <div class="jordan-actions">
+              <button class="rx-button jordan-book" type="button" data-jordan-book="amman">Booking details</button>
+              <a class="jordan-learn" href="jordan-narrative.html?place=amman">Learn more</a>
+            </div>
+          </div>
+        </article>
+        <article class="jordan-chapter" id="salt">
+          <header class="jordan-arrival">
+            <p class="jordan-arrival-location sr-only">Balqa Governorate</p>
+            <h2 data-place-name="As-Salt">As-Salt</h2>
+            <p class="jordan-arrival-line">In As-Salt, honey-coloured stone keeps the old market’s stories warm.</p>
+          </header>
+          <figure class="jordan-photo" data-video="../shared/assets/img/jordan/chapters/salt.mp4">
+            <img src="../shared/assets/img/jordan/chapters/salt.jpg" alt="Hillside houses around Beit Jaber in As-Salt" loading="lazy" decoding="async" />
+            <figcaption>As-Salt</figcaption>
+          </figure>
+          <div class="jordan-chapter-copy">
+            <h3>Yellow stone and steep lanes</h3>
+            <div class="jordan-story">
+              <p>In As-Salt, the yellow stone houses follow the slope of the hills. The stairs turn a short walk into a series of small discoveries, from carved doorways to balconies looking across the valley.</p>
+              <p>Give the old town a morning of its own. Follow the lanes around Al-Hammam Street and take a moment to notice how closely the homes, markets and gathering places sit together.</p>
+            </div>
+            <p class="jordan-transition">In Salt we read a city through its houses. In Jerash, the streets lead us much further back.</p>
+            <div class="jordan-actions">
+              <button class="rx-button jordan-book" type="button" data-jordan-book="salt">Booking details</button>
+              <a class="jordan-learn" href="jordan-narrative.html?place=salt">Learn more</a>
+            </div>
+          </div>
+        </article>
+        <article class="jordan-chapter" id="jerash">
+          <header class="jordan-arrival">
+            <p class="jordan-arrival-location sr-only">Jerash Governorate</p>
+            <h2 data-place-name="Jerash">Jerash</h2>
+            <p class="jordan-arrival-line">Between the columns, you can almost hear the city finding its feet again.</p>
+          </header>
+          <figure class="jordan-photo" data-video="../shared/assets/img/jordan/chapters/jerash.mp4">
+            <img src="../shared/assets/img/jordan/chapters/jerash.jpg" alt="Sunlight on the columns of the Oval Forum in Jerash" loading="lazy" decoding="async" />
+            <figcaption>Jerash</figcaption>
+          </figure>
+          <div class="jordan-chapter-copy">
+            <h3>A city told in stone</h3>
+            <div class="jordan-story">
+              <p>The Oval Plaza makes an expansive first impression. From there, the colonnaded street leads you through the traces of a city built for gathering, trading and moving between public spaces.</p>
+              <p>Spend time at the theatres and look back along the columns as you go. The ruins are easiest to understand when you imagine how people once used the spaces between the monuments.</p>
+            </div>
+            <p class="jordan-transition">After the open squares of Jerash, the road climbs toward the trees of Ajloun.</p>
+            <div class="jordan-actions">
+              <button class="rx-button jordan-book" type="button" data-jordan-book="jerash">Booking details</button>
+              <a class="jordan-learn" href="jordan-narrative.html?place=jerash">Learn more</a>
+            </div>
+          </div>
+        </article>
+        <article class="jordan-chapter" id="ajloun">
+          <header class="jordan-arrival">
+            <p class="jordan-arrival-location sr-only">Ajloun Governorate</p>
+            <h2 data-place-name="Ajloun">Ajloun</h2>
+            <p class="jordan-arrival-line">From the castle walls, the green hills draw your eye further north.</p>
+          </header>
+          <figure class="jordan-photo" data-video="../shared/assets/img/jordan/chapters/ajloun.mp4">
+            <img src="../shared/assets/img/jordan/chapters/ajloun.jpg" alt="Ajloun Castle above a wooded ridge" loading="lazy" decoding="async" />
+            <figcaption>Ajloun</figcaption>
+          </figure>
+          <div class="jordan-chapter-copy">
+            <h3>A castle above the trees</h3>
+            <div class="jordan-story">
+              <p>Ajloun Castle gives the northern hills a different scale. Look out from the stone walls, then carry that view with you into the wooded landscape below.</p>
+              <p>Pair the castle with time among the trees. The change from stone passageways to shaded paths is part of the pleasure of spending a full day in Ajloun.</p>
+            </div>
+            <p class="jordan-transition">We carry that view north, where the stone darkens and the horizon widens.</p>
+            <div class="jordan-actions">
+              <button class="rx-button jordan-book" type="button" data-jordan-book="ajloun">Booking details</button>
+              <a class="jordan-learn" href="jordan-narrative.html?place=ajloun">Learn more</a>
+            </div>
+          </div>
+        </article>
+        <article class="jordan-chapter" id="umm-qais">
+          <header class="jordan-arrival">
+            <p class="jordan-arrival-location sr-only">Irbid Governorate</p>
+            <h2 data-place-name="Umm Qais">Umm Qais</h2>
+            <p class="jordan-arrival-line">In Umm Qais, dark stones open onto a horizon too wide for a single glance.</p>
+          </header>
+          <figure class="jordan-photo" data-video="../shared/assets/img/jordan/chapters/umm-qais.mp4">
+            <img src="../shared/assets/img/jordan/chapters/umm-qais.jpg" alt="The sun setting over the ruins of Gadara at Umm Qais" loading="lazy" decoding="async" />
+            <figcaption>Umm Qais</figcaption>
+          </figure>
+          <div class="jordan-chapter-copy">
+            <h3>The north at its widest</h3>
+            <div class="jordan-story">
+              <p>Dark basalt gives the ruins at Umm Qais their character. The stone streets and theatre reward a slow walk, especially when you pause to look out over the surrounding landscape.</p>
+            </div>
+            <p class="jordan-transition">We turn south again. In Madaba the story is still in the stone, only now we have to look closer.</p>
+            <div class="jordan-actions">
+              <button class="rx-button jordan-book" type="button" data-jordan-book="umm-qais">Booking details</button>
+              <a class="jordan-learn" href="jordan-narrative.html?place=umm-qais">Learn more</a>
+            </div>
+          </div>
+        </article>
+        <article class="jordan-chapter" id="madaba">
+          <header class="jordan-arrival">
+            <p class="jordan-arrival-location sr-only">Madaba Governorate</p>
+            <h2 data-place-name="Madaba and Mount Nebo">Madaba and Mount Nebo</h2>
+            <p class="jordan-arrival-line">In Madaba, a whole landscape fits between pieces of mosaic stone.</p>
+          </header>
+          <figure class="jordan-photo" data-video="../shared/assets/img/jordan/chapters/madaba.mp4">
+            <img src="../shared/assets/img/jordan/chapters/madaba.jpg" alt="The floor mosaic map at St George’s Church in Madaba" loading="lazy" decoding="async" />
+            <figcaption>Madaba and Mount Nebo</figcaption>
+          </figure>
+          <div class="jordan-chapter-copy">
+            <h3>Small tiles, wide horizons</h3>
+            <div class="jordan-story">
+              <p>Begin in Madaba with the mosaic map at St George’s Church. Up close, the small pieces of stone make it easier to appreciate how patiently the larger picture was assembled.</p>
+              <p>Continue to Mount Nebo for a change of scale. After a morning of looking down at the mosaics, the broad view over the valley gives the day a quiet finish.</p>
+            </div>
+            <p class="jordan-transition">From the lookout at Nebo, the valley we have been admiring becomes the next stretch of road.</p>
+            <div class="jordan-actions">
+              <button class="rx-button jordan-book" type="button" data-jordan-book="madaba">Booking details</button>
+              <a class="jordan-learn" href="jordan-narrative.html?place=madaba">Learn more</a>
+            </div>
+          </div>
+        </article>
+        <article class="jordan-chapter" id="dead-sea">
+          <header class="jordan-arrival">
+            <p class="jordan-arrival-location sr-only">Balqa Governorate · Northern Dead Sea shore</p>
+            <h2 data-place-name="The Dead Sea">The Dead Sea</h2>
+            <p class="jordan-arrival-line">At the Dead Sea shore, even the road seems to stop and take a breath.</p>
+          </header>
+          <figure class="jordan-photo" data-video="../shared/assets/img/jordan/chapters/dead-sea.mp4">
+            <img src="../shared/assets/img/jordan/chapters/dead-sea.jpg" alt="White salt formations beside the green water of the Dead Sea" loading="lazy" decoding="async" />
+            <figcaption>The Dead Sea</figcaption>
+          </figure>
+          <div class="jordan-chapter-copy">
+            <h3>A pause at the water’s edge</h3>
+            <div class="jordan-story">
+              <p>The descent toward the Dead Sea changes the landscape gradually. The hills open up and the water takes over the view. Give the shoreline time of its own, especially if the rest of your journey is full of walks and historic sites.</p>
+            </div>
+            <p class="jordan-transition">We leave the shore and climb back into the highlands for a castle and a long lunch.</p>
+            <div class="jordan-actions">
+              <button class="rx-button jordan-book" type="button" data-jordan-book="dead-sea">Booking details</button>
+              <a class="jordan-learn" href="jordan-narrative.html?place=dead-sea">Learn more</a>
+            </div>
+          </div>
+        </article>
+        <article class="jordan-chapter" id="karak">
+          <header class="jordan-arrival">
+            <p class="jordan-arrival-location sr-only">Karak Governorate</p>
+            <h2 data-place-name="Karak">Karak</h2>
+            <p class="jordan-arrival-line">The castle holds the high ground. The shared table brings everyone close.</p>
+          </header>
+          <figure class="jordan-photo" data-video="../shared/assets/img/jordan/chapters/karak.mp4">
+            <img src="../shared/assets/img/jordan/chapters/karak.jpg" alt="Stone walls of Karak Castle along the ridge" loading="lazy" decoding="async" />
+            <figcaption>Karak</figcaption>
+          </figure>
+          <div class="jordan-chapter-copy">
+            <h3>A stronghold and a shared table</h3>
+            <div class="jordan-story">
+              <p>Karak Castle rises above the town. Its long stone corridors make a natural starting point, and the streets outside give you a chance to bring the visit back to the life of the city.</p>
+              <p>Make room for lunch. A plate of mansaf can be the beginning of a conversation about jameed, family recipes and the way a meal brings people together.</p>
+            </div>
+            <p class="jordan-transition">From Karak’s stone corridors, we follow the highlands toward a village with a valley at its door.</p>
+            <div class="jordan-actions">
+              <button class="rx-button jordan-book" type="button" data-jordan-book="karak">Booking details</button>
+              <a class="jordan-learn" href="jordan-narrative.html?place=karak">Learn more</a>
+            </div>
+          </div>
+        </article>
+        <article class="jordan-chapter" id="dana">
+          <header class="jordan-arrival">
+            <p class="jordan-arrival-location sr-only">Tafilah Governorate</p>
+            <h2 data-place-name="Dana">Dana</h2>
+            <p class="jordan-arrival-line">In Dana, the last doorstep in the village opens onto a whole valley.</p>
+          </header>
+          <figure class="jordan-photo" data-video="../shared/assets/img/jordan/chapters/dana.mp4">
+            <img src="../shared/assets/img/jordan/chapters/dana.jpg" alt="Dana’s stone village above the valley" loading="lazy" decoding="async" />
+            <figcaption>Dana</figcaption>
+          </figure>
+          <div class="jordan-chapter-copy">
+            <h3>A village on the valley’s edge</h3>
+            <div class="jordan-story">
+              <p>From the stone lanes of Dana village, the view drops into the valley. Take time to look back toward the houses and terraces before continuing into the landscape.</p>
+              <p>A village walk and a longer hike offer different ways to spend the day. Give yourself room to choose based on how far you want to walk and how much time you want to spend with a local host.</p>
+            </div>
+            <p class="jordan-transition">Dana teaches us to slow our steps. We will need that same patience in the Siq.</p>
+            <div class="jordan-actions">
+              <button class="rx-button jordan-book" type="button" data-jordan-book="dana">Booking details</button>
+              <a class="jordan-learn" href="jordan-narrative.html?place=dana">Learn more</a>
+            </div>
+          </div>
+        </article>
+        <article class="jordan-chapter" id="petra">
+          <header class="jordan-arrival">
+            <p class="jordan-arrival-location sr-only">Ma’an Governorate</p>
+            <h2 data-place-name="Petra">Petra</h2>
+            <p class="jordan-arrival-line">One last turn in the Siq, and rose-red stone stops you in your tracks.</p>
+          </header>
+          <figure class="jordan-photo" data-video="../shared/assets/img/jordan/chapters/petra.mp4">
+            <img src="../shared/assets/img/jordan/chapters/petra.jpg" alt="The rose-red façade of Petra’s Treasury" loading="lazy" decoding="async" />
+            <figcaption>Petra</figcaption>
+          </figure>
+          <div class="jordan-chapter-copy">
+            <h3>Through the Siq to the rose-red city</h3>
+            <div class="jordan-story">
+              <p>The approach to Petra is part of the visit. Follow the narrow sandstone passage through the Siq until the Treasury comes into view. Once you reach it, stop long enough to take in the change from the shaded passage to the open space.</p>
+              <p>Continue into the ancient city and pay attention to the carved façades, paths and traces of water management. Each gives a different clue about how the Nabataeans made a city in this landscape.</p>
+            </div>
+            <p class="jordan-transition">Once we leave Petra’s carved city behind, the sandstone opens into the wide desert of Wadi Rum.</p>
+            <div class="jordan-actions">
+              <button class="rx-button jordan-book" type="button" data-jordan-book="petra">Booking details</button>
+              <a class="jordan-learn" href="jordan-narrative.html?place=petra">Learn more</a>
+            </div>
+          </div>
+        </article>
+        <article class="jordan-chapter" id="wadi-rum">
+          <header class="jordan-arrival">
+            <p class="jordan-arrival-location sr-only">Aqaba Governorate</p>
+            <h2 data-place-name="Wadi Rum">Wadi Rum</h2>
+            <p class="jordan-arrival-line">In Wadi Rum, sunset leaves its colour in the sand and the rest to the stars.</p>
+          </header>
+          <figure class="jordan-photo" data-video="../shared/assets/img/jordan/chapters/wadi-rum.mp4">
+            <img src="../shared/assets/img/jordan/chapters/wadi-rum.jpg" alt="Red sand dunes below the cliffs of Wadi Rum" loading="lazy" decoding="async" />
+            <figcaption>Wadi Rum</figcaption>
+          </figure>
+          <div class="jordan-chapter-copy">
+            <h3>Between the sandstone and the stars</h3>
+            <div class="jordan-story">
+              <p>In Wadi Rum, the wide valleys make the sandstone formations seem to rise straight out of the sand. A journey with a local host leaves room to stop, listen and see the colour change as the light moves.</p>
+              <p>Share tea and leave part of the evening open. After sunset, the stillness becomes as much a part of the visit as the desert views.</p>
+            </div>
+            <p class="jordan-transition">In the morning, we trade the red of the sand for the blue of the sea.</p>
+            <div class="jordan-actions">
+              <button class="rx-button jordan-book" type="button" data-jordan-book="wadi-rum">Booking details</button>
+              <a class="jordan-learn" href="jordan-narrative.html?place=wadi-rum">Learn more</a>
+            </div>
+          </div>
+        </article>
+        <article class="jordan-chapter" id="aqaba">
+          <header class="jordan-arrival">
+            <p class="jordan-arrival-location sr-only">Aqaba Governorate</p>
+            <h2 data-place-name="Aqaba">Aqaba</h2>
+            <p class="jordan-arrival-line">The road ends at the Red Sea, and Jordan stays with you on the way home.</p>
+          </header>
+          <figure class="jordan-photo" data-video="../shared/assets/img/jordan/chapters/aqaba.mp4">
+            <img src="../shared/assets/img/jordan/chapters/aqaba.jpg" alt="Boats on the turquoise waters of Aqaba" loading="lazy" decoding="async" />
+            <figcaption>Aqaba</figcaption>
+          </figure>
+          <div class="jordan-chapter-copy">
+            <h3>The road ends at the Red Sea</h3>
+            <div class="jordan-story">
+              <p>Aqaba brings the journey back to the water. Walk along the shore, take your time over a seafood lunch, or spend part of the day out on the Red Sea.</p>
+              <p>After the hills, valleys and desert, a morning by the coast is a fitting last chapter. There is time to think back on the places you visited and the people who made them memorable.</p>
+            </div>
+            <p class="jordan-transition">We began among the hills of Amman and ended at the water. The thread through it all was the time we took to stop and listen.</p>
+            <div class="jordan-actions">
+              <button class="rx-button jordan-book" type="button" data-jordan-book="aqaba">Booking details</button>
+              <a class="jordan-learn" href="jordan-narrative.html?place=aqaba">Learn more</a>
+            </div>
+          </div>
+        </article>
+      </section>
+      <div class="jordan-route" hidden>
+        <div class="jordan-route-mark">
+          <span class="jordan-route-flag" aria-hidden="true"><span></span></span>
+          <svg class="jordan-route-map" viewBox="0 0 146 164" role="img" aria-labelledby="jordan-map-title" data-user-content>
+            <title id="jordan-map-title"></title>
+            <path data-region="maan" d="M28.7,157.3 39.3,159.3 53.4,147.4 57.5,140.2 61.0,133.9 66.3,132.8 84.5,129.0 89.6,116.5 91.1,115.6 100.4,110.5 96.4,105.5 87.8,95.1 79.8,85.8 76.4,82.1 71.5,82.2 68.7,82.2 56.7,82.1 51.8,81.9 41.5,81.9 41.7,85.3 44.1,87.8 38.5,99.0 37.9,100.2 37.2,101.6 35.8,104.3 35.3,105.4 33.8,104.7 33.4,104.6 32.8,104.6 32.4,104.7 32.0,105.4 31.7,105.6 29.0,106.1 27.8,106.1 27.4,106.2 26.8,106.7 26.6,106.8 26.3,106.8 25.8,106.6 25.3,106.4 24.7,106.4 22.8,106.5 21.7,106.5 21.3,106.5 20.1,106.1 19.8,106.3 19.8,106.3 19.9,106.6 19.9,107.3 19.9,108.6 19.1,110.4 19.1,110.8 19.1,112.0 17.0,116.3 17.9,119.7 17.9,120.8 17.4,121.7 16.8,122.7 16.0,123.6 15.6,124.0 15.4,124.4 15.3,125.2 15.2,126.0 14.9,127.1 14.9,128.2 15.2,129.1 15.6,129.8 16.0,130.3 16.6,130.7 17.2,130.9 18.4,130.9 18.9,130.7 19.3,130.6 20.4,130.6 21.3,130.9 22.1,131.3 22.9,131.8 23.3,132.0 23.5,132.3 24.1,133.2 24.4,134.2 24.7,135.7 24.8,136.0 25.3,136.4 25.5,136.7 25.9,137.5 26.5,140.6 27.0,142.2 27.6,146.4 28.0,149.7 28.4,153.8Z"/>
+            <path data-region="karak" d="M41.5,81.9 37.9,81.9 33.0,82.0 32.1,82.0 31.6,81.8 31.5,81.3 31.5,81.0 32.0,79.1 31.9,77.9 31.8,77.5 31.5,76.9 31.0,76.3 29.7,75.9 28.2,75.7 27.6,75.8 27.1,75.9 26.6,76.3 26.2,76.3 25.8,76.3 23.9,75.5 23.2,75.2 22.6,75.1 21.8,75.1 20.3,75.3 20.3,75.8 19.9,77.1 19.8,78.2 19.4,78.8 18.6,80.0 18.1,81.4 18.0,82.0 18.0,82.9 18.2,83.4 18.6,83.9 19.0,84.2 19.4,84.7 19.6,85.3 19.8,85.8 19.9,86.7 19.9,87.3 19.6,87.9 19.2,89.5 18.9,89.9 18.5,90.2 18.4,90.5 18.3,91.3 18.3,92.0 18.1,93.5 17.9,93.9 17.3,94.4 16.9,95.0 17.5,95.2 18.3,95.9 18.6,96.0 19.3,96.1 19.8,96.0 19.9,95.8 20.0,95.6 20.0,94.1 20.5,93.2 20.5,93.0 20.4,92.5 20.4,92.2 20.4,92.0 20.6,91.9 20.9,91.9 21.4,92.0 22.2,91.8 22.4,91.8 22.7,92.2 23.0,92.5 23.4,92.6 24.0,92.7 25.3,92.8 26.3,92.6 27.0,92.7 28.1,93.4 29.2,93.9 30.4,94.6 30.7,94.7 31.5,94.8 31.8,94.9 31.9,95.0 32.1,95.6 32.2,95.7 32.6,95.9 32.8,96.0 33.1,96.2 33.4,96.4 33.6,96.7 34.1,96.8 34.3,96.9 34.4,97.2 34.8,97.7 35.7,98.4 36.3,98.7 37.2,99.6 37.9,100.2 38.5,99.0 44.1,87.8 41.7,85.3Z"/>
+            <path data-region="madaba" d="M31.0,76.3 31.9,75.3 32.2,74.1 32.6,73.2 32.9,72.2 33.0,71.9 32.4,71.3 32.6,70.7 32.6,70.2 32.3,69.6 31.9,69.3 31.1,69.0 30.9,68.7 30.8,68.4 30.5,67.4 30.4,67.0 30.5,66.5 30.5,66.1 30.6,65.9 30.9,65.7 31.4,65.3 31.5,64.9 31.2,63.1 31.3,62.3 31.2,61.9 31.0,61.6 30.6,61.6 30.4,61.9 30.1,62.0 28.6,62.0 28.2,62.1 27.5,62.5 27.4,62.5 26.6,62.6 25.9,62.6 25.7,62.6 25.5,62.7 25.4,62.9 25.0,63.2 25.0,63.4 24.9,65.1 24.7,65.4 24.3,65.6 24.0,65.8 23.2,66.0 21.3,66.1 20.6,68.0 20.6,68.5 20.3,71.8 20.2,73.7 20.3,75.3 21.8,75.1 22.6,75.1 23.2,75.2 23.9,75.5 25.8,76.3 26.2,76.3 26.6,76.3 27.1,75.9 27.6,75.8 28.2,75.7 29.7,75.9Z"/>
+            <path data-region="balqa" d="M27.4,62.5 27.3,61.6 27.4,61.3 27.5,61.0 27.9,60.6 28.0,60.3 28.0,60.1 27.5,59.6 27.2,59.5 26.6,59.4 26.0,59.2 25.9,59.0 25.9,58.7 26.0,58.2 26.2,57.9 29.5,56.3 30.3,55.6 30.5,55.1 30.5,54.4 30.7,54.3 30.9,54.1 32.4,54.0 33.0,53.6 33.2,53.2 33.3,52.8 33.5,52.6 33.8,52.4 34.0,52.2 33.4,51.8 32.9,51.3 32.9,50.6 32.3,50.5 32.0,50.3 31.8,50.1 31.4,49.7 31.4,49.5 31.1,49.1 30.5,48.8 29.8,48.8 28.8,49.0 28.5,49.0 28.2,49.0 28.0,48.8 27.9,48.8 27.7,48.8 27.3,49.0 27.1,49.1 26.9,49.1 26.8,49.0 26.7,48.9 27.0,48.4 25.7,48.4 25.3,48.1 25.2,47.9 25.2,47.6 24.4,47.6 22.8,47.4 22.8,47.6 22.6,47.8 22.5,48.6 22.2,49.2 22.1,49.6 22.0,50.4 22.0,51.0 22.1,51.4 21.4,52.5 21.3,53.0 21.3,53.6 21.4,54.1 21.7,54.4 21.9,54.8 22.0,56.6 22.0,56.9 21.6,57.1 21.6,57.4 21.6,57.7 21.7,58.0 22.0,58.5 22.1,59.1 22.2,60.5 22.1,61.1 22.1,61.5 22.5,62.5 22.4,63.3 22.0,64.1 21.3,66.1 23.2,66.0 24.0,65.8 24.3,65.6 24.7,65.4 24.9,65.1 25.0,63.4 25.0,63.2 25.4,62.9 25.5,62.7 25.7,62.6 25.9,62.6 26.6,62.6Z"/>
+            <path data-region="jerash" d="M32.9,50.6 33.3,50.0 34.0,49.3 34.8,48.8 35.4,48.7 35.7,48.5 35.9,48.1 36.0,47.3 35.9,47.2 35.9,46.9 35.5,46.0 35.0,45.4 34.8,45.1 34.8,44.6 35.0,44.4 35.9,43.8 36.3,43.4 36.6,43.1 36.7,42.7 36.8,42.3 36.5,42.3 36.2,42.3 35.9,42.2 35.8,42.1 35.7,41.7 35.2,41.6 35.0,41.6 34.4,42.1 33.5,42.5 33.1,42.7 32.3,43.0 31.9,43.2 31.4,43.7 31.0,44.3 30.8,44.8 30.6,45.5 30.7,46.0 30.5,46.2 29.8,46.7 29.0,47.0 28.2,47.1 27.9,47.2 27.7,47.4 27.0,48.4 26.7,48.9 26.8,49.0 26.9,49.1 27.1,49.1 27.3,49.0 27.7,48.8 27.9,48.8 28.0,48.8 28.2,49.0 28.5,49.0 28.8,49.0 29.8,48.8 30.5,48.8 31.1,49.1 31.4,49.5 31.4,49.7 31.8,50.1 32.0,50.3 32.3,50.5Z"/>
+            <path data-region="ajloun" d="M27.0,48.4 27.7,47.4 27.9,47.2 28.2,47.1 29.0,47.0 29.8,46.7 30.5,46.2 30.7,46.0 30.6,45.5 30.8,44.8 31.0,44.3 31.4,43.7 31.9,43.2 32.3,43.0 33.1,42.7 33.5,42.5 33.4,42.0 33.1,41.6 33.0,41.2 32.4,41.0 32.2,40.9 32.2,40.5 32.4,40.3 32.4,40.1 32.3,40.0 32.0,40.0 31.7,40.0 31.5,40.1 31.3,40.6 31.2,40.8 30.9,40.9 30.5,40.9 29.4,40.8 29.0,40.9 28.7,41.0 28.3,41.5 27.6,41.9 27.1,41.8 26.7,41.6 26.1,41.4 25.7,41.5 25.4,42.0 24.9,42.9 24.4,44.2 24.4,44.6 24.4,45.2 24.5,45.5 25.0,46.4 25.1,46.7 25.2,47.6 25.2,47.9 25.3,48.1 25.7,48.4Z"/>
+            <path data-region="irbid" d="M25.2,47.6 25.1,46.7 25.0,46.4 24.5,45.5 24.4,45.2 24.4,44.6 24.4,44.2 24.9,42.9 25.4,42.0 25.7,41.5 26.1,41.4 26.7,41.6 27.1,41.8 27.6,41.9 28.3,41.5 28.7,41.0 29.0,40.9 29.4,40.8 30.5,40.9 30.9,40.9 31.2,40.8 31.3,40.6 31.5,40.1 31.7,40.0 32.0,40.0 32.3,40.0 32.4,40.1 32.4,40.3 32.2,40.5 32.2,40.9 32.4,41.0 33.0,41.2 33.1,41.6 33.4,42.0 33.5,42.5 34.4,42.1 35.0,41.6 35.2,41.6 35.7,41.7 35.8,42.1 35.9,42.2 36.2,42.3 36.5,42.3 36.8,42.3 37.2,41.9 37.5,41.6 37.6,41.4 37.6,41.2 37.5,41.0 36.8,40.4 36.7,40.2 36.8,39.8 36.9,39.6 37.3,39.5 37.7,39.4 38.0,39.4 38.5,39.7 38.8,40.1 39.0,40.2 39.5,40.1 39.6,39.9 39.7,37.6 39.7,37.1 39.6,36.5 39.4,36.1 39.4,35.2 39.2,34.7 38.5,33.3 38.1,32.9 37.8,32.5 38.0,31.2 37.9,30.9 37.6,30.7 37.3,30.5 36.9,30.5 36.7,30.7 36.4,30.6 35.7,30.2 35.7,29.9 35.8,29.8 35.9,29.5 35.8,29.3 35.2,29.3 35.1,29.1 35.0,28.7 34.4,28.6 33.0,28.2 32.6,28.1 31.8,28.2 31.5,28.0 30.9,27.6 30.5,27.4 30.1,27.4 29.8,27.4 29.5,27.6 29.2,27.9 28.8,28.2 27.2,28.8 26.9,29.0 26.9,29.3 26.7,29.6 26.3,29.7 24.9,29.8 24.6,30.0 24.5,30.3 24.1,30.7 23.3,31.1 23.2,31.3 23.2,31.5 23.4,31.7 23.4,32.0 23.3,32.2 23.3,32.6 23.4,32.8 23.6,33.2 23.6,33.7 23.4,34.1 23.1,34.5 23.0,34.9 22.9,35.5 23.3,36.6 23.1,37.1 23.2,37.8 22.6,39.2 22.7,39.5 22.8,39.8 22.5,40.3 22.7,40.6 22.7,40.9 22.6,41.1 22.6,41.3 22.5,42.3 22.6,42.9 22.9,43.6 22.9,43.9 22.7,44.4 22.8,44.7 22.9,44.9 22.9,45.2 22.7,45.4 22.7,45.7 22.9,45.9 22.9,46.2 22.7,46.7 22.7,47.1 22.8,47.4 24.4,47.6Z"/>
+            <path data-region="mafraq" d="M35.9,47.2 36.2,47.1 36.4,47.1 36.9,47.3 37.0,47.4 37.0,47.7 37.0,47.9 36.8,48.3 36.7,48.5 36.8,48.7 37.0,48.9 37.5,49.3 37.9,49.3 38.2,49.3 38.4,49.3 38.6,49.2 38.9,48.7 39.1,48.6 39.3,48.7 39.5,49.2 40.0,49.5 40.2,49.6 40.4,49.7 40.8,49.6 42.2,49.1 43.0,49.0 43.8,49.0 44.2,49.2 45.5,49.8 45.9,50.0 46.2,50.0 46.6,50.0 46.9,49.9 47.6,49.4 48.8,49.4 49.3,49.5 49.5,49.5 50.0,49.4 50.5,49.4 50.9,49.6 51.1,50.4 51.4,50.8 51.6,50.9 55.1,52.3 65.5,56.5 70.2,58.2 74.6,59.8 79.1,61.2 87.9,64.0 94.5,66.1 104.9,63.1 115.0,60.1 131.5,55.4 141.5,46.5 140.2,41.9 133.2,43.8 131.4,37.3 134.8,36.4 132.7,28.8 130.7,21.6 128.2,13.4 125.3,4.0 116.3,9.5 109.1,14.1 102.2,18.6 94.6,23.5 88.3,27.7 80.8,32.8 74.6,36.7 71.5,38.6 67.9,40.8 64.6,42.7 63.6,43.6 59.9,42.8 59.4,43.1 59.0,42.7 56.9,42.3 52.6,41.7 52.2,41.3 49.6,41.0 46.7,38.1 44.9,36.8 43.2,35.4 42.4,35.9 42.1,36.0 41.8,35.8 41.5,35.8 41.0,35.8 39.9,35.9 39.4,36.1 39.6,36.5 39.7,37.1 39.7,37.6 39.6,39.9 39.5,40.1 39.0,40.2 38.8,40.1 38.5,39.7 38.0,39.4 37.7,39.4 37.3,39.5 36.9,39.6 36.8,39.8 36.7,40.2 36.8,40.4 37.5,41.0 37.6,41.2 37.6,41.4 37.5,41.6 37.2,41.9 36.8,42.3 36.7,42.7 36.6,43.1 36.3,43.4 35.9,43.8 35.0,44.4 34.8,44.6 34.8,45.1 35.0,45.4 35.5,46.0 35.9,46.9Z"/>
+            <path data-region="tafilah" d="M37.9,100.2 37.2,99.6 36.3,98.7 35.7,98.4 34.8,97.7 34.4,97.2 34.3,96.9 34.1,96.8 33.6,96.7 33.4,96.4 33.1,96.2 32.8,96.0 32.6,95.9 32.2,95.7 32.1,95.6 31.9,95.0 31.8,94.9 31.5,94.8 30.7,94.7 30.4,94.6 29.2,93.9 28.1,93.4 27.0,92.7 26.3,92.6 25.3,92.8 24.0,92.7 23.4,92.6 23.0,92.5 22.7,92.2 22.4,91.8 22.2,91.8 21.4,92.0 20.9,91.9 20.6,91.9 20.4,92.0 20.4,92.2 20.4,92.5 20.5,93.0 20.5,93.2 20.0,94.1 20.0,95.6 19.9,95.8 19.8,96.0 19.3,96.1 18.6,96.0 18.3,95.9 17.5,95.2 16.9,95.0 16.5,95.6 16.3,96.3 16.1,98.1 16.0,98.6 15.4,99.0 15.1,99.3 14.9,99.7 14.8,100.4 14.6,102.0 14.3,102.6 14.7,102.8 15.6,103.3 15.9,103.7 16.5,104.1 16.9,104.2 17.3,104.4 17.5,104.7 18.1,105.9 18.6,106.2 19.2,106.2 19.8,106.3 19.8,106.3 20.1,106.1 21.3,106.5 21.7,106.5 22.8,106.5 24.7,106.4 25.3,106.4 25.8,106.6 26.3,106.8 26.6,106.8 26.8,106.7 27.4,106.2 27.8,106.1 29.0,106.1 31.7,105.6 32.0,105.4 32.4,104.7 32.8,104.6 33.4,104.6 33.8,104.7 35.3,105.4 35.8,104.3 37.2,101.6Z"/>
+            <path data-region="aqaba" d="M19.8,106.3 19.2,106.2 18.6,106.2 18.1,105.9 17.5,104.7 17.3,104.4 16.9,104.2 16.5,104.1 15.9,103.7 15.6,103.3 14.7,102.8 14.3,102.6 13.5,104.3 12.4,106.5 12.0,107.4 12.0,107.9 11.6,109.0 11.5,110.2 11.1,111.8 10.6,112.8 10.6,113.3 10.7,113.7 11.2,114.2 11.2,114.6 11.3,115.1 11.2,115.6 10.7,116.8 10.4,118.7 10.3,120.2 10.8,123.0 10.9,123.8 10.8,124.6 10.7,125.2 9.6,126.6 9.2,127.0 8.8,127.5 8.6,128.2 8.5,128.9 8.5,130.1 8.0,130.7 8.0,134.6 7.4,135.8 6.2,138.9 6.1,139.2 6.1,139.8 5.9,141.0 5.5,142.5 5.1,143.2 4.8,144.2 4.7,146.0 5.4,146.6 5.3,147.6 5.2,147.9 4.8,148.5 4.4,149.2 4.1,151.1 4.0,152.8 17.0,155.1 28.7,157.3 28.4,153.8 28.0,149.7 27.6,146.4 27.0,142.2 26.5,140.6 25.9,137.5 25.5,136.7 25.3,136.4 24.8,136.0 24.7,135.7 24.4,134.2 24.1,133.2 23.5,132.3 23.3,132.0 22.9,131.8 22.1,131.3 21.3,130.9 20.4,130.6 19.3,130.6 18.9,130.7 18.4,130.9 17.2,130.9 16.6,130.7 16.0,130.3 15.6,129.8 15.2,129.1 14.9,128.2 14.9,127.1 15.2,126.0 15.3,125.2 15.4,124.4 15.6,124.0 16.0,123.6 16.8,122.7 17.4,121.7 17.9,120.8 17.9,119.7 17.0,116.3 19.1,112.0 19.1,110.8 19.1,110.4 19.9,108.6 19.9,107.3 19.9,106.6Z"/>
+            <path data-region="amman" d="M76.4,82.1 68.6,73.5 68.9,73.4 59.2,63.2 56.4,64.6 56.3,64.6 55.8,64.4 55.0,63.9 54.7,63.6 54.4,63.5 53.9,63.1 52.6,61.9 51.7,60.8 51.1,60.2 51.0,60.0 51.3,59.3 51.6,59.0 53.9,57.7 53.3,56.9 50.4,53.7 49.6,53.0 49.0,52.7 48.6,52.7 47.8,52.9 46.9,53.0 46.1,52.8 45.7,52.7 45.1,52.7 44.7,53.0 44.5,53.2 44.3,53.8 44.2,54.0 43.9,54.2 42.8,54.5 42.4,54.6 42.0,54.4 41.6,54.3 41.0,54.2 40.6,54.4 40.2,55.0 40.0,55.1 39.1,55.1 38.7,55.2 38.4,55.3 37.8,55.7 37.6,55.7 37.2,55.5 36.9,55.4 36.6,55.1 36.4,54.7 36.3,54.4 36.0,54.0 35.5,53.6 34.9,53.3 34.5,52.9 34.4,52.7 34.4,52.4 34.0,52.2 33.8,52.4 33.5,52.6 33.3,52.8 33.2,53.2 33.0,53.6 32.4,54.0 30.9,54.1 30.7,54.3 30.5,54.4 30.5,55.1 30.3,55.6 29.5,56.3 26.2,57.9 26.0,58.2 25.9,58.7 25.9,59.0 26.0,59.2 26.6,59.4 27.2,59.5 27.5,59.6 28.0,60.1 28.0,60.3 27.9,60.6 27.5,61.0 27.4,61.3 27.3,61.6 27.4,62.5 27.5,62.5 28.2,62.1 28.6,62.0 30.1,62.0 30.4,61.9 30.6,61.6 31.0,61.6 31.2,61.9 31.3,62.3 31.2,63.1 31.5,64.9 31.4,65.3 30.9,65.7 30.6,65.9 30.5,66.1 30.5,66.5 30.4,67.0 30.5,67.4 30.8,68.4 30.9,68.7 31.1,69.0 31.9,69.3 32.3,69.6 32.6,70.2 32.6,70.7 32.4,71.3 33.0,71.9 32.9,72.2 32.6,73.2 32.2,74.1 31.9,75.3 31.0,76.3 31.5,76.9 31.8,77.5 31.9,77.9 32.0,79.1 31.5,81.0 31.5,81.3 31.6,81.8 32.1,82.0 33.0,82.0 37.9,81.9 41.5,81.9 51.8,81.9 56.7,82.1 68.7,82.2 71.5,82.2Z"/>
+            <path data-region="zarqa" d="M34.0,52.2 34.4,52.4 34.4,52.7 34.5,52.9 34.9,53.3 35.5,53.6 36.0,54.0 36.3,54.4 36.4,54.7 36.6,55.1 36.9,55.4 37.2,55.5 37.6,55.7 37.8,55.7 38.4,55.3 38.7,55.2 39.1,55.1 40.0,55.1 40.2,55.0 40.6,54.4 41.0,54.2 41.6,54.3 42.0,54.4 42.4,54.6 42.8,54.5 43.9,54.2 44.2,54.0 44.3,53.8 44.5,53.2 44.7,53.0 45.1,52.7 45.7,52.7 46.1,52.8 46.9,53.0 47.8,52.9 48.6,52.7 49.0,52.7 49.6,53.0 50.4,53.7 53.3,56.9 53.9,57.7 51.6,59.0 51.3,59.3 51.0,60.0 51.1,60.2 51.7,60.8 52.6,61.9 53.9,63.1 54.4,63.5 54.7,63.6 55.0,63.9 55.8,64.4 56.3,64.6 56.4,64.6 59.2,63.2 68.9,73.4 77.9,70.7 94.5,66.1 87.9,64.0 79.1,61.2 74.6,59.8 70.2,58.2 65.5,56.5 55.1,52.3 51.6,50.9 51.4,50.8 51.1,50.4 50.9,49.6 50.5,49.4 50.0,49.4 49.5,49.5 49.3,49.5 48.8,49.4 47.6,49.4 46.9,49.9 46.6,50.0 46.2,50.0 45.9,50.0 45.5,49.8 44.2,49.2 43.8,49.0 43.0,49.0 42.2,49.1 40.8,49.6 40.4,49.7 40.2,49.6 40.0,49.5 39.5,49.2 39.3,48.7 39.1,48.6 38.9,48.7 38.6,49.2 38.4,49.3 38.2,49.3 37.9,49.3 37.5,49.3 37.0,48.9 36.8,48.7 36.7,48.5 36.8,48.3 37.0,47.9 37.0,47.7 37.0,47.4 36.9,47.3 36.4,47.1 36.2,47.1 35.9,47.2 36.0,47.3 35.9,48.1 35.7,48.5 35.4,48.7 34.8,48.8 34.0,49.3 33.3,50.0 32.9,50.6 32.9,51.3 33.4,51.8Z"/>
+          </svg>
+        </div>
+        <div class="jordan-route-copy" data-user-content>
+          <strong></strong>
+          <p></p>
+        </div>
+      </div>
+      <p class="container jordan-credits"><a href="../shared/assets/img/jordan/CREDITS.md">Media credits</a></p>
+    </main>
+    <footer class="site-footer">
+      <div class="container container--narrow site-footer__inner">
+        <section class="newsletter" aria-labelledby="newsletter-title">
+          <div>
+            <h2 class="newsletter__title" id="newsletter-title">
+              <i class="fa-regular fa-envelope" aria-hidden="true"></i> Subscribe to our newsletter
+            </h2>
+            <p class="newsletter__text">
+              Get exclusive deals, AI travel tips, and destination inspiration straight to your inbox.
+            </p>
+          </div>
+          <form class="newsletter__form" action="#" method="post">
+            <label class="sr-only" for="newsletter-email">Email address</label>
+            <input
+              class="newsletter__input"
+              id="newsletter-email"
+              type="email"
+              name="email"
+              placeholder="Enter your email..."
+              autocomplete="email"
+              required
+            />
+            <button class="btn btn--primary" type="submit">Subscribe</button>
+          </form>
+        </section>
+
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="brand" href="index.html" aria-label="Roamly home">
+              <span class="brand__mark"
+                ><img src="../shared/assets/img/logo.png" alt="" width="32" height="28"
+              /></span> </a
+            ><br />
+            <p class="footer-brand__text" style="color: var(--slate-400)">
+              Roamly is your travel companion
+            </p>
+            <br />
+            <div class="socials">
+              <a href="#" aria-label="Facebook"
+                ><i class="fa-brands fa-facebook" aria-hidden="true"></i
+              ></a>
+              <a href="#" aria-label="Instagram"
+                ><i class="fa-brands fa-instagram" aria-hidden="true"></i
+              ></a>
+              <a href="#" aria-label="Twitter"
+                ><i class="fa-brands fa-twitter" aria-hidden="true"></i
+              ></a>
+              <a href="#" aria-label="YouTube"
+                ><i class="fa-brands fa-youtube" aria-hidden="true"></i
+              ></a>
+            </div>
+          </div>
+          <nav class="footer-col" aria-labelledby="footer-quick">
+            <h3 class="footer-col__title" id="footer-quick">Quick Links</h3>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="ai-planner.html">AI Planner </a></li>
+              <li><a href="destinations.html">Destinations</a></li>
+              <li><a href="deals.html">Packages &amp; Deals</a></li>
+              <li><a href="pricing.html">Pricing</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-labelledby="footer-top">
+            <h3 class="footer-col__title" id="footer-top">Explore Jordan</h3>
+            <ul>
+              <li><a href="#amman">Amman</a></li>
+              <li><a href="#jerash">Jerash</a></li>
+              <li><a href="#dana">Dana</a></li>
+              <li><a href="#petra">Petra</a></li>
+              <li><a href="#wadi-rum">Wadi Rum</a></li>
+              <li><a href="#aqaba">Aqaba</a></li>
+            </ul>
+          </nav>
+          <nav class="footer-col" aria-labelledby="footer-support">
+            <h3 class="footer-col__title" id="footer-support">Support</h3>
+            <ul>
+              <li><a href="Contact-Us.html">Contact Us</a></li>
+              <li><a href="Contact-Us.html#faq">FAQs</a></li>
+              <li><a href="booking-guide.html">Booking Guide</a></li>
+              <li><a href="terms.html">Terms &amp; Conditions</a></li>
+              <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <p class="copyright">© Roamly AI Travel Planner. All Rights Reserved.</p>
+      </div>
+    </footer>
+    <script src="../shared/js/main.js" defer></script>
+    <script src="../shared/js/translations-ar.js" defer></script>
+    <script src="../shared/js/i18n.js" defer></script>
+    <script src="../shared/js/roamly-features.js" defer></script>
+    <script src="../shared/js/integration.js" defer></script>
+    <script src="js/jordan-places.js" defer></script>
+    <script src="js/jordan-narrative.js" defer></script>
+  </body>
+</html>
